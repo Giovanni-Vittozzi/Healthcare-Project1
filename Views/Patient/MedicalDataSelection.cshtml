@@ -1,0 +1,12 @@
+﻿
+@{
+    ViewBag.Title = "MedicalDataSelection";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Click a button to begin entering medical data.</h2>
+<br />
+<button type="button" class="btn btn-success" onclick="location.href='@Url.Action("BloodSugar", "Patient")'">Blood Sugar</button>
+<button type="button" class="btn btn-success" onclick="location.href='@Url.Action("BloodPressure", "Patient")'">Blood Pressure</button>
+<button type="button" class="btn btn-success" onclick="location.href='@Url.Action("Pulse", "Patient")'">Pulse</button>
+<button type="button" class="btn btn-success" onclick="location.href='@Url.Action("Weight", "Patient")'">Weight</button>

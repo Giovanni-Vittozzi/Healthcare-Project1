@@ -22,5 +22,11 @@ namespace Healthcare_Companion.Controllers
 
             return View();
         }
+        [HttpGet]
+        public ActionResult About()
+        {
+
+            return View();
+        }
     }
 }
