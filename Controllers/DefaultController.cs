@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using Healthcare_Companion.Models;
+using HealthcareCompanion.DataAccessLayer;
+using HealthcareCompanion.Models;
 
-namespace Healthcare_Companion.Controllers
+namespace HealthcareCompanion.Controllers
 {
+    //[RequireHttps]
     public class DefaultController : Controller
     {
         // GET: Default
@@ -22,6 +25,36 @@ namespace Healthcare_Companion.Controllers
 
             return View();
         }
+        [HttpPost]
+        public ActionResult PatientInfoRegistration(Patient patient)
+        {
+            if (ModelState.IsValid)
+            {
+                //Identity here
+                PatientTier tier = new PatientTier();
+                tier.insertPatient(patient);
+
+                RedirectToAction("Index");
+
+            }
+            return View();
+        }
+        [HttpGet]
+        public ActionResult ListAllPatients()
+        {
+            PatientTier tier = new PatientTier();
+            List<Patient> patientList = tier.getAllPatients();
+
+            return View(patientList);
+        }
+
+        [HttpGet]
+        public ActionResult AddDoctorInfo()
+        {
+
+            return View();
+        }
+
         [HttpGet]
         public ActionResult About()
         {

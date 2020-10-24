@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using Healthcare_Companion.Models;
+using HealthcareCompanion.Models;
 
-namespace Healthcare_Companion.Controllers
+namespace HealthcareCompanion.Controllers
 {
     public class PatientController : Controller
     {
@@ -16,7 +16,14 @@ namespace Healthcare_Companion.Controllers
 
             return View();
         }
-        
+
+        [HttpGet]
+        public ActionResult EditPatientInfo()
+        {
+
+            return View();
+        }
+
         [HttpGet]
         public ActionResult MedicalDataSelection()
         {
@@ -25,7 +32,7 @@ namespace Healthcare_Companion.Controllers
         }
 
         [HttpPost]
-        public ActionResult MedicalDataSelectio(Patient medicalDataSelection)
+        public ActionResult MedicalDataSelection(Patient medicalDataSelection)
         {
             if (ModelState.IsValid)
             {

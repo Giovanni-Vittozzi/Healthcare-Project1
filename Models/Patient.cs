@@ -4,10 +4,11 @@ using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
 
-namespace Healthcare_Companion.Models
+namespace HealthcareCompanion.Models
 {
     public class Patient
     {
+        public int PatientID { get; set; }
         [Required(ErrorMessage = "This field is required.")]
         [Display(Name = "First Name")]
         public string FirstName { get; set; }
@@ -28,7 +29,7 @@ namespace Healthcare_Companion.Models
         public string State { get; set; }
         [Required(ErrorMessage = "This field is required.")]
         [Display(Name = "Zip Code")]
-        public string ZipCode { get; set; }
+        public int ZipCode { get; set; }
     }
 
     public class BloodSugar
