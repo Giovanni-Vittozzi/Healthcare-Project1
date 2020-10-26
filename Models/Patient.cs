@@ -9,7 +9,7 @@ namespace HealthcareCompanion.Models
     public class Patient : Registration
     {
         public int PatientID { get; set; }
-        [Required(ErrorMessage = "This field is required.")]
+        [Required(ErrorMessage = "This field is required.")]//can modify it from inherited or just put it in the Registration Model
         [Display(Name = "First Name")]
         public string FirstName { get; set; }
         [Display(Name = "Middle Name")]

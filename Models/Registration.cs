@@ -8,6 +8,7 @@ namespace HealthcareCompanion.Models
 {
     public class Registration
     {
+        //can call it virtual: virtual public int then override in the inherited class
         public int PatientID { get; set; }
         public string userID { get; set; }
         public string FirstName { get; set; }
@@ -17,7 +18,7 @@ namespace HealthcareCompanion.Models
         public string Address2 { get; set; }
         public string City { get; set; }
         public string State { get; set; }
-        public int Zip { get; set; }
+        public int ZipCode { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
         public string Confirm { get; set; }

@@ -572,13 +572,13 @@ namespace HealthcareCompanion.Controllers
 
             return RedirectToAction("UserDetails", new { id = userID });
         }
+        //temporary 
+        //[HttpGet]
+        //public ActionResult UserError(ErrorModel error)
+        //{
 
-        [HttpGet]
-        public ActionResult UserError(ErrorModel error)
-        {
-
-            return View(error);
-        }
+        //    return View(error);
+        //}
 
     }
 }

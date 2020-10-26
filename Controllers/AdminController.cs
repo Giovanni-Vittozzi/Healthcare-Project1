@@ -30,7 +30,8 @@ namespace HealthcareCompanion.Controllers
             return View();
         }
 
-        [AllowAnonymous]
+        [AllowAnonymous]//so this makes it ok 
+        // distinguish patient registration from doctor registration
         [HttpPost]
         public async Task<ActionResult> Registration(Registration reg)
         {
@@ -83,19 +84,24 @@ namespace HealthcareCompanion.Controllers
                 }
 
                 //If an occurred with user creation, post the error to the end user.
-                if (processError)
-                {
-                    ErrorModel error   = new ErrorModel();
-                    error.Location     = "Creating a new user in Identity";
-                    error.ErrorMessage = statusMessage;
-                    //Error Page for creating a user
-                    return View("Error", "Employee", error);
-                }
+                //if (processError)
+                //{
+                //    ErrorModel error   = new ErrorModel();
+                //    error.Location     = "Creating a new user in Identity";
+                //    error.ErrorMessage = statusMessage;
+                //    //Error Page for creating a user
+                //    return View("Error", "Employee", error);
+                    //create a view to refer for errors
+                    //in employee controller (second attribute here is the controller
+                //}
 
                 //Add code to add the rest of the information for the user in the patient table
                 PatientTier tier = new PatientTier();
                 reg.userID       = theUser.Id;
                 tier.insertPatient(reg);
+                //boolean pending in the model and set it to true here to let the user know on login that its pending
+                //field in patient table of bit type called pending
+                //or we could check if they are only in the user role //pending boolean AND user role
 
                 //List<IdentityUser> userList = userManager.Users.ToList<IdentityUser>();
                 return RedirectToAction("Default/Index");

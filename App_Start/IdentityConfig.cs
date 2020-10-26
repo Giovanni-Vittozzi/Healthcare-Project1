@@ -25,7 +25,7 @@ namespace HealthcareCompanion
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
                 AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
-                LoginPath = new PathString("/Default/Login"),
+                LoginPath = new PathString("/ListAllPatients"), // /Default/Login
             });
         }
     }
