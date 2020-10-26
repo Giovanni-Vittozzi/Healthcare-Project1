@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace HealthcareCompanion.Models
 {
-    public class Patient
+    public class Patient : Registration
     {
         public int PatientID { get; set; }
         [Required(ErrorMessage = "This field is required.")]

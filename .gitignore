@@ -3,7 +3,11 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 edb.jtx
+edbtmp.jtx
 Windows.edb
+[Ww]indows/
+Search/Data/Applications/Windows/edbtmp.jtx
+
 
 # User-specific files
 *.rsuser
