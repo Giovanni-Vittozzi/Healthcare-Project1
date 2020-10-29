@@ -33,7 +33,7 @@ namespace HealthcareCompanion.Controllers
         [AllowAnonymous]//so this makes it ok 
         // distinguish patient registration from doctor registration
         [HttpPost]
-        public async Task<ActionResult> Registration(Registration reg)
+        public async Task<ActionResult> Registration(Patient patient)
         {
             if (ModelState.IsValid)
             {
@@ -44,8 +44,8 @@ namespace HealthcareCompanion.Controllers
                 var userManager      = new UserManager<IdentityUser>(userStore);
                 string statusMessage = "";
 
-                IdentityUser theUser     = new IdentityUser() { UserName = reg.Email, Email = reg.Email };
-                IdentityResult theResult = await userManager.CreateAsync(theUser, reg.Password);
+                IdentityUser theUser     = new IdentityUser() { UserName = patient.Email, Email = patient.Email };
+                IdentityResult theResult = await userManager.CreateAsync(theUser, patient.Password);
 
                 if (theResult == IdentityResult.Success)
                 {
@@ -97,8 +97,8 @@ namespace HealthcareCompanion.Controllers
 
                 //Add code to add the rest of the information for the user in the patient table
                 PatientTier tier = new PatientTier();
-                reg.userID       = theUser.Id;
-                tier.insertPatient(reg);
+                patient.userID       = theUser.Id;
+                tier.insertPatient(patient);
                 //boolean pending in the model and set it to true here to let the user know on login that its pending
                 //field in patient table of bit type called pending
                 //or we could check if they are only in the user role //pending boolean AND user role

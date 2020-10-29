@@ -6,9 +6,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace HealthcareCompanion.Models
 {
-    public class Patient : Registration
+    public class Patient
     {
+        public Boolean Pending { get; set; } //Pending approval by admin
         public int PatientID { get; set; }
+        public string userID { get; set; }
         [Required(ErrorMessage = "This field is required.")]//can modify it from inherited or just put it in the Registration Model
         [Display(Name = "First Name")]
         public string FirstName { get; set; }
@@ -30,6 +32,13 @@ namespace HealthcareCompanion.Models
         [Required(ErrorMessage = "This field is required.")]
         [Display(Name = "Zip Code")]
         public int ZipCode { get; set; }
+        [Required(ErrorMessage = "This field is required.")]
+        public string Email { get; set; }
+        [Required(ErrorMessage = "This field is required.")]
+        public string Password { get; set; }
+        [Required(ErrorMessage = "This field is required.")]
+        [Display(Name = "Confirm Password")]
+        public string Confirm { get; set; }
     }
 
     public class BloodSugar

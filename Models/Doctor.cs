@@ -8,6 +8,9 @@ namespace HealthcareCompanion.Models
 {
     public class Doctor
     {
+        public Boolean Pending { get; set; } //Pending approval by admin
+        public int DoctorID { get; set; }
+        public string userID { get; set; }
         [Required(ErrorMessage = "This field is required.")]
         [Display(Name = "First Name")]
         public string FirstName { get; set; }
@@ -25,5 +28,11 @@ namespace HealthcareCompanion.Models
         [Required(ErrorMessage = "This field is required.")]
         [Display(Name = "Zip Code")]
         public string ZipCode { get; set; }
+        public string Email { get; set; }
+        [Required(ErrorMessage = "This field is required.")]
+        public string Password { get; set; }
+        [Required(ErrorMessage = "This field is required.")]
+        [Display(Name = "Confirm Password")]
+        public string Confirm { get; set; }
     }
 }
