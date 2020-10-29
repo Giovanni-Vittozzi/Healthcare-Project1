@@ -27,7 +27,7 @@ namespace HealthcareCompanion.Models
         public string State { get; set; }
         [Required(ErrorMessage = "This field is required.")]
         [Display(Name = "Zip Code")]
-        public string ZipCode { get; set; }
+        public int ZipCode { get; set; }
         public string Email { get; set; }
         [Required(ErrorMessage = "This field is required.")]
         public string Password { get; set; }

@@ -480,6 +480,7 @@
     <Compile Include="Controllers\PatientController.cs" />
     <Compile Include="Controllers\UserAdminController.cs" />
     <Compile Include="DataAccessLayer\BaseTier.cs" />
+    <Compile Include="DataAccessLayer\DoctorTier.cs" />
     <Compile Include="DataAccessLayer\PatientTier.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
