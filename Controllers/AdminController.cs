@@ -104,7 +104,7 @@ namespace HealthcareCompanion.Controllers
 
                 List<IdentityUser> userList = userManager.Users.ToList<IdentityUser>();
                 //is this the right list to return?
-                return RedirectToAction("Default/Index");
+                return RedirectToAction("Index");
             }
             return View();
         }
@@ -112,6 +112,7 @@ namespace HealthcareCompanion.Controllers
         [HttpGet]
         public ActionResult DoctorRegistration()
         {
+
             //Need to create View here
             return View();
         }
@@ -190,7 +191,7 @@ namespace HealthcareCompanion.Controllers
                 //or we could check if they are only in the user role //pending boolean AND user role
 
                 List<IdentityUser> userList = userManager.Users.ToList<IdentityUser>();
-                return RedirectToAction("Default/Index");
+                return RedirectToAction("Index");
                 //is this the right list to return?
             }
             return View();

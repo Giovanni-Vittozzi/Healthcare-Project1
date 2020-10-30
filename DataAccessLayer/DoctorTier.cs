@@ -46,6 +46,7 @@ namespace HealthcareCompanion.DataAccessLayer
                                 doctor.City      = (string)reader["City"];
                                 doctor.State     = (string)reader["State"];
                                 doctor.ZipCode   = (int)reader["ZipCode"];
+                                doctor.Pending   = (Boolean)reader["Pending"];
                                 doctorList.Add(doctor);
                             }
                         }
@@ -74,8 +75,8 @@ namespace HealthcareCompanion.DataAccessLayer
 
             //DoctorID is an auto number
             query = "INSERT INTO doctors" +
-                "(FirstName, LastName, Address, OfficeNum, City, State, ZipCode)" +
-                "VALUES(@FName, @LName, @Address, @OfficeNum, @City, @State, @ZipCode)";
+                "(FirstName, LastName, Address, OfficeNum, City, State, ZipCode, Pending)" +
+                "VALUES(@FName, @LName, @Address, @OfficeNum, @City, @State, @ZipCode, @Pending)";
 
             using (conn = new SqlConnection(connectionString))
             using (cmd  = new SqlCommand(query, conn))
@@ -87,6 +88,7 @@ namespace HealthcareCompanion.DataAccessLayer
                 cmd.Parameters.Add("@City", System.Data.SqlDbType.NVarChar, 50).Value      = doctor.City;
                 cmd.Parameters.Add("@State", System.Data.SqlDbType.NVarChar, 50).Value     = doctor.State;
                 cmd.Parameters.Add("@ZipCode", System.Data.SqlDbType.Int, 50).Value        = doctor.ZipCode;
+                cmd.Parameters.Add("@Pending", System.Data.SqlDbType.Bit).Value            = doctor.Pending;
 
                 try
                 {

@@ -522,6 +522,10 @@
     <Content Include="Views\Admin\AddUser.cshtml" />
     <Content Include="Views\Admin\ListAllPatients.cshtml" />
     <Content Include="Views\Admin\Registration.cshtml" />
+    <Content Include="Views\Admin\DoctorRegistration.cshtml" />
+    <Content Include="Views\Default\PatientRegistration.cshtml" />
+    <Content Include="Views\Default\DoctorRegistration.cshtml" />
+    <Content Include="Views\Default\Login.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

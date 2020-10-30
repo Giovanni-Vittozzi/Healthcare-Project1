@@ -69,6 +69,7 @@ namespace HealthcareCompanion.DataAccessLayer
                                 patient.City    = (string)reader["City"];
                                 patient.State   = (string)reader["State"];
                                 patient.ZipCode = (int)reader["ZipCode"];
+                                patient.Pending = (Boolean)reader["Pending"];
 
                                 patientList.Add(patient);
                             }
@@ -92,66 +93,6 @@ namespace HealthcareCompanion.DataAccessLayer
             Patient patient = null;
             return patient;
         }
-        //public bool insertPatient(Patient patient)
-        //{
-        //    int rows = 0;
-
-        //    //patient_id is an auto number
-        //    query = "INSERT INTO patients" +
-        //        "(FirstName, MiddleName, LastName, Address, Address2, City, State, ZipCode)" +
-        //        "VALUES(@FName, @MName, @LName, @Address, @Address2, @City, @State, @ZipCode)";
-
-        //    using (conn = new SqlConnection(connectionString))
-        //    using (cmd  = new SqlCommand(query, conn))
-        //    {
-        //        cmd.Parameters.Add("@FName", System.Data.SqlDbType.NVarChar, 50).Value = patient.FirstName;
-        //        if(patient.MiddleName != null)
-        //        {
-        //            cmd.Parameters.Add("@MName", System.Data.SqlDbType.NVarChar, 50).Value = patient.MiddleName;
-        //        }
-        //        else
-        //        {
-        //            cmd.Parameters.Add("@MName", System.Data.SqlDbType.NVarChar, 50).Value = DBNull.Value;
-        //        }
-        //        cmd.Parameters.Add("@LName", System.Data.SqlDbType.NVarChar, 50).Value   = patient.LastName;
-        //        cmd.Parameters.Add("@Address", System.Data.SqlDbType.NVarChar, 50).Value = patient.Address;
-        //        if (patient.Address2 != null)
-        //        {
-        //            cmd.Parameters.Add("@Address2", System.Data.SqlDbType.NVarChar, 50).Value = patient.Address2;
-        //        }
-        //        else
-        //        {
-        //            cmd.Parameters.Add("@Address2", System.Data.SqlDbType.NVarChar, 50).Value  = DBNull.Value;
-        //        }
-        //        cmd.Parameters.Add("@City", System.Data.SqlDbType.NVarChar, 50).Value  = patient.City;
-        //        cmd.Parameters.Add("@State", System.Data.SqlDbType.NVarChar, 50).Value = patient.State;
-        //        cmd.Parameters.Add("@ZipCode", System.Data.SqlDbType.Int, 50).Value    = patient.ZipCode;
-
-        //        try
-        //        {
-        //            conn.Open();
-        //            rows = cmd.ExecuteNonQuery();
-
-        //            if(rows > 0)
-        //            {
-        //                success = true;
-        //            }
-        //            else
-        //            {
-        //                success = false;
-        //            }
-        //        }catch(SqlException ex)
-        //        {
-        //            throw new Exception(ex.Message);
-        //        }
-        //        finally
-        //        {
-        //            conn.Close();
-        //        }
-        //        return success;
-        //    }
-
-        //}
         ///trying to figure out what to do here
         ///had an error with converting reg to patient... i think i want patient to inherit from registration
         public bool insertPatient(Patient patient)
@@ -160,8 +101,8 @@ namespace HealthcareCompanion.DataAccessLayer
 
             //patient_id is an auto number
             query = "INSERT INTO patients" +
-                "(FirstName, MiddleName, LastName, Address, Address2, City, State, ZipCode)" +
-                "VALUES(@FName, @MName, @LName, @Address, @Address2, @City, @State, @ZipCode)";
+                "(FirstName, MiddleName, LastName, Address, Address2, City, State, ZipCode, Pending)" +
+                "VALUES(@FName, @MName, @LName, @Address, @Address2, @City, @State, @ZipCode, @Pending)";
 
             using (conn = new SqlConnection(connectionString))
             using (cmd  = new SqlCommand(query, conn))
@@ -188,6 +129,7 @@ namespace HealthcareCompanion.DataAccessLayer
                 cmd.Parameters.Add("@City", System.Data.SqlDbType.NVarChar, 50).Value  = patient.City;
                 cmd.Parameters.Add("@State", System.Data.SqlDbType.NVarChar, 50).Value = patient.State;
                 cmd.Parameters.Add("@ZipCode", System.Data.SqlDbType.Int, 50).Value    = patient.ZipCode;
+                cmd.Parameters.Add("@Pending", System.Data.SqlDbType.Bit).Value        = patient.Pending;
 
                 try
                 {
