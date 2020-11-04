@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Owin;
 using Microsoft.Owin;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
@@ -22,16 +23,14 @@ namespace HealthcareCompanion.Controllers
         // GET: Default
         public ActionResult Index()
         {
-
             return View();
         }
         [HttpGet]
         public ActionResult PatientRegistration()
         {
-
+            
             return View();
         }
-
         [AllowAnonymous]//so this makes it ok 
         [HttpPost]
         public async Task<ActionResult> PatientRegistration(Patient patient)
@@ -39,21 +38,19 @@ namespace HealthcareCompanion.Controllers
             if (ModelState.IsValid)
             {
                 bool processError = false;
-
                 //First Create the user using Identity Objects
-                var userStore        = new UserStore<IdentityUser>();
-                var userManager      = new UserManager<IdentityUser>(userStore);
+                var    userStore     = new UserStore<IdentityUser>();
+                var    userManager   = new UserManager<IdentityUser>(userStore);
                 string statusMessage = "";
 
-                IdentityUser theUser     = new IdentityUser() { UserName = patient.Email, Email = patient.Email };
+                IdentityUser   theUser   = new IdentityUser() { UserName = patient.Email, Email = patient.Email };
                 IdentityResult theResult = await userManager.CreateAsync(theUser, patient.Password);
 
                 if (theResult == IdentityResult.Success)
                 {
                     //First check to see if User Role exists.  If not create it and add user to User role.
-                    var roleStore   = new RoleStore<IdentityRole>();
-                    var roleManager = new RoleManager<IdentityRole>(roleStore);
-
+                    var roleStore        = new RoleStore<IdentityRole>();
+                    var roleManager      = new RoleManager<IdentityRole>(roleStore);
                     IdentityRole theRole = await roleManager.FindByNameAsync("User");
 
                     if (theRole == null)
@@ -66,7 +63,7 @@ namespace HealthcareCompanion.Controllers
                         {
                             statusMessage = string.Format("User Group Creation failed because : {0}", theResult.Errors.FirstOrDefault());
                             //Need to exit nicely here for some reason, we could not create the role with the DB
-                            processError = true;
+                            processError  = true;
                         }
 
                     }
@@ -125,27 +122,25 @@ namespace HealthcareCompanion.Controllers
             if (ModelState.IsValid)
             {
                 bool processError = false;
-
                 //First Create the user using Identity Objects
-                var userStore = new UserStore<IdentityUser>();
-                var userManager = new UserManager<IdentityUser>(userStore);
+                var userStore        = new UserStore<IdentityUser>();
+                var userManager      = new UserManager<IdentityUser>(userStore);
                 string statusMessage = "";
 
-                IdentityUser theUser = new IdentityUser() { UserName = doctor.Email, Email = doctor.Email };
+                IdentityUser theUser     = new IdentityUser() { UserName = doctor.Email, Email = doctor.Email };
                 IdentityResult theResult = await userManager.CreateAsync(theUser, doctor.Password);
 
                 if (theResult == IdentityResult.Success)
                 {
                     //First check to see if User Role exists.  If not create it and add user to User role.
-                    var roleStore = new RoleStore<IdentityRole>();
+                    var roleStore   = new RoleStore<IdentityRole>();
                     var roleManager = new RoleManager<IdentityRole>(roleStore);
-
                     IdentityRole theRole = await roleManager.FindByNameAsync("User");
 
                     if (theRole == null)
                     {
                         //The user role does not exist, create it.
-                        theRole = new IdentityRole("User");
+                        theRole   = new IdentityRole("User");
                         theResult = null;
                         theResult = await roleManager.CreateAsync(theRole);
                         if (theResult == null)
@@ -154,12 +149,11 @@ namespace HealthcareCompanion.Controllers
                             //Need to exit nicely here for some reason, we could not create the role with the DB
                             processError = true;
                         }
-
                     }
                     if (!processError)
                     {
                         //The role exists, now add the user to the role
-                        theResult = await userManager.AddToRoleAsync(theUser.Id, "User");
+                        theResult     = await userManager.AddToRoleAsync(theUser.Id, "User");
                         statusMessage = string.Format("Identity User {0} was created successfully!<br /> {0} was added to the User group: {1}", theUser.UserName, theResult.Errors.FirstOrDefault());
                     }
                 }
@@ -167,25 +161,23 @@ namespace HealthcareCompanion.Controllers
                 {
                     //could not create a user
                     statusMessage = string.Format("User Creation failed because : {0}", theResult.Errors.FirstOrDefault());
-                    processError = true;
+                    processError  = true;
                 }
-
                 //If an occurred with user creation, post the error to the end user.
                 if (processError)
                 {
-                    ErrorModel error = new ErrorModel();
-                    error.Location = "Creating a new user in Identity";
+                    ErrorModel error   = new ErrorModel();
+                    error.Location     = "Creating a new user in Identity";
                     error.ErrorMessage = statusMessage;
                     //Error Page for creating a user
-                    //return View("Error", "Employee", error);//need a correct redirect here
+                    //return View("Error", "Default", error);//need a correct redirect here
                     //create a view to refer for errors
                     //in employee controller (second attribute here is the controller
                 }
-
                 //Add code to add the rest of the information for the user in the doctor table
                 DoctorTier tier = new DoctorTier();
-                doctor.userID = theUser.Id;
-                doctor.Pending = true;
+                doctor.userID   = theUser.Id;
+                doctor.Pending  = true;
                 tier.insertDoctor(doctor);
                 //boolean pending in the model and set it to true here to let the user know on login that its pending
                 //field in doctor table of bit type called pending
@@ -197,36 +189,36 @@ namespace HealthcareCompanion.Controllers
             }
             return View();
         }
-        //[HttpGet]
-        //public ActionResult Login()
-        //{
+        [HttpGet]
+        public ActionResult Login()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult Login(LoginViewModel login)
+        {
+            if (ModelState.IsValid)
+            {
+                var userManager = HttpContext.GetOwinContext().GetUserManager<AppUserManager>();
+                var authManager = HttpContext.GetOwinContext().Authentication;
 
-        //    return View();
-        //}
-
-        //[HttpPost]
-        //public ActionResult Login(LoginViewModel login)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var userManager = HttpContext.GetOwinContext().GetUserManager<AppUserManager>();
-        //        var authManager = HttpContext.GetOwinContext().Authentication;
-
-        //        IdentityUser user = userManager.Find(login.UserName, login.Password);
-        //        if (user != null)
-        //        {
-        //            var ident = userManager.CreateIdentity(user,
-        //                DefaultAuthenticationTypes.ApplicationCookie);
-        //            authManager.SignIn(
-        //                new AuthenticationProperties { IsPersistent = false }, ident);
-        //            return Redirect(login.ReturnUrl ?? Url.Action("Index", "Default"));
-        //        }
-        //    }
-        //    ModelState.AddModelError("", "Invalid username or password");
-        //    return View(login);
-        //}
-
-
+                IdentityUser user = userManager.Find(login.UserName, login.Password);
+                PatientTier tier  = new PatientTier();
+                Boolean pending   = tier.isPendingPatient(login.UserName);
+                //isPending
+                if (user != null)
+                {
+                    var ident = userManager.CreateIdentity(user,
+                        DefaultAuthenticationTypes.ApplicationCookie);
+                    authManager.SignIn(
+                        new AuthenticationProperties { IsPersistent = false }, ident);
+                    if (pending) { return Redirect(login.ReturnUrl ?? Url.Action("Pending", "Patient")); }
+                    else if (!pending) { return Redirect(login.ReturnUrl ?? Url.Action("NotPending", "Patient")); }
+                }
+            }
+            ModelState.AddModelError("", "Invalid username or password");
+            return View(login);
+        }
         //[HttpGet]
         //public ActionResult PatientInfoRegistration()
         //{
@@ -241,9 +233,7 @@ namespace HealthcareCompanion.Controllers
         //        //Identity here
         //        PatientTier tier = new PatientTier();
         //        tier.insertPatient(patient);
-
         //        RedirectToAction("Index");
-
         //    }
         //    return View();
         //}
@@ -255,14 +245,12 @@ namespace HealthcareCompanion.Controllers
 
             return View(patientList);
         }
-
         [HttpGet]
         public ActionResult AddDoctorInfo()
         {
 
             return View();
         }
-
         [HttpGet]
         public ActionResult About()
         {

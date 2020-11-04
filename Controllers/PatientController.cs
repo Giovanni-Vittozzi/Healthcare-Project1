@@ -23,7 +23,16 @@ namespace HealthcareCompanion.Controllers
 
             return View();
         }
-
+        [HttpGet]
+        public ActionResult Pending()
+        {
+            return View();
+        }
+        [HttpGet]
+        public ActionResult NotPending()
+        {
+            return View();
+        }
         [HttpGet]
         public ActionResult MedicalDataSelection()
         {

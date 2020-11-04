@@ -16,7 +16,6 @@ namespace HealthcareCompanion.DataAccessLayer
         {
 
         }
-
         public List<Patient> getAllPatients()
         {
             List<Patient> patientList = null;
@@ -69,7 +68,15 @@ namespace HealthcareCompanion.DataAccessLayer
                                 patient.City    = (string)reader["City"];
                                 patient.State   = (string)reader["State"];
                                 patient.ZipCode = (int)reader["ZipCode"];
-                                patient.Pending = (Boolean)reader["Pending"];
+                                if (reader["Pending"] != DBNull.Value)
+                                {
+                                    patient.Pending = (bool)(reader["Pending"]); //Convert.ToBoolean
+                                }
+                                else
+                                {
+                                    patient.Pending = false;
+                                }
+                                patient.Email = (string)reader["Email"];
 
                                 patientList.Add(patient);
                             }
@@ -93,16 +100,14 @@ namespace HealthcareCompanion.DataAccessLayer
             Patient patient = null;
             return patient;
         }
-        ///trying to figure out what to do here
-        ///had an error with converting reg to patient... i think i want patient to inherit from registration
         public bool insertPatient(Patient patient)
         {
             int rows = 0;
 
             //patient_id is an auto number
             query = "INSERT INTO patients" +
-                "(FirstName, MiddleName, LastName, Address, Address2, City, State, ZipCode, Pending)" +
-                "VALUES(@FName, @MName, @LName, @Address, @Address2, @City, @State, @ZipCode, @Pending)";
+                "(FirstName, MiddleName, LastName, Address, Address2, City, State, ZipCode, Pending, Email)" +
+                "VALUES(@FName, @MName, @LName, @Address, @Address2, @City, @State, @ZipCode, @Pending, @Email)";
 
             using (conn = new SqlConnection(connectionString))
             using (cmd  = new SqlCommand(query, conn))
@@ -130,7 +135,7 @@ namespace HealthcareCompanion.DataAccessLayer
                 cmd.Parameters.Add("@State", System.Data.SqlDbType.NVarChar, 50).Value = patient.State;
                 cmd.Parameters.Add("@ZipCode", System.Data.SqlDbType.Int, 50).Value    = patient.ZipCode;
                 cmd.Parameters.Add("@Pending", System.Data.SqlDbType.Bit).Value        = patient.Pending;
-
+                cmd.Parameters.Add("@Email", System.Data.SqlDbType.NVarChar, 50).Value = patient.Email;
                 try
                 {
                     conn.Open();
@@ -156,6 +161,7 @@ namespace HealthcareCompanion.DataAccessLayer
             }
 
         }
+        //get pending patients and returns list [where pending = true or 1]
         public bool updatePatient(Patient patient)
         {
             return success;
@@ -164,6 +170,54 @@ namespace HealthcareCompanion.DataAccessLayer
         {
             return success;
         }
+        public Boolean isPendingPatient(String email)
+        {
+            Patient patient      = null;
+            Boolean emailCheck   = false;
+            Boolean pendingCheck = false;
 
+            query = "SELECT * FROM patients WHERE Pending = 'True';";
+
+            using (conn = new SqlConnection(connectionString))
+            using (cmd  = new SqlCommand(query, conn))
+            {
+                try
+                {
+                    conn.Open();
+                    using (reader = cmd.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                patient           = new Patient();
+                                patient.Email     = (string)reader["Email"];
+                                emailCheck        = (patient.Email).Equals(email);
+                                if (emailCheck)
+                                {
+                                    if (reader["Pending"] != DBNull.Value)
+                                    {
+                                        pendingCheck    = true;
+                                    }
+                                    else
+                                    {
+                                        pendingCheck = false;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    throw new Exception(ex.Message);
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+            return pendingCheck;
+        }
     }
 }

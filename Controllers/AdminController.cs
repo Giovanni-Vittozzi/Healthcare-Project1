@@ -22,6 +22,15 @@ namespace HealthcareCompanion.Controllers
 
             return View();
         }
+        [HttpGet]
+        public ActionResult ApprovePatients()
+        {
+            PatientTier tier = new PatientTier();
+            List<Patient> patientList = tier.getAllPatients();
+
+            return View(patientList);
+        }
+
         [AllowAnonymous]
         [HttpGet]
         public ActionResult PatientRegistration()

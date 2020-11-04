@@ -485,7 +485,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Identity\AccountViewModel.cs" />
+    <Compile Include="Models\LoginViewModel.cs" />
     <Compile Include="Identity\IdentityModels.cs" />
     <Compile Include="Models\ErrorModel.cs" />
     <Compile Include="Models\Doctor.cs" />
@@ -526,6 +526,9 @@
     <Content Include="Views\Default\PatientRegistration.cshtml" />
     <Content Include="Views\Default\DoctorRegistration.cshtml" />
     <Content Include="Views\Default\Login.cshtml" />
+    <Content Include="Views\Admin\ApprovePatients.cshtml" />
+    <Content Include="Views\Patient\Pending.cshtml" />
+    <Content Include="Views\Patient\NotPending.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
 
-namespace HealthcareCompanion
+namespace HealthcareCompanion.Models
 {
    public class LoginViewModel
     {
