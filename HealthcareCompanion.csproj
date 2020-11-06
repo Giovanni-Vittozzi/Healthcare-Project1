@@ -502,7 +502,6 @@
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-3.0.0.slim.min.map" />
     <Content Include="Scripts\jquery-3.0.0.min.map" />
-    <Content Include="Views\Default\PatientInfoRegistration.cshtml" />
     <Content Include="Views\Patient\Index.cshtml" />
     <Content Include="Views\Patient\MedicalDataSelection.cshtml" />
     <Content Include="Views\Patient\BloodPressure.cshtml" />
@@ -516,7 +515,6 @@
     <Content Include="Views\Shared\_LayoutDoctor.cshtml" />
     <Content Include="Views\Doctor\Index.cshtml" />
     <Content Include="Views\Doctor\EditDoctorInfo.cshtml" />
-    <Content Include="Views\Default\AddDoctorInfo.cshtml" />
     <Content Include="Views\Shared\_LayoutAdmin.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Admin\AddUser.cshtml" />
@@ -529,6 +527,8 @@
     <Content Include="Views\Admin\ApprovePatients.cshtml" />
     <Content Include="Views\Patient\Pending.cshtml" />
     <Content Include="Views\Patient\NotPending.cshtml" />
+    <Content Include="Views\Doctor\Pending.cshtml" />
+    <Content Include="Views\Doctor\NotPending.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -34,5 +34,6 @@ namespace HealthcareCompanion.Models
         [Required(ErrorMessage = "This field is required.")]
         [Display(Name = "Confirm Password")]
         public string Confirm { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
 }

@@ -14,6 +14,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
+using System.Web.UI.WebControls;
 
 namespace HealthcareCompanion.Controllers
 {
@@ -28,7 +29,10 @@ namespace HealthcareCompanion.Controllers
         [HttpGet]
         public ActionResult PatientRegistration()
         {
-            
+            //var list = new List<string>() { "USA", "Test", "123" };
+            DoctorTier tier         = new DoctorTier();
+            List<Doctor> doctorList = tier.getAllDoctors();
+            ViewBag.list = doctorList;
             return View();
         }
         [AllowAnonymous]//so this makes it ok 
@@ -185,7 +189,6 @@ namespace HealthcareCompanion.Controllers
 
                 List<IdentityUser> userList = userManager.Users.ToList<IdentityUser>();
                 return RedirectToAction("Index");
-                //is this the right list to return?
             }
             return View();
         }
@@ -202,9 +205,11 @@ namespace HealthcareCompanion.Controllers
                 var userManager = HttpContext.GetOwinContext().GetUserManager<AppUserManager>();
                 var authManager = HttpContext.GetOwinContext().Authentication;
 
-                IdentityUser user = userManager.Find(login.UserName, login.Password);
-                PatientTier tier  = new PatientTier();
-                Boolean pending   = tier.isPendingPatient(login.UserName);
+                IdentityUser user       = userManager.Find(login.UserName, login.Password);
+                PatientTier patientTier = new PatientTier();
+                DoctorTier doctorTier   = new DoctorTier();
+                var patientUser         = patientTier.isPendingPatient(login.UserName);
+                var doctorUser          = doctorTier.isPendingDoctor(login.UserName);
                 //isPending
                 if (user != null)
                 {
@@ -212,31 +217,16 @@ namespace HealthcareCompanion.Controllers
                         DefaultAuthenticationTypes.ApplicationCookie);
                     authManager.SignIn(
                         new AuthenticationProperties { IsPersistent = false }, ident);
-                    if (pending) { return Redirect(login.ReturnUrl ?? Url.Action("Pending", "Patient")); }
-                    else if (!pending) { return Redirect(login.ReturnUrl ?? Url.Action("NotPending", "Patient")); }
+                    //this code right here officer  && !pendingDoctor
+                    if (patientUser.pendingCheck && patientUser.emailCheck && !doctorUser.emailCheck) { return Redirect(login.ReturnUrl ?? Url.Action("Pending", "Patient")); }
+                    else if (!patientUser.pendingCheck && patientUser.emailCheck && !doctorUser.emailCheck) { return Redirect(login.ReturnUrl ?? Url.Action("NotPending", "Patient")); }
+                    else if (doctorUser.pendingCheck && doctorUser.emailCheck && !patientUser.emailCheck) { return Redirect(login.ReturnUrl ?? Url.Action("Pending", "Doctor")); }
+                    else if (!doctorUser.pendingCheck && doctorUser.emailCheck && !patientUser.emailCheck) { return Redirect(login.ReturnUrl ?? Url.Action("NotPending", "Doctor")); }
                 }
             }
             ModelState.AddModelError("", "Invalid username or password");
             return View(login);
         }
-        //[HttpGet]
-        //public ActionResult PatientInfoRegistration()
-        //{
-
-        //    return View();
-        //}
-        //[HttpPost]
-        //public ActionResult PatientInfoRegistration(Patient patient)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        //Identity here
-        //        PatientTier tier = new PatientTier();
-        //        tier.insertPatient(patient);
-        //        RedirectToAction("Index");
-        //    }
-        //    return View();
-        //}
         [HttpGet]
         public ActionResult ListAllPatients()
         {

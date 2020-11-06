@@ -75,8 +75,8 @@ namespace HealthcareCompanion.DataAccessLayer
 
             //DoctorID is an auto number
             query = "INSERT INTO doctors" +
-                "(FirstName, LastName, Address, OfficeNum, City, State, ZipCode, Pending)" +
-                "VALUES(@FName, @LName, @Address, @OfficeNum, @City, @State, @ZipCode, @Pending)";
+                "(FirstName, LastName, Address, OfficeNum, City, State, ZipCode, Pending, Email)" +
+                "VALUES(@FName, @LName, @Address, @OfficeNum, @City, @State, @ZipCode, @Pending, @Email)";
 
             using (conn = new SqlConnection(connectionString))
             using (cmd  = new SqlCommand(query, conn))
@@ -89,7 +89,7 @@ namespace HealthcareCompanion.DataAccessLayer
                 cmd.Parameters.Add("@State", System.Data.SqlDbType.NVarChar, 50).Value     = doctor.State;
                 cmd.Parameters.Add("@ZipCode", System.Data.SqlDbType.Int, 50).Value        = doctor.ZipCode;
                 cmd.Parameters.Add("@Pending", System.Data.SqlDbType.Bit).Value            = doctor.Pending;
-
+                cmd.Parameters.Add("@Email", System.Data.SqlDbType.NVarChar, 50).Value     = doctor.Email;
                 try
                 {
                     conn.Open();
@@ -113,6 +113,55 @@ namespace HealthcareCompanion.DataAccessLayer
                 }
                 return success;
             }
+        }
+        public (Boolean pendingCheck, Boolean emailCheck) isPendingDoctor(String email)
+        {
+            Doctor doctor = null;
+            Boolean emailCheck = false;
+            Boolean pendingCheck = false;
+
+            query = "SELECT * FROM doctors WHERE Pending = 'True';";
+
+            using (conn = new SqlConnection(connectionString))
+            using (cmd  = new SqlCommand(query, conn))
+            {
+                try
+                {
+                    conn.Open();
+                    using (reader = cmd.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                doctor = new Doctor();
+                                doctor.Email = (string)reader["Email"];
+                                emailCheck = (doctor.Email).Equals(email);
+                                if (emailCheck)
+                                {
+                                    if (reader["Pending"] != DBNull.Value)
+                                    {
+                                        pendingCheck = true;
+                                    }
+                                    else
+                                    {
+                                        pendingCheck = false;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    throw new Exception(ex.Message);
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+            return (pendingCheck, emailCheck);
         }
         public bool updateDoctor(Doctor doctor)
         {

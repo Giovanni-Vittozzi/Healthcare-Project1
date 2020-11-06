@@ -170,7 +170,7 @@ namespace HealthcareCompanion.DataAccessLayer
         {
             return success;
         }
-        public Boolean isPendingPatient(String email)
+        public (Boolean pendingCheck, Boolean emailCheck) isPendingPatient(String email)
         {
             Patient patient      = null;
             Boolean emailCheck   = false;
@@ -217,7 +217,7 @@ namespace HealthcareCompanion.DataAccessLayer
                     conn.Close();
                 }
             }
-            return pendingCheck;
+            return (pendingCheck, emailCheck);
         }
     }
 }

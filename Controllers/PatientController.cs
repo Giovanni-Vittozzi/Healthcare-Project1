@@ -16,7 +16,6 @@ namespace HealthcareCompanion.Controllers
 
             return View();
         }
-
         [HttpGet]
         public ActionResult EditPatientInfo()
         {
@@ -39,7 +38,6 @@ namespace HealthcareCompanion.Controllers
 
             return View();
         }
-
         [HttpPost]
         public ActionResult MedicalDataSelection(Patient medicalDataSelection)
         {
@@ -49,15 +47,12 @@ namespace HealthcareCompanion.Controllers
             }
             return View();
         }
-
-
         [HttpGet]
         public ActionResult BloodSugar()
         {
 
             return View();
         }
-
         [HttpPost]
         public ActionResult BloodSugar(BloodSugar bloodSugar)
         {
@@ -67,21 +62,18 @@ namespace HealthcareCompanion.Controllers
             }
             return View();
         }
-
         [HttpGet]
         public ActionResult BloodPressure()
         {
 
             return View();
         }
-
         [HttpGet]
         public ActionResult Pulse()
         {
 
             return View();
         }
-
         [HttpGet]
         public ActionResult Weight()
         {

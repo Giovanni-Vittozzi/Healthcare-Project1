@@ -40,6 +40,9 @@ namespace HealthcareCompanion.Models
         [Display(Name = "Confirm Password")]
         public string Confirm { get; set; }
         public DateTime CreatedAt { get; set; }
+        [Required(ErrorMessage = "This field is required.")]
+        [Display(Name = "Select Your Doctor From The List Below:")]
+        public string Doctor { get; set; }
     }
 
     public class BloodSugar
