@@ -31,7 +31,7 @@ namespace HealthcareCompanion.Controllers
         {
             //var list = new List<string>() { "USA", "Test", "123" };
             DoctorTier tier         = new DoctorTier();
-            List<Doctor> doctorList = tier.getAllDoctors();
+            List<SelectListItem> doctorList = tier.listAllDoctors();
             ViewBag.list = doctorList;
             return View();
         }
@@ -174,7 +174,7 @@ namespace HealthcareCompanion.Controllers
                     error.Location     = "Creating a new user in Identity";
                     error.ErrorMessage = statusMessage;
                     //Error Page for creating a user
-                    //return View("Error", "Default", error);//need a correct redirect here
+                    return View("Error", "Default", error);//need a correct redirect here
                     //create a view to refer for errors
                     //in employee controller (second attribute here is the controller
                 }
@@ -218,10 +218,10 @@ namespace HealthcareCompanion.Controllers
                     authManager.SignIn(
                         new AuthenticationProperties { IsPersistent = false }, ident);
                     //this code right here officer  && !pendingDoctor
-                    if (patientUser.pendingCheck && patientUser.emailCheck && !doctorUser.emailCheck) { return Redirect(login.ReturnUrl ?? Url.Action("Pending", "Patient")); }
+                    if (patientUser.pendingCheck       && patientUser.emailCheck && !doctorUser.emailCheck) { return Redirect(login.ReturnUrl ?? Url.Action("Pending", "Patient")); }
                     else if (!patientUser.pendingCheck && patientUser.emailCheck && !doctorUser.emailCheck) { return Redirect(login.ReturnUrl ?? Url.Action("NotPending", "Patient")); }
-                    else if (doctorUser.pendingCheck && doctorUser.emailCheck && !patientUser.emailCheck) { return Redirect(login.ReturnUrl ?? Url.Action("Pending", "Doctor")); }
-                    else if (!doctorUser.pendingCheck && doctorUser.emailCheck && !patientUser.emailCheck) { return Redirect(login.ReturnUrl ?? Url.Action("NotPending", "Doctor")); }
+                    else if (doctorUser.pendingCheck   && doctorUser.emailCheck  && !patientUser.emailCheck) { return Redirect(login.ReturnUrl ?? Url.Action("Pending", "Doctor")); }
+                    else if (!doctorUser.pendingCheck  && doctorUser.emailCheck  && !patientUser.emailCheck) { return Redirect(login.ReturnUrl ?? Url.Action("NotPending", "Doctor")); }
                 }
             }
             ModelState.AddModelError("", "Invalid username or password");

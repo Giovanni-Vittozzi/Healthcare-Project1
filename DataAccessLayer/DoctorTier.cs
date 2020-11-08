@@ -7,6 +7,7 @@ using System.Data.SqlTypes; //in case we need data strings, but we most likely w
 using System.Configuration; //gives access to web config files (pull out connection string)
 using HealthcareCompanion.DataAccessLayer;
 using HealthcareCompanion.Models;
+using System.Web.Mvc;
 
 namespace HealthcareCompanion.DataAccessLayer
 {
@@ -62,6 +63,50 @@ namespace HealthcareCompanion.DataAccessLayer
                 }
             }
 
+            return doctorList;
+        }
+        public List<SelectListItem> listAllDoctors()
+        {
+            List<SelectListItem> doctorList = null;
+            SelectListItem item             = null;
+
+            query = "Select ('Dr. ' + FirstName + ' ' + LastName) AS FullName, " +
+                    "(OfficeNum + ', ' + Address + ', ' + City + ', ' + UPPER(State) + ', ' + CAST(ZipCode AS NVARCHAR(50))) AS DoctorOfficeAddress, " + 
+                    "DoctorID " + 
+                    "FROM doctors;";
+
+            using (conn = new SqlConnection(connectionString))
+            using (cmd  = new SqlCommand(query, conn))
+            {
+                try
+                {
+                    conn.Open();
+                    using (reader = cmd.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            doctorList = new List<SelectListItem>();
+                            while (reader.Read())
+                            {
+                                item       = new SelectListItem();
+                                var name   = reader["FullName"].ToString();
+                                var office = reader["DoctorOfficeAddress"].ToString();
+                                item.Value = reader["DoctorID"].ToString();
+                                item.Text  = name + " " + office;
+                                doctorList.Add(item);
+                            }
+                        }
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    throw new Exception(ex.Message);
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
             return doctorList;
         }
         public Doctor getDoctorByID(int id)
