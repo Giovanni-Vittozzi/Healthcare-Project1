@@ -47,6 +47,7 @@ namespace HealthcareCompanion.Models
 
     public class BloodSugar
     {
+        [Required]
         [Display(Name = "Enter Blood Sugar")]
         public int BloodSugarValue { get; set; }
         [Required]
@@ -54,12 +55,14 @@ namespace HealthcareCompanion.Models
         [DataType(DataType.Time)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:HH:mm}")]
         public DateTime Hour { get; set; }
+        [Required]
         [Display(Name = "Date Blood Pressure was taken")]
         [DataType(DataType.Date)]
         public DateTime ReleaseDate { get; set; }
     }
     public class BloodPressure
     {
+        [Required]
         [Display(Name = "Enter Systolic Blood Pressure")]
         public int BloodPressureSystValue { get; set; }
         [Display(Name = "Enter Diastolic Blood Pressure")]
@@ -69,12 +72,14 @@ namespace HealthcareCompanion.Models
         [DataType(DataType.Time)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:HH:mm}")]
         public DateTime Hour { get; set; }
+        [Required]
         [Display(Name = "Date Blood Pressure was taken")]
         [DataType(DataType.Date)]
         public DateTime ReleaseDate { get; set; }
     }
     public class Pulse
     {
+        [Required]
         [Display(Name = "Enter Pulse")]
         public int BloodPressureSystValue { get; set; }
         [Required]
@@ -82,12 +87,14 @@ namespace HealthcareCompanion.Models
         [DataType(DataType.Time)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:HH:mm}")]
         public DateTime Hour { get; set; }
+        [Required]
         [Display(Name = "Date Pulse was taken")]
         [DataType(DataType.Date)]
         public DateTime ReleaseDate { get; set; }
     }
     public class Weight
     {
+        [Required]
         [Display(Name = "Enter Weight")]
         public int BloodPressureSystValue { get; set; }
         [Required]
@@ -95,6 +102,7 @@ namespace HealthcareCompanion.Models
         [DataType(DataType.Time)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:HH:mm}")]
         public DateTime Hour { get; set; }
+        [Required]
         [Display(Name = "Date Weight was taken")]
         [DataType(DataType.Date)]
         public DateTime ReleaseDate { get; set; }

@@ -17,13 +17,12 @@ namespace HealthcareCompanion.DataAccessLayer
         {
 
         }
-
         public List<Doctor> getAllDoctors()
         {
             List<Doctor> doctorList = null;
             Doctor doctor = null;
 
-            query = "SELECT * FROM doctors;";
+            query = "SELECT * FROM Doctors;";
 
             using (conn = new SqlConnection(connectionString))
             using (cmd = new SqlCommand(query, conn))
@@ -73,7 +72,7 @@ namespace HealthcareCompanion.DataAccessLayer
             query = "Select ('Dr. ' + FirstName + ' ' + LastName) AS FullName, " +
                     "(OfficeNum + ', ' + Address + ', ' + City + ', ' + UPPER(State) + ', ' + CAST(ZipCode AS NVARCHAR(50))) AS DoctorOfficeAddress, " + 
                     "DoctorID " + 
-                    "FROM doctors;";
+                    "FROM Doctors;";
 
             using (conn = new SqlConnection(connectionString))
             using (cmd  = new SqlCommand(query, conn))
@@ -119,7 +118,7 @@ namespace HealthcareCompanion.DataAccessLayer
             int rows = 0;
 
             //DoctorID is an auto number
-            query = "INSERT INTO doctors" +
+            query = "INSERT INTO Doctors" +
                 "(FirstName, LastName, Address, OfficeNum, City, State, ZipCode, Pending, Email)" +
                 "VALUES(@FName, @LName, @Address, @OfficeNum, @City, @State, @ZipCode, @Pending, @Email)";
 
@@ -165,7 +164,7 @@ namespace HealthcareCompanion.DataAccessLayer
             Boolean emailCheck = false;
             Boolean pendingCheck = false;
 
-            query = "SELECT * FROM doctors WHERE Pending = 'True';";
+            query = "SELECT * FROM Doctors WHERE Pending = 'True';";
 
             using (conn = new SqlConnection(connectionString))
             using (cmd  = new SqlCommand(query, conn))
@@ -179,9 +178,9 @@ namespace HealthcareCompanion.DataAccessLayer
                         {
                             while (reader.Read())
                             {
-                                doctor = new Doctor();
+                                doctor       = new Doctor();
                                 doctor.Email = (string)reader["Email"];
-                                emailCheck = (doctor.Email).Equals(email);
+                                emailCheck   = (doctor.Email).Equals(email);
                                 if (emailCheck)
                                 {
                                     if (reader["Pending"] != DBNull.Value)
@@ -207,6 +206,88 @@ namespace HealthcareCompanion.DataAccessLayer
                 }
             }
             return (pendingCheck, emailCheck);
+        }
+        public List<Patient> listPendingPatients()
+        {
+            List<Patient> patientList = null;
+            Patient patient = null;
+
+            query = "SELECT (Patients.FirstName + ' ' + Patients.LastName) AS FullName, " + 
+                    "(Patients.Address + ', ' + Patients.City + ', ' + UPPER(Patients.State) + ', ' + CAST(Patients.ZipCode AS NVARCHAR(50))) AS PatientAddress " +
+                    "FROM Doctors Inner Join PatientAssignment on Doctors.DoctorID = PatientAssignment.DoctorID " + 
+                    "INNER JOIN Patients on PatientAssignment.PatientID = Patients.PatientID WHERE Doctors.DoctorID = 7 AND Patients.Pending = 1; ";
+
+            using (conn = new SqlConnection(connectionString))
+            using (cmd  = new SqlCommand(query, conn))
+            {
+                try
+                {
+                    conn.Open();
+                    using (reader = cmd.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            patientList = new List<Patient>();
+                            while (reader.Read())
+                            {
+                                patient           = new Patient();
+                                patient.PatientID = (int)reader["PatientID"];
+                                patient.FirstName = (string)reader["FirstName"];
+                                if (reader["MiddleName"] != DBNull.Value)
+                                {
+                                    patient.MiddleName = (string)reader["MiddleName"];
+                                }
+                                else
+                                {
+                                    patient.MiddleName = "N\\A";
+                                }
+                                patient.LastName = (string)reader["LastName"];
+                                patient.Address  = (string)reader["Address"];
+                                if (reader["Address2"] != DBNull.Value)
+                                {
+                                    patient.Address2 = (string)reader["Address2"];
+                                }
+                                else
+                                {
+                                    patient.Address2 = "N\\A";
+                                }
+                                if (reader["AptNum"] != DBNull.Value)
+                                {
+                                    patient.AptNum = (string)reader["AptNum"];
+                                }
+                                else
+                                {
+                                    patient.AptNum = "N\\A";
+                                }
+                                patient.City    = (string)reader["City"];
+                                patient.State   = (string)reader["State"];
+                                patient.ZipCode = (int)reader["ZipCode"];
+                                if (reader["Pending"] != DBNull.Value)
+                                {
+                                    patient.Pending = (bool)(reader["Pending"]); //Convert.ToBoolean
+                                }
+                                else
+                                {
+                                    patient.Pending = false;
+                                }
+                                patient.Email = (string)reader["Email"];
+
+                                patientList.Add(patient);
+                            }
+                        }
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    throw new Exception(ex.Message);
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+
+            return patientList;
         }
         public bool updateDoctor(Doctor doctor)
         {

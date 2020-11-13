@@ -21,7 +21,7 @@ namespace HealthcareCompanion.DataAccessLayer
             List<Patient> patientList = null;
             Patient patient = null;
 
-            query = "SELECT * FROM patients;";
+            query = "SELECT * FROM Patients;";
 
             using (conn = new SqlConnection(connectionString))
             using (cmd = new SqlCommand(query, conn))
@@ -105,7 +105,7 @@ namespace HealthcareCompanion.DataAccessLayer
             int rows = 0;
 
             //patient_id is an auto number
-            query = "INSERT INTO patients" +
+            query = "INSERT INTO Patients" +
                 "(FirstName, MiddleName, LastName, Address, Address2, City, State, ZipCode, Pending, Email)" +
                 "VALUES(@FName, @MName, @LName, @Address, @Address2, @City, @State, @ZipCode, @Pending, @Email)";
 
@@ -161,7 +161,7 @@ namespace HealthcareCompanion.DataAccessLayer
             }
 
         }
-        //get pending patients and returns list [where pending = true or 1]
+        //get pending Patients and returns list [where pending = true or 1]
         public bool updatePatient(Patient patient)
         {
             return success;
@@ -176,7 +176,7 @@ namespace HealthcareCompanion.DataAccessLayer
             Boolean emailCheck   = false;
             Boolean pendingCheck = false;
 
-            query = "SELECT * FROM patients WHERE Pending = 'True';";
+            query = "SELECT * FROM Patients WHERE Pending = 'True';";
 
             using (conn = new SqlConnection(connectionString))
             using (cmd  = new SqlCommand(query, conn))
@@ -218,6 +218,48 @@ namespace HealthcareCompanion.DataAccessLayer
                 }
             }
             return (pendingCheck, emailCheck);
+        }
+        public bool insertBloodSugar(int patientID, BloodSugar bloodSugar)
+        {
+            int rows = 0;
+
+            //patient_id is an auto number
+            query = "INSERT INTO PatientMedicalData" +
+                "(PatientID, BloodSugar, BloodSugarTime, BloodSugarDate)" +
+                "VALUES(@PatientID, @BloodSugarValue, @BloodSugarTime, @BloodSugarDate)";
+
+            using (conn = new SqlConnection(connectionString))
+            using (cmd  = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.Add("@PatientID", System.Data.SqlDbType.Int).Value           = patientID; 
+                cmd.Parameters.Add("@BloodSugarValue", System.Data.SqlDbType.Int).Value     = bloodSugar.BloodSugarValue;
+                cmd.Parameters.Add("@BloodSugarTime", System.Data.SqlDbType.Time).Value     = bloodSugar.Hour.TimeOfDay;
+                cmd.Parameters.Add("@BloodSugarDate", System.Data.SqlDbType.DateTime).Value = bloodSugar.ReleaseDate;
+                try
+                {
+                    conn.Open();
+                    rows = cmd.ExecuteNonQuery();
+
+                    if (rows > 0)
+                    {
+                        success = true;
+                    }
+                    else
+                    {
+                        success = false;
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    throw new Exception(ex.Message);
+                }
+                finally
+                {
+                    conn.Close();
+                }
+                return success;
+            }
+
         }
     }
 }

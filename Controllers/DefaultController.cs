@@ -41,7 +41,7 @@ namespace HealthcareCompanion.Controllers
         {
             if (ModelState.IsValid)
             {
-                bool processError = false;
+                bool processError    = false;
                 //First Create the user using Identity Objects
                 var    userStore     = new UserStore<IdentityUser>();
                 var    userManager   = new UserManager<IdentityUser>(userStore);
@@ -53,9 +53,9 @@ namespace HealthcareCompanion.Controllers
                 if (theResult == IdentityResult.Success)
                 {
                     //First check to see if User Role exists.  If not create it and add user to User role.
-                    var roleStore        = new RoleStore<IdentityRole>();
-                    var roleManager      = new RoleManager<IdentityRole>(roleStore);
-                    IdentityRole theRole = await roleManager.FindByNameAsync("User");
+                    var          roleStore   = new RoleStore<IdentityRole>();
+                    var          roleManager = new RoleManager<IdentityRole>(roleStore);
+                    IdentityRole theRole     = await roleManager.FindByNameAsync("User");
 
                     if (theRole == null)
                     {
@@ -86,16 +86,16 @@ namespace HealthcareCompanion.Controllers
                 }
 
                 //If an occurred with user creation, post the error to the end user.
-                if (processError)
-                {
-                    ErrorModel error   = new ErrorModel();
-                    error.Location     = "Creating a new user in Identity";
-                    error.ErrorMessage = statusMessage;
-                    //Error Page for creating a user
-                    //return View("Error", "Employee", error); //need a proper view for this
-                    //create a view to refer for errors
-                    //in employee controller (second attribute here is the controller)
-                }
+                //if (processError)
+                //{
+                //    ErrorModel error   = new ErrorModel();
+                //    error.Location     = "Creating a new user in Identity";
+                //    error.ErrorMessage = statusMessage;
+                //    //Error Page for creating a user
+                //    //return View("Error", "Employee", error); //need a proper view for this
+                //    //create a view to refer for errors
+                //    //in employee controller (second attribute here is the controller)
+                //}
                 //Add code to add the rest of the information for the user in the patient table
                 PatientTier tier = new PatientTier();
                 patient.userID   = theUser.Id;
@@ -168,16 +168,16 @@ namespace HealthcareCompanion.Controllers
                     processError  = true;
                 }
                 //If an occurred with user creation, post the error to the end user.
-                if (processError)
-                {
-                    ErrorModel error   = new ErrorModel();
-                    error.Location     = "Creating a new user in Identity";
-                    error.ErrorMessage = statusMessage;
-                    //Error Page for creating a user
-                    return View("Error", "Default", error);//need a correct redirect here
-                    //create a view to refer for errors
-                    //in employee controller (second attribute here is the controller
-                }
+                //if (processError)
+                //{
+                //    ErrorModel error   = new ErrorModel();
+                //    error.Location     = "Creating a new user in Identity";
+                //    error.ErrorMessage = statusMessage;
+                //    //Error Page for creating a user
+                //    return View("Error", "Default", error);//need a correct redirect here
+                //    //create a view to refer for errors
+                //    //in employee controller (second attribute here is the controller
+                //}
                 //Add code to add the rest of the information for the user in the doctor table
                 DoctorTier tier = new DoctorTier();
                 doctor.userID   = theUser.Id;

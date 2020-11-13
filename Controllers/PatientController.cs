@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using HealthcareCompanion.Models;
+using HealthcareCompanion.DataAccessLayer;
 
 namespace HealthcareCompanion.Controllers
 {
@@ -58,6 +59,11 @@ namespace HealthcareCompanion.Controllers
         {
             if (ModelState.IsValid)
             {
+                PatientTier tier = new PatientTier();
+                //patient.userID = theUser.Id;
+
+                int userID = 2;
+                tier.insertBloodSugar(userID, bloodSugar);
                 return View();
             }
             return View();
