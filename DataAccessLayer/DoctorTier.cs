@@ -67,11 +67,11 @@ namespace HealthcareCompanion.DataAccessLayer
         public List<SelectListItem> listAllDoctors()
         {
             List<SelectListItem> doctorList = null;
-            SelectListItem item             = null;
+            SelectListItem       item       = null;
 
             query = "Select ('Dr. ' + FirstName + ' ' + LastName) AS FullName, " +
                     "(OfficeNum + ', ' + Address + ', ' + City + ', ' + UPPER(State) + ', ' + CAST(ZipCode AS NVARCHAR(50))) AS DoctorOfficeAddress, " + 
-                    "DoctorID " + 
+                    "DoctorID, Pending " + 
                     "FROM Doctors;";
 
             using (conn = new SqlConnection(connectionString))
@@ -87,12 +87,15 @@ namespace HealthcareCompanion.DataAccessLayer
                             doctorList = new List<SelectListItem>();
                             while (reader.Read())
                             {
-                                item       = new SelectListItem();
-                                var name   = reader["FullName"].ToString();
-                                var office = reader["DoctorOfficeAddress"].ToString();
-                                item.Value = reader["DoctorID"].ToString();
-                                item.Text  = name + " " + office;
-                                doctorList.Add(item);
+                                if (reader["Pending"].ToString().Equals("False"))
+                                {
+                                    item = new SelectListItem();
+                                    var name = reader["FullName"].ToString();
+                                    var office = reader["DoctorOfficeAddress"].ToString();
+                                    item.Value = reader["DoctorID"].ToString();
+                                    item.Text = name + " " + office;
+                                    doctorList.Add(item);
+                                }
                             }
                         }
                     }
@@ -119,21 +122,22 @@ namespace HealthcareCompanion.DataAccessLayer
 
             //DoctorID is an auto number
             query = "INSERT INTO Doctors" +
-                "(FirstName, LastName, Address, OfficeNum, City, State, ZipCode, Pending, Email)" +
-                "VALUES(@FName, @LName, @Address, @OfficeNum, @City, @State, @ZipCode, @Pending, @Email)";
+                "(IdentityID, FirstName, LastName, Address, OfficeNum, City, State, ZipCode, Pending, Email)" +
+                "VALUES(@IdentityID, @FName, @LName, @Address, @OfficeNum, @City, @State, @ZipCode, @Pending, @Email)";
 
             using (conn = new SqlConnection(connectionString))
             using (cmd  = new SqlCommand(query, conn))
             {
-                cmd.Parameters.Add("@FName", System.Data.SqlDbType.NVarChar, 50).Value     = doctor.FirstName;
-                cmd.Parameters.Add("@LName", System.Data.SqlDbType.NVarChar, 50).Value     = doctor.LastName;
-                cmd.Parameters.Add("@Address", System.Data.SqlDbType.NVarChar, 50).Value   = doctor.Address;
-                cmd.Parameters.Add("@OfficeNum", System.Data.SqlDbType.NVarChar, 50).Value = doctor.OfficeNum;
-                cmd.Parameters.Add("@City", System.Data.SqlDbType.NVarChar, 50).Value      = doctor.City;
-                cmd.Parameters.Add("@State", System.Data.SqlDbType.NVarChar, 50).Value     = doctor.State;
-                cmd.Parameters.Add("@ZipCode", System.Data.SqlDbType.Int, 50).Value        = doctor.ZipCode;
-                cmd.Parameters.Add("@Pending", System.Data.SqlDbType.Bit).Value            = doctor.Pending;
-                cmd.Parameters.Add("@Email", System.Data.SqlDbType.NVarChar, 50).Value     = doctor.Email;
+                cmd.Parameters.Add("@IdentityID", System.Data.SqlDbType.NVarChar, 128).Value = doctor.userID;
+                cmd.Parameters.Add("@FName", System.Data.SqlDbType.NVarChar, 50).Value       = doctor.FirstName;
+                cmd.Parameters.Add("@LName", System.Data.SqlDbType.NVarChar, 50).Value       = doctor.LastName;
+                cmd.Parameters.Add("@Address", System.Data.SqlDbType.NVarChar, 50).Value     = doctor.Address;
+                cmd.Parameters.Add("@OfficeNum", System.Data.SqlDbType.NVarChar, 50).Value   = doctor.OfficeNum;
+                cmd.Parameters.Add("@City", System.Data.SqlDbType.NVarChar, 50).Value        = doctor.City;
+                cmd.Parameters.Add("@State", System.Data.SqlDbType.NVarChar, 50).Value       = doctor.State;
+                cmd.Parameters.Add("@ZipCode", System.Data.SqlDbType.Int, 50).Value          = doctor.ZipCode;
+                cmd.Parameters.Add("@Pending", System.Data.SqlDbType.Bit).Value              = doctor.Pending;
+                cmd.Parameters.Add("@Email", System.Data.SqlDbType.NVarChar, 50).Value       = doctor.Email;
                 try
                 {
                     conn.Open();

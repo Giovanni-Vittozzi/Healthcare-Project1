@@ -30,9 +30,9 @@ namespace HealthcareCompanion.Controllers
         public ActionResult PatientRegistration()
         {
             //var list = new List<string>() { "USA", "Test", "123" };
-            DoctorTier tier         = new DoctorTier();
+            DoctorTier           tier       = new DoctorTier();
             List<SelectListItem> doctorList = tier.listAllDoctors();
-            ViewBag.list = doctorList;
+            ViewBag.list                    = doctorList;
             return View();
         }
         [AllowAnonymous]//so this makes it ok 
@@ -101,12 +101,8 @@ namespace HealthcareCompanion.Controllers
                 patient.userID   = theUser.Id;
                 patient.Pending  = true;
                 tier.insertPatient(patient);
-                //boolean pending in the model and set it to true here to let the user know on login that its pending
-                //field in patient table of bit type called pending
-                //or we could check if they are only in the user role //pending boolean AND user role
 
                 List<IdentityUser> userList = userManager.Users.ToList<IdentityUser>();
-                //is this the right list to return?
                 return RedirectToAction("Index");
             }
             return View();

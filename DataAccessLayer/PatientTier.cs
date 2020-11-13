@@ -19,12 +19,12 @@ namespace HealthcareCompanion.DataAccessLayer
         public List<Patient> getAllPatients()
         {
             List<Patient> patientList = null;
-            Patient patient = null;
+            Patient       patient     = null;
 
             query = "SELECT * FROM Patients;";
 
             using (conn = new SqlConnection(connectionString))
-            using (cmd = new SqlCommand(query, conn))
+            using (cmd  = new SqlCommand(query, conn))
             {
                 try
                 {
@@ -36,7 +36,7 @@ namespace HealthcareCompanion.DataAccessLayer
                             patientList = new List<Patient>();
                             while (reader.Read())
                             {
-                                patient = new Patient();
+                                patient           = new Patient();
                                 patient.PatientID = (int)reader["PatientID"];
                                 patient.FirstName = (string)reader["FirstName"];
                                 if(reader["MiddleName"] != DBNull.Value)
@@ -106,13 +106,14 @@ namespace HealthcareCompanion.DataAccessLayer
 
             //patient_id is an auto number
             query = "INSERT INTO Patients" +
-                "(FirstName, MiddleName, LastName, Address, Address2, City, State, ZipCode, Pending, Email)" +
-                "VALUES(@FName, @MName, @LName, @Address, @Address2, @City, @State, @ZipCode, @Pending, @Email)";
+                "(IdentityID, FirstName, MiddleName, LastName, Address, Address2, City, State, ZipCode, Pending, Email)" +
+                "VALUES(@IdentityID, @FName, @MName, @LName, @Address, @Address2, @City, @State, @ZipCode, @Pending, @Email)";
 
             using (conn = new SqlConnection(connectionString))
             using (cmd  = new SqlCommand(query, conn))
             {
-                cmd.Parameters.Add("@FName", System.Data.SqlDbType.NVarChar, 50).Value = patient.FirstName;
+                cmd.Parameters.Add("@IdentityID", System.Data.SqlDbType.NVarChar, 128).Value = patient.userID;
+                cmd.Parameters.Add("@FName", System.Data.SqlDbType.NVarChar, 50).Value       = patient.FirstName;
                 if(patient.MiddleName != null)
                 {
                     cmd.Parameters.Add("@MName", System.Data.SqlDbType.NVarChar, 50).Value = patient.MiddleName;
