@@ -42,7 +42,7 @@ namespace HealthcareCompanion.Models
         public DateTime CreatedAt { get; set; }
         [Required(ErrorMessage = "This field is required.")]
         [Display(Name = "Select Your Doctor From The List Below:")]
-        public string Doctor { get; set; }
+        public int Doctor { get; set; }
     }
 
     public class BloodSugar

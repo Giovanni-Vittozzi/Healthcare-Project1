@@ -46,7 +46,6 @@ namespace HealthcareCompanion.Controllers
             if (ModelState.IsValid)
             {
                 bool processError = false;
-
                 //First Create the user using Identity Objects
                 var userStore        = new UserStore<IdentityUser>();
                 var userManager      = new UserManager<IdentityUser>(userStore);
@@ -58,10 +57,9 @@ namespace HealthcareCompanion.Controllers
                 if (theResult == IdentityResult.Success)
                 {
                     //First check to see if User Role exists.  If not create it and add user to User role.
-                    var roleStore   = new RoleStore<IdentityRole>();
-                    var roleManager = new RoleManager<IdentityRole>(roleStore);
-
-                    IdentityRole theRole = await roleManager.FindByNameAsync("User");
+                    var          roleStore   = new RoleStore<IdentityRole>();
+                    var          roleManager = new RoleManager<IdentityRole>(roleStore);
+                    IdentityRole theRole     = await roleManager.FindByNameAsync("User");
 
                     if (theRole == null)
                     {
@@ -105,7 +103,7 @@ namespace HealthcareCompanion.Controllers
                 //Add code to add the rest of the information for the user in the patient table
                 PatientTier tier = new PatientTier();
                 patient.userID   = theUser.Id;
-                patient.Pending = true;
+                patient.Pending  = true;
                 tier.insertPatient(patient);
                 //boolean pending in the model and set it to true here to let the user know on login that its pending
                 //field in patient table of bit type called pending
@@ -121,8 +119,6 @@ namespace HealthcareCompanion.Controllers
         [HttpGet]
         public ActionResult DoctorRegistration()
         {
-
-            //Need to create View here
             return View();
         }
 
@@ -135,20 +131,19 @@ namespace HealthcareCompanion.Controllers
                 bool processError = false;
 
                 //First Create the user using Identity Objects
-                var userStore        = new UserStore<IdentityUser>();
-                var userManager      = new UserManager<IdentityUser>(userStore);
+                var    userStore     = new UserStore<IdentityUser>();
+                var    userManager   = new UserManager<IdentityUser>(userStore);
                 string statusMessage = "";
 
-                IdentityUser theUser     = new IdentityUser() { UserName = doctor.Email, Email = doctor.Email };
+                IdentityUser   theUser   = new IdentityUser() { UserName = doctor.Email, Email = doctor.Email };
                 IdentityResult theResult = await userManager.CreateAsync(theUser, doctor.Password);
 
                 if (theResult == IdentityResult.Success)
                 {
                     //First check to see if User Role exists.  If not create it and add user to User role.
-                    var roleStore   = new RoleStore<IdentityRole>();
-                    var roleManager = new RoleManager<IdentityRole>(roleStore);
-
-                    IdentityRole theRole = await roleManager.FindByNameAsync("User");
+                    var          roleStore   = new RoleStore<IdentityRole>();
+                    var          roleManager = new RoleManager<IdentityRole>(roleStore);
+                    IdentityRole theRole     = await roleManager.FindByNameAsync("User");
 
                     if (theRole == null)
                     {
@@ -162,7 +157,6 @@ namespace HealthcareCompanion.Controllers
                             //Need to exit nicely here for some reason, we could not create the role with the DB
                             processError = true;
                         }
-
                     }
                     if (!processError)
                     {
@@ -192,8 +186,8 @@ namespace HealthcareCompanion.Controllers
 
                 //Add code to add the rest of the information for the user in the doctor table
                 DoctorTier tier = new DoctorTier();
-                doctor.userID = theUser.Id;
-                doctor.Pending = true;
+                doctor.userID   = theUser.Id;
+                doctor.Pending  = true;
                 tier.insertDoctor(doctor);
                 //boolean pending in the model and set it to true here to let the user know on login that its pending
                 //field in doctor table of bit type called pending
@@ -201,7 +195,6 @@ namespace HealthcareCompanion.Controllers
 
                 List<IdentityUser> userList = userManager.Users.ToList<IdentityUser>();
                 return RedirectToAction("Index");
-                //is this the right list to return?
             }
             return View();
         }

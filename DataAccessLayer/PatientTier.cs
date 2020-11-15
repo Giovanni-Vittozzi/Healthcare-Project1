@@ -95,11 +95,6 @@ namespace HealthcareCompanion.DataAccessLayer
 
             return patientList;
         }
-        public Patient getPatientByID(int id)
-        {
-            Patient patient = null;
-            return patient;
-        }
         public bool insertPatient(Patient patient)
         {
             int rows = 0;
@@ -163,6 +158,49 @@ namespace HealthcareCompanion.DataAccessLayer
 
         }
         //get pending Patients and returns list [where pending = true or 1]
+        public int getPatientByID(String id)
+        {
+            Patient patient         = null;
+            Boolean identityIDCheck = false;
+            int     myid            = 0;
+
+            query = "SELECT * FROM Patients WHERE IdentityID = '" + id + "';";
+
+            using (conn = new SqlConnection(connectionString))
+            using (cmd  = new SqlCommand(query, conn))
+            {
+                try
+                {
+                    conn.Open();
+                    using (reader = cmd.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                patient = new Patient();
+                                patient.userID  = (string)reader["IdentityID"];
+                                identityIDCheck = (patient.userID).Equals(id);
+                                if (identityIDCheck)
+                                {
+                                    myid = (int)reader["PatientID"];
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    throw new Exception(ex.Message);
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+            return myid;
+        }
+
         public bool updatePatient(Patient patient)
         {
             return success;
@@ -236,6 +274,46 @@ namespace HealthcareCompanion.DataAccessLayer
                 cmd.Parameters.Add("@BloodSugarValue", System.Data.SqlDbType.Int).Value     = bloodSugar.BloodSugarValue;
                 cmd.Parameters.Add("@BloodSugarTime", System.Data.SqlDbType.Time).Value     = bloodSugar.Hour.TimeOfDay;
                 cmd.Parameters.Add("@BloodSugarDate", System.Data.SqlDbType.DateTime).Value = bloodSugar.ReleaseDate;
+                try
+                {
+                    conn.Open();
+                    rows = cmd.ExecuteNonQuery();
+
+                    if (rows > 0)
+                    {
+                        success = true;
+                    }
+                    else
+                    {
+                        success = false;
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    throw new Exception(ex.Message);
+                }
+                finally
+                {
+                    conn.Close();
+                }
+                return success;
+            }
+
+        }
+        public bool pairDoctorPatient(int patientID, int DoctorID)
+        {
+            int rows = 0;
+
+            //patient_id is an auto number
+            query = "INSERT INTO PatientAssignment" +
+                "(PatientID, DoctorID) " +
+                "VALUES(@PatientID, @DoctorID);";
+
+            using (conn = new SqlConnection(connectionString))
+            using (cmd  = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.Add("@PatientID", System.Data.SqlDbType.Int).Value = patientID; 
+                cmd.Parameters.Add("@DoctorID", System.Data.SqlDbType.Int).Value  = DoctorID;
                 try
                 {
                     conn.Open();

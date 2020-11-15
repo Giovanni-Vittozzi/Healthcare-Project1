@@ -117,13 +117,16 @@
                 @{
                     if (ViewBag.list != null)
                     {
-                        <select id="Doctor" name="Doctor">
+                        <select id="DoctorSelect" name="DoctorSelect">
                             <option>--SELECT YOUR DOCTOR FROM THE LIST--</option>
                             @foreach (SelectListItem item in ViewBag.list)
                             {
                                 <option value="@item.Value" selected>@item.Text</option>
                             }
                         </select>
+                    }else
+                    {
+                        <p>There are no doctors currently registered. Please add one later.</p>
                     }
                 }
                 @*@Html.EditorFor(model => model.Doctor, new { htmlAttributes = new { @class = "form-control" } })*@

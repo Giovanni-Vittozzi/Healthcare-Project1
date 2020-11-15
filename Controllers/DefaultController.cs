@@ -98,12 +98,15 @@ namespace HealthcareCompanion.Controllers
                 //}
                 //Add code to add the rest of the information for the user in the patient table
                 PatientTier tier = new PatientTier();
+                patient.Doctor   = int.Parse(Request.Form["DoctorSelect"].ToString()); //Get selected Doctor
                 patient.userID   = theUser.Id;
                 patient.Pending  = true;
                 tier.insertPatient(patient);
+                int newid = tier.getPatientByID(patient.userID);
+                tier.pairDoctorPatient(newid, patient.Doctor);
 
                 List<IdentityUser> userList = userManager.Users.ToList<IdentityUser>();
-                return RedirectToAction("Index");
+                return RedirectToAction("Login");
             }
             return View();
         }
@@ -214,8 +217,8 @@ namespace HealthcareCompanion.Controllers
                     authManager.SignIn(
                         new AuthenticationProperties { IsPersistent = false }, ident);
                     //this code right here officer  && !pendingDoctor
-                    if (patientUser.pendingCheck       && patientUser.emailCheck && !doctorUser.emailCheck) { return Redirect(login.ReturnUrl ?? Url.Action("Pending", "Patient")); }
-                    else if (!patientUser.pendingCheck && patientUser.emailCheck && !doctorUser.emailCheck) { return Redirect(login.ReturnUrl ?? Url.Action("NotPending", "Patient")); }
+                    if (patientUser.pendingCheck       && patientUser.emailCheck && !doctorUser.emailCheck)  { return Redirect(login.ReturnUrl ?? Url.Action("Pending", "Patient")); }
+                    else if (!patientUser.pendingCheck && patientUser.emailCheck && !doctorUser.emailCheck)  { return Redirect(login.ReturnUrl ?? Url.Action("NotPending", "Patient")); }
                     else if (doctorUser.pendingCheck   && doctorUser.emailCheck  && !patientUser.emailCheck) { return Redirect(login.ReturnUrl ?? Url.Action("Pending", "Doctor")); }
                     else if (!doctorUser.pendingCheck  && doctorUser.emailCheck  && !patientUser.emailCheck) { return Redirect(login.ReturnUrl ?? Url.Action("NotPending", "Doctor")); }
                 }
@@ -226,7 +229,7 @@ namespace HealthcareCompanion.Controllers
         [HttpGet]
         public ActionResult ListAllPatients()
         {
-            PatientTier tier = new PatientTier();
+            PatientTier tier          = new PatientTier();
             List<Patient> patientList = tier.getAllPatients();
 
             return View(patientList);
