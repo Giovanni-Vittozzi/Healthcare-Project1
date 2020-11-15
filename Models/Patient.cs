@@ -50,15 +50,10 @@ namespace HealthcareCompanion.Models
         [Required]
         [Display(Name = "Enter Blood Sugar")]
         public int BloodSugarValue { get; set; }
+        public DateTime Now { get; set; }
         [Required]
-        [Display(Name = "Time Blood Pressure was taken")]
-        [DataType(DataType.Time)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:HH:mm}")]
-        public DateTime Hour { get; set; }
-        [Required]
-        [Display(Name = "Date Blood Pressure was taken")]
-        [DataType(DataType.Date)]
-        public DateTime ReleaseDate { get; set; }
+        [Display(Name = "Time of day Blood Sugar was taken")]
+        public String TimeOfDay { get; set; }
     }
     public class BloodPressure
     {

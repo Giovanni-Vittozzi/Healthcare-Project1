@@ -118,10 +118,10 @@
                     if (ViewBag.list != null)
                     {
                         <select id="DoctorSelect" name="DoctorSelect">
-                            <option>--SELECT YOUR DOCTOR FROM THE LIST--</option>
+                            <option selected>--SELECT YOUR DOCTOR FROM THE LIST--</option>
                             @foreach (SelectListItem item in ViewBag.list)
                             {
-                                <option value="@item.Value" selected>@item.Text</option>
+                                <option value="@item.Value">@item.Text</option>
                             }
                         </select>
                     }else

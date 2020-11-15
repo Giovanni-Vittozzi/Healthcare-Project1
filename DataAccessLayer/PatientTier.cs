@@ -264,16 +264,16 @@ namespace HealthcareCompanion.DataAccessLayer
 
             //patient_id is an auto number
             query = "INSERT INTO PatientMedicalData" +
-                "(PatientID, BloodSugar, BloodSugarTime, BloodSugarDate)" +
-                "VALUES(@PatientID, @BloodSugarValue, @BloodSugarTime, @BloodSugarDate)";
+                "(TypeID, PatientID, DateEntered, Value1, TimeOfDay)" +
+                "VALUES(@TypeID, @PatientID, @DateEntered, @Value1, @TimeOfDay)";
 
             using (conn = new SqlConnection(connectionString))
             using (cmd  = new SqlCommand(query, conn))
             {
                 cmd.Parameters.Add("@PatientID", System.Data.SqlDbType.Int).Value           = patientID; 
                 cmd.Parameters.Add("@BloodSugarValue", System.Data.SqlDbType.Int).Value     = bloodSugar.BloodSugarValue;
-                cmd.Parameters.Add("@BloodSugarTime", System.Data.SqlDbType.Time).Value     = bloodSugar.Hour.TimeOfDay;
-                cmd.Parameters.Add("@BloodSugarDate", System.Data.SqlDbType.DateTime).Value = bloodSugar.ReleaseDate;
+                //cmd.Parameters.Add("@BloodSugarTime", System.Data.SqlDbType.Time).Value     = bloodSugar.Hour.TimeOfDay;
+                //cmd.Parameters.Add("@BloodSugarDate", System.Data.SqlDbType.DateTime).Value = bloodSugar.ReleaseDate;
                 try
                 {
                     conn.Open();

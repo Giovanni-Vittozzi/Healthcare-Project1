@@ -51,7 +51,8 @@ namespace HealthcareCompanion.Controllers
         [HttpGet]
         public ActionResult BloodSugar()
         {
-
+            var TimeOfDayList = new List<string>() { "Morning", "Afternoon", "Evening", "Night" };
+            ViewBag.TimeOfDayList = TimeOfDayList;
             return View();
         }
         [HttpPost]
@@ -61,8 +62,9 @@ namespace HealthcareCompanion.Controllers
             {
                 PatientTier tier = new PatientTier();
                 //patient.userID = theUser.Id;
-
                 int userID = 2;
+                bloodSugar.Now = DateTime.Now;
+                bloodSugar.TimeOfDay = Request.Form["TimeOfDay"]; //Get selected time of day
                 tier.insertBloodSugar(userID, bloodSugar);
                 return View();
             }
