@@ -506,7 +506,6 @@
     <Content Include="Views\Patient\Index.cshtml" />
     <Content Include="Views\Patient\MedicalDataSelection.cshtml" />
     <Content Include="Views\Patient\BloodPressure.cshtml" />
-    <Content Include="Views\Patient\BloodSugar.cshtml" />
     <Content Include="Views\Patient\Pulse.cshtml" />
     <Content Include="Views\Patient\Weight.cshtml" />
     <Content Include="Views\Default\About.cshtml" />
@@ -530,6 +529,7 @@
     <Content Include="Views\Patient\NotPending.cshtml" />
     <Content Include="Views\Doctor\Pending.cshtml" />
     <Content Include="Views\Doctor\NotPending.cshtml" />
+    <Content Include="Views\Patient\BloodSugar.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -258,20 +258,31 @@ namespace HealthcareCompanion.DataAccessLayer
             }
             return (pendingCheck, emailCheck);
         }
-        public bool insertBloodSugar(int patientID, BloodSugar bloodSugar)
+        public bool insertMedicalData(MedicalData medicalData)
         {
             int rows = 0;
 
             //patient_id is an auto number
             query = "INSERT INTO PatientMedicalData" +
-                "(TypeID, PatientID, DateEntered, Value1, TimeOfDay)" +
-                "VALUES(@TypeID, @PatientID, @DateEntered, @Value1, @TimeOfDay)";
+                "(TypeID, PatientID, DateEntered, Value1, Value2, TimeOfDay) " +
+                "VALUES(@TypeID, @PatientID, @DateEntered, @Value1, @Value2, @TimeOfDay)";
 
             using (conn = new SqlConnection(connectionString))
             using (cmd  = new SqlCommand(query, conn))
             {
-                cmd.Parameters.Add("@PatientID", System.Data.SqlDbType.Int).Value           = patientID; 
-                cmd.Parameters.Add("@BloodSugarValue", System.Data.SqlDbType.Int).Value     = bloodSugar.BloodSugarValue;
+                cmd.Parameters.Add("@TypeID",      System.Data.SqlDbType.Int).Value          = medicalData.TypeID; 
+                cmd.Parameters.Add("@PatientID",   System.Data.SqlDbType.Int).Value          = medicalData.PatientID; 
+                cmd.Parameters.Add("@DateEntered", System.Data.SqlDbType.DateTime).Value     = medicalData.Now; 
+                cmd.Parameters.Add("@Value1",      System.Data.SqlDbType.Int).Value          = medicalData.Value1;
+                if (medicalData.Value2 != 0)
+                {
+                    cmd.Parameters.Add("@Value2", System.Data.SqlDbType.Int).Value = medicalData.Value2;
+                }
+                else
+                {
+                    cmd.Parameters.Add("@Value2", System.Data.SqlDbType.Int).Value = DBNull.Value;
+                }
+                cmd.Parameters.Add("@TimeOfDay", System.Data.SqlDbType.NVarChar, 50).Value = medicalData.TimeOfDay;
                 //cmd.Parameters.Add("@BloodSugarTime", System.Data.SqlDbType.Time).Value     = bloodSugar.Hour.TimeOfDay;
                 //cmd.Parameters.Add("@BloodSugarDate", System.Data.SqlDbType.DateTime).Value = bloodSugar.ReleaseDate;
                 try

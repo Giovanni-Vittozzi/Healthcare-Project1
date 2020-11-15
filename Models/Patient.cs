@@ -45,6 +45,19 @@ namespace HealthcareCompanion.Models
         public int Doctor { get; set; }
     }
 
+    public class MedicalData
+    {
+        public int TypeID { get; set; }
+        public int PatientID { get; set; }
+        [Required]
+        public int Value1 { get; set; }
+        [Required]
+        public int Value2 { get; set; }
+        public DateTime Now { get; set; }
+        [Required]
+        [Display(Name = "Time of day reading was taken")]
+        public String TimeOfDay { get; set; }
+    }
     public class BloodSugar
     {
         [Required]

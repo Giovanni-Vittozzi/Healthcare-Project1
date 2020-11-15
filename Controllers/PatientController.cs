@@ -56,16 +56,18 @@ namespace HealthcareCompanion.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult BloodSugar(BloodSugar bloodSugar)
+        public ActionResult BloodSugar(MedicalData medicalData)
         {
             if (ModelState.IsValid)
             {
                 PatientTier tier = new PatientTier();
                 //patient.userID = theUser.Id;
-                int userID = 2;
-                bloodSugar.Now = DateTime.Now;
-                bloodSugar.TimeOfDay = Request.Form["TimeOfDay"]; //Get selected time of day
-                tier.insertBloodSugar(userID, bloodSugar);
+                medicalData.Value2    = 0;
+                medicalData.PatientID = 2;
+                medicalData.TypeID    = 1;
+                medicalData.Now = Convert.ToDateTime(DateTime.Now);
+                medicalData.TimeOfDay = Request.Form["TimeOfDay"]; //Get selected time of day
+                tier.insertMedicalData(medicalData);
                 return View();
             }
             return View();
