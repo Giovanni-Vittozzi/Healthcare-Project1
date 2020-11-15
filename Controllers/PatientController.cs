@@ -5,6 +5,8 @@ using System.Web;
 using System.Web.Mvc;
 using HealthcareCompanion.Models;
 using HealthcareCompanion.DataAccessLayer;
+using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Identity;
 
 namespace HealthcareCompanion.Controllers
 {
@@ -51,7 +53,7 @@ namespace HealthcareCompanion.Controllers
         [HttpGet]
         public ActionResult BloodSugar()
         {
-            var TimeOfDayList = new List<string>() { "Morning", "Afternoon", "Evening", "Night" };
+            var TimeOfDayList     = new List<string>() { "Morning", "Afternoon", "Evening", "Night" };
             ViewBag.TimeOfDayList = TimeOfDayList;
             return View();
         }
@@ -60,13 +62,18 @@ namespace HealthcareCompanion.Controllers
         {
             if (ModelState.IsValid)
             {
-                PatientTier tier = new PatientTier();
-                //patient.userID = theUser.Id;
-                medicalData.Value2    = 0;
-                medicalData.PatientID = 2;
-                medicalData.TypeID    = 1;
-                medicalData.Now = Convert.ToDateTime(DateTime.Now);
-                medicalData.TimeOfDay = Request.Form["TimeOfDay"]; //Get selected time of day
+                PatientTier tier   = new PatientTier();
+                medicalData.Value2 = 0; //this value is only needed for blood pressure
+                if (Request.IsAuthenticated)
+                {
+                    var          userStore   = new UserStore<IdentityUser>();
+                    var          userManager = new UserManager<IdentityUser>(userStore);
+                    IdentityUser theUser     = userManager.FindById(User.Identity.GetUserId());
+                    string       userID      = theUser.Id;
+                    medicalData.PatientID    = tier.getPatientByID(userID);
+                }
+                medicalData.TypeID    = 1; //From the MedicalDataType Table, Blood Sugar is 1
+                medicalData.TimeOfDay = Request.Form["TimeOfDay"]; //Get selected time of day the reading was taken
                 tier.insertMedicalData(medicalData);
                 return View();
             }
@@ -75,20 +82,90 @@ namespace HealthcareCompanion.Controllers
         [HttpGet]
         public ActionResult BloodPressure()
         {
-
+            var TimeOfDayList = new List<string>() { "Morning", "Afternoon", "Evening", "Night" };
+            ViewBag.TimeOfDayList = TimeOfDayList;
+            return View();
+        }
+        [HttpPost]
+        public ActionResult BloodPressure(MedicalData medicalData)
+        {
+            if (ModelState.IsValid)
+            {
+                PatientTier tier   = new PatientTier();
+                if (Request.IsAuthenticated)
+                {
+                    var          userStore   = new UserStore<IdentityUser>();
+                    var          userManager = new UserManager<IdentityUser>(userStore);
+                    IdentityUser theUser     = userManager.FindById(User.Identity.GetUserId());
+                    string       userID      = theUser.Id;
+                    medicalData.PatientID    = tier.getPatientByID(userID);
+                }
+                medicalData.TypeID    = 2; //From the MedicalDataType Table, Blood Pressure is 2
+                medicalData.TimeOfDay = Request.Form["TimeOfDay"]; //Get selected time of day the reading was taken
+                tier.insertMedicalData(medicalData);
+                return View();
+            }
             return View();
         }
         [HttpGet]
         public ActionResult Pulse()
         {
-
+            var TimeOfDayList = new List<string>() { "Morning", "Afternoon", "Evening", "Night" };
+            ViewBag.TimeOfDayList = TimeOfDayList;
             return View();
+        }
+        [HttpPost]
+        public ActionResult Pulse(MedicalData medicalData)
+        {
+            if (ModelState.IsValid)
+            {
+                PatientTier tier   = new PatientTier();
+                medicalData.Value2 = 0; //this value is only needed for blood pressure
+                if (Request.IsAuthenticated)
+                {
+                    var          userStore   = new UserStore<IdentityUser>();
+                    var          userManager = new UserManager<IdentityUser>(userStore);
+                    IdentityUser theUser     = userManager.FindById(User.Identity.GetUserId());
+                    string       userID      = theUser.Id;
+                    medicalData.PatientID    = tier.getPatientByID(userID);
+                }
+                medicalData.TypeID    = 3; //From the MedicalDataType Table, Pulse is 3
+                medicalData.TimeOfDay = Request.Form["TimeOfDay"]; //Get selected time of day the reading was taken
+                tier.insertMedicalData(medicalData);
+                return View();
+            }
+            return View();
+
         }
         [HttpGet]
         public ActionResult Weight()
         {
-
+            var TimeOfDayList     = new List<string>() { "Morning", "Afternoon", "Evening", "Night" };
+            ViewBag.TimeOfDayList = TimeOfDayList;
             return View();
+        }
+        [HttpPost]
+        public ActionResult Weight(MedicalData medicalData)
+        {
+            if (ModelState.IsValid)
+            {
+                PatientTier tier   = new PatientTier();
+                medicalData.Value2 = 0; //this value is only needed for blood pressure
+                if (Request.IsAuthenticated)
+                {
+                    var          userStore   = new UserStore<IdentityUser>();
+                    var          userManager = new UserManager<IdentityUser>(userStore);
+                    IdentityUser theUser     = userManager.FindById(User.Identity.GetUserId());
+                    string       userID      = theUser.Id;
+                    medicalData.PatientID    = tier.getPatientByID(userID);
+                }
+                medicalData.TypeID    = 4; //From the MedicalDataType Table, Weight is 4
+                medicalData.TimeOfDay = Request.Form["TimeOfDay"]; //Get selected time of day the reading was taken
+                tier.insertMedicalData(medicalData);
+                return View();
+            }
+            return View();
+
         }
     }
 }

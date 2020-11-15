@@ -44,7 +44,6 @@ namespace HealthcareCompanion.Models
         [Display(Name = "Select Your Doctor From The List Below:")]
         public int Doctor { get; set; }
     }
-
     public class MedicalData
     {
         public int TypeID { get; set; }
@@ -58,62 +57,4 @@ namespace HealthcareCompanion.Models
         [Display(Name = "Time of day reading was taken")]
         public String TimeOfDay { get; set; }
     }
-    public class BloodSugar
-    {
-        [Required]
-        [Display(Name = "Enter Blood Sugar")]
-        public int BloodSugarValue { get; set; }
-        public DateTime Now { get; set; }
-        [Required]
-        [Display(Name = "Time of day Blood Sugar was taken")]
-        public String TimeOfDay { get; set; }
-    }
-    public class BloodPressure
-    {
-        [Required]
-        [Display(Name = "Enter Systolic Blood Pressure")]
-        public int BloodPressureSystValue { get; set; }
-        [Display(Name = "Enter Diastolic Blood Pressure")]
-        public int BloodPressureDiastValue { get; set; }
-        [Required]
-        [Display(Name = "Time Blood Pressure was taken")]
-        [DataType(DataType.Time)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:HH:mm}")]
-        public DateTime Hour { get; set; }
-        [Required]
-        [Display(Name = "Date Blood Pressure was taken")]
-        [DataType(DataType.Date)]
-        public DateTime ReleaseDate { get; set; }
-    }
-    public class Pulse
-    {
-        [Required]
-        [Display(Name = "Enter Pulse")]
-        public int BloodPressureSystValue { get; set; }
-        [Required]
-        [Display(Name = "Time Pulse was taken")]
-        [DataType(DataType.Time)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:HH:mm}")]
-        public DateTime Hour { get; set; }
-        [Required]
-        [Display(Name = "Date Pulse was taken")]
-        [DataType(DataType.Date)]
-        public DateTime ReleaseDate { get; set; }
-    }
-    public class Weight
-    {
-        [Required]
-        [Display(Name = "Enter Weight")]
-        public int BloodPressureSystValue { get; set; }
-        [Required]
-        [Display(Name = "Time Weight was taken")]
-        [DataType(DataType.Time)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:HH:mm}")]
-        public DateTime Hour { get; set; }
-        [Required]
-        [Display(Name = "Date Weight was taken")]
-        [DataType(DataType.Date)]
-        public DateTime ReleaseDate { get; set; }
-    }
-
 }

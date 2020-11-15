@@ -271,8 +271,8 @@ namespace HealthcareCompanion.DataAccessLayer
             using (cmd  = new SqlCommand(query, conn))
             {
                 cmd.Parameters.Add("@TypeID",      System.Data.SqlDbType.Int).Value          = medicalData.TypeID; 
-                cmd.Parameters.Add("@PatientID",   System.Data.SqlDbType.Int).Value          = medicalData.PatientID; 
-                cmd.Parameters.Add("@DateEntered", System.Data.SqlDbType.DateTime).Value     = medicalData.Now; 
+                cmd.Parameters.Add("@PatientID",   System.Data.SqlDbType.Int).Value          = medicalData.PatientID;
+                cmd.Parameters.AddWithValue("@DateEntered", DateTime.Now);
                 cmd.Parameters.Add("@Value1",      System.Data.SqlDbType.Int).Value          = medicalData.Value1;
                 if (medicalData.Value2 != 0)
                 {
