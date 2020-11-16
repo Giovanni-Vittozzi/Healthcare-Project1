@@ -7,6 +7,7 @@ using HealthcareCompanion.Models;
 using HealthcareCompanion.DataAccessLayer;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity;
+using Microsoft.Owin.Security.Cookies;
 
 namespace HealthcareCompanion.Controllers
 {
@@ -53,7 +54,7 @@ namespace HealthcareCompanion.Controllers
         [HttpGet]
         public ActionResult BloodSugar()
         {
-            var TimeOfDayList     = new List<string>() { "Morning", "Afternoon", "Evening", "Night" };
+            var TimeOfDayList = new List<string>() { "Morning", "Afternoon", "Evening", "Night" };
             ViewBag.TimeOfDayList = TimeOfDayList;
             return View();
         }
@@ -66,11 +67,11 @@ namespace HealthcareCompanion.Controllers
                 medicalData.Value2 = 0; //this value is only needed for blood pressure
                 if (Request.IsAuthenticated)
                 {
-                    var          userStore   = new UserStore<IdentityUser>();
-                    var          userManager = new UserManager<IdentityUser>(userStore);
-                    IdentityUser theUser     = userManager.FindById(User.Identity.GetUserId());
-                    string       userID      = theUser.Id;
-                    medicalData.PatientID    = tier.getPatientByID(userID);
+                    var userStore         = new UserStore<IdentityUser>();
+                    var userManager       = new UserManager<IdentityUser>(userStore);
+                    IdentityUser theUser  = userManager.FindById(User.Identity.GetUserId());
+                    string userID         = theUser.Id;
+                    medicalData.PatientID = tier.getPatientByID(userID);
                 }
                 medicalData.TypeID    = 1; //From the MedicalDataType Table, Blood Sugar is 1
                 medicalData.TimeOfDay = Request.Form["TimeOfDay"]; //Get selected time of day the reading was taken
@@ -82,7 +83,7 @@ namespace HealthcareCompanion.Controllers
         [HttpGet]
         public ActionResult BloodPressure()
         {
-            var TimeOfDayList = new List<string>() { "Morning", "Afternoon", "Evening", "Night" };
+            var TimeOfDayList     = new List<string>() { "Morning", "Afternoon", "Evening", "Night" };
             ViewBag.TimeOfDayList = TimeOfDayList;
             return View();
         }
@@ -91,14 +92,14 @@ namespace HealthcareCompanion.Controllers
         {
             if (ModelState.IsValid)
             {
-                PatientTier tier   = new PatientTier();
+                PatientTier tier = new PatientTier();
                 if (Request.IsAuthenticated)
                 {
-                    var          userStore   = new UserStore<IdentityUser>();
-                    var          userManager = new UserManager<IdentityUser>(userStore);
-                    IdentityUser theUser     = userManager.FindById(User.Identity.GetUserId());
-                    string       userID      = theUser.Id;
-                    medicalData.PatientID    = tier.getPatientByID(userID);
+                    var userStore         = new UserStore<IdentityUser>();
+                    var userManager       = new UserManager<IdentityUser>(userStore);
+                    IdentityUser theUser  = userManager.FindById(User.Identity.GetUserId());
+                    string userID         = theUser.Id;
+                    medicalData.PatientID = tier.getPatientByID(userID);
                 }
                 medicalData.TypeID    = 2; //From the MedicalDataType Table, Blood Pressure is 2
                 medicalData.TimeOfDay = Request.Form["TimeOfDay"]; //Get selected time of day the reading was taken
@@ -110,7 +111,7 @@ namespace HealthcareCompanion.Controllers
         [HttpGet]
         public ActionResult Pulse()
         {
-            var TimeOfDayList = new List<string>() { "Morning", "Afternoon", "Evening", "Night" };
+            var TimeOfDayList     = new List<string>() { "Morning", "Afternoon", "Evening", "Night" };
             ViewBag.TimeOfDayList = TimeOfDayList;
             return View();
         }
@@ -123,11 +124,11 @@ namespace HealthcareCompanion.Controllers
                 medicalData.Value2 = 0; //this value is only needed for blood pressure
                 if (Request.IsAuthenticated)
                 {
-                    var          userStore   = new UserStore<IdentityUser>();
-                    var          userManager = new UserManager<IdentityUser>(userStore);
-                    IdentityUser theUser     = userManager.FindById(User.Identity.GetUserId());
-                    string       userID      = theUser.Id;
-                    medicalData.PatientID    = tier.getPatientByID(userID);
+                    var userStore         = new UserStore<IdentityUser>();
+                    var userManager       = new UserManager<IdentityUser>(userStore);
+                    IdentityUser theUser  = userManager.FindById(User.Identity.GetUserId());
+                    string userID         = theUser.Id;
+                    medicalData.PatientID = tier.getPatientByID(userID);
                 }
                 medicalData.TypeID    = 3; //From the MedicalDataType Table, Pulse is 3
                 medicalData.TimeOfDay = Request.Form["TimeOfDay"]; //Get selected time of day the reading was taken
@@ -153,11 +154,11 @@ namespace HealthcareCompanion.Controllers
                 medicalData.Value2 = 0; //this value is only needed for blood pressure
                 if (Request.IsAuthenticated)
                 {
-                    var          userStore   = new UserStore<IdentityUser>();
-                    var          userManager = new UserManager<IdentityUser>(userStore);
-                    IdentityUser theUser     = userManager.FindById(User.Identity.GetUserId());
-                    string       userID      = theUser.Id;
-                    medicalData.PatientID    = tier.getPatientByID(userID);
+                    var userStore         = new UserStore<IdentityUser>();
+                    var userManager       = new UserManager<IdentityUser>(userStore);
+                    IdentityUser theUser  = userManager.FindById(User.Identity.GetUserId());
+                    string userID         = theUser.Id;
+                    medicalData.PatientID = tier.getPatientByID(userID);
                 }
                 medicalData.TypeID    = 4; //From the MedicalDataType Table, Weight is 4
                 medicalData.TimeOfDay = Request.Form["TimeOfDay"]; //Get selected time of day the reading was taken
@@ -166,6 +167,17 @@ namespace HealthcareCompanion.Controllers
             }
             return View();
 
+        }
+        [HttpPost]
+        public ActionResult SignOut()
+        {
+            if (HttpContext.User.Identity.IsAuthenticated)
+            {
+                HttpContext.GetOwinContext()
+                           .Authentication
+                           .SignOut(CookieAuthenticationDefaults.AuthenticationType);
+            }
+            return RedirectToAction("SignOut", "Patient");
         }
     }
 }

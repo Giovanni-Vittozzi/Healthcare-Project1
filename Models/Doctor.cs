@@ -30,8 +30,11 @@ namespace HealthcareCompanion.Models
         public int ZipCode { get; set; }
         public string Email { get; set; }
         [Required(ErrorMessage = "This field is required.")]
+        [DataType(DataType.Password)]
+        [Display(Name = "Password")]
         public string Password { get; set; }
         [Required(ErrorMessage = "This field is required.")]
+        [DataType(DataType.Password)]
         [Display(Name = "Confirm Password")]
         public string Confirm { get; set; }
         public DateTime CreatedAt { get; set; }

@@ -187,7 +187,7 @@ namespace HealthcareCompanion.Controllers
                 //or we could check if they are only in the user role //pending boolean AND user role
 
                 List<IdentityUser> userList = userManager.Users.ToList<IdentityUser>();
-                return RedirectToAction("Index");
+                return RedirectToAction("Login");
             }
             return View();
         }
@@ -204,11 +204,11 @@ namespace HealthcareCompanion.Controllers
                 var userManager = HttpContext.GetOwinContext().GetUserManager<AppUserManager>();
                 var authManager = HttpContext.GetOwinContext().Authentication;
 
-                IdentityUser user       = userManager.Find(login.UserName, login.Password);
-                PatientTier patientTier = new PatientTier();
-                DoctorTier doctorTier   = new DoctorTier();
-                var patientUser         = patientTier.isPendingPatient(login.UserName);
-                var doctorUser          = doctorTier.isPendingDoctor(login.UserName);
+                IdentityUser user        = userManager.Find(login.UserName, login.Password);
+                PatientTier  patientTier = new PatientTier();
+                DoctorTier   doctorTier  = new DoctorTier();
+                var          patientUser = patientTier.isPendingPatient(login.UserName);
+                var          doctorUser  = doctorTier.isPendingDoctor(login.UserName);
                 //isPending
                 if (user != null)
                 {

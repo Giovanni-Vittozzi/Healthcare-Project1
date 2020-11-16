@@ -1,0 +1,12 @@
+﻿
+@{
+    ViewBag.Title = "SignOut";
+    Layout = "~/Views/Shared/_LayoutPatient.cshtml";
+}
+<script type="text/javascript">
+   function preventBack(){window.history.forward();}
+    setTimeout("preventBack()", 0);
+    window.onunload=function(){null};
+</script>
+<h2>You are now Signed Out</h2>
+

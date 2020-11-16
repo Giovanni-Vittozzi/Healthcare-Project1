@@ -35,6 +35,8 @@ namespace HealthcareCompanion.Models
         [Required(ErrorMessage = "This field is required.")]
         public string Email { get; set; }
         [Required(ErrorMessage = "This field is required.")]
+        [DataType(DataType.Password)]
+        [Display(Name = "Password")]
         public string Password { get; set; }
         [Required(ErrorMessage = "This field is required.")]
         [Display(Name = "Confirm Password")]

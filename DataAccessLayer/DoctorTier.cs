@@ -111,11 +111,49 @@ namespace HealthcareCompanion.DataAccessLayer
             }
             return doctorList;
         }
-        public Doctor getDoctorByID(int id)
+        public int getDoctorByID(String id)
         {
-            Doctor doctor = null;
-            return doctor;
+            Doctor  doctor          = null;
+            Boolean identityIDCheck = false;
+            int myid = 0;
+
+            query = "SELECT * FROM Doctors WHERE IdentityID = '" + id + "';";
+
+            using (conn = new SqlConnection(connectionString))
+            using (cmd  = new SqlCommand(query, conn))
+            {
+                try
+                {
+                    conn.Open();
+                    using (reader = cmd.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                doctor = new Doctor();
+                                doctor.userID = (string)reader["IdentityID"];
+                                identityIDCheck = (doctor.userID).Equals(id);
+                                if (identityIDCheck)
+                                {
+                                    myid = (int)reader["DoctorID"];
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    throw new Exception(ex.Message);
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+            return myid;
         }
+
         public bool insertDoctor(Doctor doctor)
         {
             int rows = 0;
@@ -129,15 +167,15 @@ namespace HealthcareCompanion.DataAccessLayer
             using (cmd  = new SqlCommand(query, conn))
             {
                 cmd.Parameters.Add("@IdentityID", System.Data.SqlDbType.NVarChar, 128).Value = doctor.userID;
-                cmd.Parameters.Add("@FName", System.Data.SqlDbType.NVarChar, 50).Value       = doctor.FirstName;
-                cmd.Parameters.Add("@LName", System.Data.SqlDbType.NVarChar, 50).Value       = doctor.LastName;
-                cmd.Parameters.Add("@Address", System.Data.SqlDbType.NVarChar, 50).Value     = doctor.Address;
-                cmd.Parameters.Add("@OfficeNum", System.Data.SqlDbType.NVarChar, 50).Value   = doctor.OfficeNum;
-                cmd.Parameters.Add("@City", System.Data.SqlDbType.NVarChar, 50).Value        = doctor.City;
-                cmd.Parameters.Add("@State", System.Data.SqlDbType.NVarChar, 50).Value       = doctor.State;
-                cmd.Parameters.Add("@ZipCode", System.Data.SqlDbType.Int, 50).Value          = doctor.ZipCode;
-                cmd.Parameters.Add("@Pending", System.Data.SqlDbType.Bit).Value              = doctor.Pending;
-                cmd.Parameters.Add("@Email", System.Data.SqlDbType.NVarChar, 50).Value       = doctor.Email;
+                cmd.Parameters.Add("@FName",      System.Data.SqlDbType.NVarChar, 50).Value  = doctor.FirstName;
+                cmd.Parameters.Add("@LName",      System.Data.SqlDbType.NVarChar, 50).Value  = doctor.LastName;
+                cmd.Parameters.Add("@Address",    System.Data.SqlDbType.NVarChar, 50).Value  = doctor.Address;
+                cmd.Parameters.Add("@OfficeNum",  System.Data.SqlDbType.NVarChar, 50).Value  = doctor.OfficeNum;
+                cmd.Parameters.Add("@City",       System.Data.SqlDbType.NVarChar, 50).Value  = doctor.City;
+                cmd.Parameters.Add("@State",      System.Data.SqlDbType.NVarChar, 50).Value  = doctor.State;
+                cmd.Parameters.Add("@ZipCode",    System.Data.SqlDbType.Int,      50).Value  = doctor.ZipCode;
+                cmd.Parameters.Add("@Pending",    System.Data.SqlDbType.Bit         ).Value  = doctor.Pending;
+                cmd.Parameters.Add("@Email",      System.Data.SqlDbType.NVarChar, 50).Value  = doctor.Email;
                 try
                 {
                     conn.Open();
@@ -211,15 +249,15 @@ namespace HealthcareCompanion.DataAccessLayer
             }
             return (pendingCheck, emailCheck);
         }
-        public List<Patient> listPendingPatients()
+        public List<Patient> listPendingPatients(int id)
         {
             List<Patient> patientList = null;
-            Patient patient = null;
+            Patient       patient     = null;
 
-            query = "SELECT (Patients.FirstName + ' ' + Patients.LastName) AS FullName, " + 
-                    "(Patients.Address + ', ' + Patients.City + ', ' + UPPER(Patients.State) + ', ' + CAST(Patients.ZipCode AS NVARCHAR(50))) AS PatientAddress " +
-                    "FROM Doctors Inner Join PatientAssignment on Doctors.DoctorID = PatientAssignment.DoctorID " + 
-                    "INNER JOIN Patients on PatientAssignment.PatientID = Patients.PatientID WHERE Doctors.DoctorID = 7 AND Patients.Pending = 1; ";
+            query = "SELECT (Patients.FirstName + ' ' + Patients.LastName) AS FullName, " +
+                    "(Patients.Address + ', ' + Patients.City + ', ' + UPPER(Patients.State) + ', ' + CAST(Patients.ZipCode AS NVARCHAR(50))) AS PatientAddress, Patients.PatientID " +
+                    "FROM Doctors Inner Join PatientAssignment on Doctors.DoctorID = PatientAssignment.DoctorID " +
+                    "INNER JOIN Patients on PatientAssignment.PatientID = Patients.PatientID WHERE Doctors.DoctorID = " + id.ToString() + " AND Patients.Pending = 1; ";
 
             using (conn = new SqlConnection(connectionString))
             using (cmd  = new SqlCommand(query, conn))
@@ -236,46 +274,8 @@ namespace HealthcareCompanion.DataAccessLayer
                             {
                                 patient           = new Patient();
                                 patient.PatientID = (int)reader["PatientID"];
-                                patient.FirstName = (string)reader["FirstName"];
-                                if (reader["MiddleName"] != DBNull.Value)
-                                {
-                                    patient.MiddleName = (string)reader["MiddleName"];
-                                }
-                                else
-                                {
-                                    patient.MiddleName = "N\\A";
-                                }
-                                patient.LastName = (string)reader["LastName"];
-                                patient.Address  = (string)reader["Address"];
-                                if (reader["Address2"] != DBNull.Value)
-                                {
-                                    patient.Address2 = (string)reader["Address2"];
-                                }
-                                else
-                                {
-                                    patient.Address2 = "N\\A";
-                                }
-                                if (reader["AptNum"] != DBNull.Value)
-                                {
-                                    patient.AptNum = (string)reader["AptNum"];
-                                }
-                                else
-                                {
-                                    patient.AptNum = "N\\A";
-                                }
-                                patient.City    = (string)reader["City"];
-                                patient.State   = (string)reader["State"];
-                                patient.ZipCode = (int)reader["ZipCode"];
-                                if (reader["Pending"] != DBNull.Value)
-                                {
-                                    patient.Pending = (bool)(reader["Pending"]); //Convert.ToBoolean
-                                }
-                                else
-                                {
-                                    patient.Pending = false;
-                                }
-                                patient.Email = (string)reader["Email"];
-
+                                patient.FirstName = (string)reader["FullName"];
+                                patient.Address   = (string)reader["PatientAddress"];
                                 patientList.Add(patient);
                             }
                         }

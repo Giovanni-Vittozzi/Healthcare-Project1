@@ -4,6 +4,11 @@
     Layout = "~/Views/Shared/_LayoutPatient.cshtml";
 }
 
+@if (Context.User.Identity.IsAuthenticated)
+{
+    <h4>Hello, <b>@Context.User.Identity.Name</b></h4>
+}
+<br />
 <h2>You are logged in as a patient.</h2>
 <h2>You can edit your info in the tab above.</h2>
 
