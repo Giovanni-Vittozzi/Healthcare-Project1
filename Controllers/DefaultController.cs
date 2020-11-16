@@ -55,12 +55,12 @@ namespace HealthcareCompanion.Controllers
                     //First check to see if User Role exists.  If not create it and add user to User role.
                     var          roleStore   = new RoleStore<IdentityRole>();
                     var          roleManager = new RoleManager<IdentityRole>(roleStore);
-                    IdentityRole theRole     = await roleManager.FindByNameAsync("User");
+                    IdentityRole theRole     = await roleManager.FindByNameAsync("Patient");
 
                     if (theRole == null)
                     {
                         //The user role does not exist, create it.
-                        theRole   = new IdentityRole("User");
+                        theRole   = new IdentityRole("Patient");
                         theResult = null;
                         theResult = await roleManager.CreateAsync(theRole);
                         if (theResult == null)
@@ -74,7 +74,7 @@ namespace HealthcareCompanion.Controllers
                     if (!processError)
                     {
                         //The role exists, now add the user to the role
-                        theResult     = await userManager.AddToRoleAsync(theUser.Id, "User");
+                        theResult     = await userManager.AddToRoleAsync(theUser.Id, "Patient");
                         statusMessage = string.Format("Identity User {0} was created successfully!<br /> {0} was added to the User group: {1}", theUser.UserName, theResult.Errors.FirstOrDefault());
                     }
                 }
@@ -138,12 +138,12 @@ namespace HealthcareCompanion.Controllers
                     //First check to see if User Role exists.  If not create it and add user to User role.
                     var roleStore   = new RoleStore<IdentityRole>();
                     var roleManager = new RoleManager<IdentityRole>(roleStore);
-                    IdentityRole theRole = await roleManager.FindByNameAsync("User");
+                    IdentityRole theRole = await roleManager.FindByNameAsync("Doctor");
 
                     if (theRole == null)
                     {
                         //The user role does not exist, create it.
-                        theRole   = new IdentityRole("User");
+                        theRole   = new IdentityRole("Doctor");
                         theResult = null;
                         theResult = await roleManager.CreateAsync(theRole);
                         if (theResult == null)
@@ -156,7 +156,7 @@ namespace HealthcareCompanion.Controllers
                     if (!processError)
                     {
                         //The role exists, now add the user to the role
-                        theResult     = await userManager.AddToRoleAsync(theUser.Id, "User");
+                        theResult     = await userManager.AddToRoleAsync(theUser.Id, "Doctor");
                         statusMessage = string.Format("Identity User {0} was created successfully!<br /> {0} was added to the User group: {1}", theUser.UserName, theResult.Errors.FirstOrDefault());
                     }
                 }

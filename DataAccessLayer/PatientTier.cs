@@ -214,8 +214,8 @@ namespace HealthcareCompanion.DataAccessLayer
             Patient patient      = null;
             Boolean emailCheck   = false;
             Boolean pendingCheck = false;
-
-            query = "SELECT * FROM Patients WHERE Pending = 'True';";
+            //where patientid is equal to this and pending is true
+            query = "SELECT * FROM Patients;";
 
             using (conn = new SqlConnection(connectionString))
             using (cmd  = new SqlCommand(query, conn))
@@ -234,9 +234,9 @@ namespace HealthcareCompanion.DataAccessLayer
                                 emailCheck        = (patient.Email).Equals(email);
                                 if (emailCheck)
                                 {
-                                    if (reader["Pending"] != DBNull.Value)
+                                    if ((bool)reader["Pending"])
                                     {
-                                        pendingCheck    = true;
+                                        pendingCheck = true;
                                     }
                                     else
                                     {
@@ -270,10 +270,10 @@ namespace HealthcareCompanion.DataAccessLayer
             using (conn = new SqlConnection(connectionString))
             using (cmd  = new SqlCommand(query, conn))
             {
-                cmd.Parameters.Add("@TypeID",      System.Data.SqlDbType.Int).Value          = medicalData.TypeID; 
-                cmd.Parameters.Add("@PatientID",   System.Data.SqlDbType.Int).Value          = medicalData.PatientID;
+                cmd.Parameters.Add("@TypeID",    System.Data.SqlDbType.Int).Value = medicalData.TypeID; 
+                cmd.Parameters.Add("@PatientID", System.Data.SqlDbType.Int).Value = medicalData.PatientID;
+                cmd.Parameters.Add("@Value1",    System.Data.SqlDbType.Int).Value = medicalData.Value1;
                 cmd.Parameters.AddWithValue("@DateEntered", DateTime.Now);
-                cmd.Parameters.Add("@Value1",      System.Data.SqlDbType.Int).Value          = medicalData.Value1;
                 if (medicalData.Value2 != 0)
                 {
                     cmd.Parameters.Add("@Value2", System.Data.SqlDbType.Int).Value = medicalData.Value2;
@@ -283,8 +283,6 @@ namespace HealthcareCompanion.DataAccessLayer
                     cmd.Parameters.Add("@Value2", System.Data.SqlDbType.Int).Value = DBNull.Value;
                 }
                 cmd.Parameters.Add("@TimeOfDay", System.Data.SqlDbType.NVarChar, 50).Value = medicalData.TimeOfDay;
-                //cmd.Parameters.Add("@BloodSugarTime", System.Data.SqlDbType.Time).Value     = bloodSugar.Hour.TimeOfDay;
-                //cmd.Parameters.Add("@BloodSugarDate", System.Data.SqlDbType.DateTime).Value = bloodSugar.ReleaseDate;
                 try
                 {
                     conn.Open();
@@ -325,6 +323,43 @@ namespace HealthcareCompanion.DataAccessLayer
             {
                 cmd.Parameters.Add("@PatientID", System.Data.SqlDbType.Int).Value = patientID; 
                 cmd.Parameters.Add("@DoctorID", System.Data.SqlDbType.Int).Value  = DoctorID;
+                try
+                {
+                    conn.Open();
+                    rows = cmd.ExecuteNonQuery();
+
+                    if (rows > 0)
+                    {
+                        success = true;
+                    }
+                    else
+                    {
+                        success = false;
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    throw new Exception(ex.Message);
+                }
+                finally
+                {
+                    conn.Close();
+                }
+                return success;
+            }
+
+        }
+        public bool approvePatient(int patientID)
+        {
+            int rows = 0;
+
+            //patient_id is an auto number
+            query = "UPDATE Patients SET Pending = 0 WHERE PatientID = @PatientID;";
+
+            using (conn = new SqlConnection(connectionString))
+            using (cmd  = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.Add("@PatientID", System.Data.SqlDbType.Int).Value = patientID; 
                 try
                 {
                     conn.Open();

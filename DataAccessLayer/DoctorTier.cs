@@ -206,7 +206,7 @@ namespace HealthcareCompanion.DataAccessLayer
             Boolean emailCheck = false;
             Boolean pendingCheck = false;
 
-            query = "SELECT * FROM Doctors WHERE Pending = 'True';";
+            query = "SELECT * FROM Doctors";
 
             using (conn = new SqlConnection(connectionString))
             using (cmd  = new SqlCommand(query, conn))
@@ -225,7 +225,7 @@ namespace HealthcareCompanion.DataAccessLayer
                                 emailCheck   = (doctor.Email).Equals(email);
                                 if (emailCheck)
                                 {
-                                    if (reader["Pending"] != DBNull.Value)
+                                    if ((bool)reader["Pending"])
                                     {
                                         pendingCheck = true;
                                     }

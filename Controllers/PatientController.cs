@@ -8,9 +8,11 @@ using HealthcareCompanion.DataAccessLayer;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security.Cookies;
+using System.Security.Principal;
 
 namespace HealthcareCompanion.Controllers
 {
+    [Authorize(Roles = "Patient")]
     public class PatientController : Controller
     {
         // GET: Patient
@@ -177,7 +179,8 @@ namespace HealthcareCompanion.Controllers
                            .Authentication
                            .SignOut(CookieAuthenticationDefaults.AuthenticationType);
             }
-            return RedirectToAction("SignOut", "Patient");
+            return View();
+            //return RedirectToAction("SignOut", "Patient");
         }
     }
 }
