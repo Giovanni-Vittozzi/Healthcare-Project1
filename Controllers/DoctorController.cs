@@ -55,7 +55,7 @@ namespace HealthcareCompanion.Controllers
                 string       userID      = theUser.Id;
                 doctor.DoctorID          = tier.getDoctorByID(userID);
             }
-            List<Patient> patientList = tier.listPendingPatients(doctor.DoctorID);
+            List<PatientFromDatabase> patientList = tier.listPendingPatients(doctor.DoctorID);
 
             return View(patientList);
         }

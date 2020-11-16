@@ -249,13 +249,13 @@ namespace HealthcareCompanion.DataAccessLayer
             }
             return (pendingCheck, emailCheck);
         }
-        public List<Patient> listPendingPatients(int id)
+        public List<PatientFromDatabase> listPendingPatients(int id)
         {
-            List<Patient> patientList = null;
-            Patient       patient     = null;
+            List<PatientFromDatabase> patientList = null;
+            PatientFromDatabase       patient     = null;
 
             query = "SELECT (Patients.FirstName + ' ' + Patients.LastName) AS FullName, " +
-                    "(Patients.Address + ', ' + Patients.City + ', ' + UPPER(Patients.State) + ', ' + CAST(Patients.ZipCode AS NVARCHAR(50))) AS PatientAddress, Patients.PatientID " +
+                    "(Patients.Address + ', ' + Patients.City + ', ' + UPPER(Patients.State) + ', ' + CAST(Patients.ZipCode AS NVARCHAR(50))) AS PatientAddress, Patients.PatientID, Patients.Email, Patients.CreatedAt " +
                     "FROM Doctors Inner Join PatientAssignment on Doctors.DoctorID = PatientAssignment.DoctorID " +
                     "INNER JOIN Patients on PatientAssignment.PatientID = Patients.PatientID WHERE Doctors.DoctorID = " + id.ToString() + " AND Patients.Pending = 1; ";
 
@@ -269,13 +269,15 @@ namespace HealthcareCompanion.DataAccessLayer
                     {
                         if (reader.HasRows)
                         {
-                            patientList = new List<Patient>();
+                            patientList = new List<PatientFromDatabase>();
                             while (reader.Read())
                             {
-                                patient           = new Patient();
-                                patient.PatientID = (int)reader["PatientID"];
-                                patient.FirstName = (string)reader["FullName"];
-                                patient.Address   = (string)reader["PatientAddress"];
+                                patient                = new PatientFromDatabase();
+                                patient.PatientID      = (int)reader["PatientID"];
+                                patient.FullName       = (string)reader["FullName"];
+                                patient.PatientAddress = (string)reader["PatientAddress"];
+                                patient.Email = (string)reader["Email"];
+                                patient.CreatedAt      = (DateTime)reader["CreatedAt"];
                                 patientList.Add(patient);
                             }
                         }

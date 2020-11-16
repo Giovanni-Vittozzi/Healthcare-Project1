@@ -491,6 +491,8 @@
     <Compile Include="Models\ErrorModel.cs" />
     <Compile Include="Models\Doctor.cs" />
     <Compile Include="Models\NewUser.cs" />
+    <Compile Include="Models\MedicalData.cs" />
+    <Compile Include="Models\PatientFromDatabase.cs" />
     <Compile Include="Models\Patient.cs" />
     <Compile Include="Models\Role.cs" />
     <Compile Include="Models\Registration.cs" />
@@ -530,8 +532,8 @@
     <Content Include="Views\Patient\BloodPressure.cshtml" />
     <Content Include="Views\Patient\Pulse.cshtml" />
     <Content Include="Views\Patient\Weight.cshtml" />
-    <Content Include="Views\Doctor\ApprovePatients.cshtml" />
     <Content Include="Views\Patient\SignOut.cshtml" />
+    <Content Include="Views\Doctor\ApprovePatients.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
