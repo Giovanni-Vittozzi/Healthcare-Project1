@@ -1,11 +1,11 @@
 ﻿@model IEnumerable<HealthcareCompanion.Models.PatientFromDatabase>
 
 @{
-    ViewBag.Title = "ApprovePatients";
+    ViewBag.Title = "ListPatients";
     Layout = "~/Views/Shared/_LayoutDoctor.cshtml";
 }
 
-<h2>Approve Patients</h2>
+<h2>ListPatients</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
@@ -48,8 +48,8 @@
             @Html.DisplayFor(modelItem => item.CreatedAt)
         </td>
         <td>
-            @Html.ActionLink("Approve", "Approve", new { id = item.PatientID }) |
             @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("View Medical Data", "View Medical Data", new { /* id=item.PrimaryKey */ }) |
             @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
         </td>
     </tr>

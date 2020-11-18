@@ -534,6 +534,7 @@
     <Content Include="Views\Patient\Weight.cshtml" />
     <Content Include="Views\Patient\SignOut.cshtml" />
     <Content Include="Views\Doctor\ApprovePatients.cshtml" />
+    <Content Include="Views\Doctor\ListPatients.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

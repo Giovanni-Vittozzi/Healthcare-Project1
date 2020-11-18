@@ -117,11 +117,12 @@ namespace HealthcareCompanion.DataAccessLayer
             Boolean identityIDCheck = false;
             int myid = 0;
 
-            query = "SELECT * FROM Doctors WHERE IdentityID = '" + id + "';";
+            query = "SELECT * FROM Doctors WHERE IdentityID = @IdentityID;";
 
             using (conn = new SqlConnection(connectionString))
             using (cmd  = new SqlCommand(query, conn))
             {
+                cmd.Parameters.Add("@IdentityID", System.Data.SqlDbType.NVarChar, 128).Value = id;
                 try
                 {
                     conn.Open();
@@ -202,8 +203,8 @@ namespace HealthcareCompanion.DataAccessLayer
         }
         public (Boolean pendingCheck, Boolean emailCheck) isPendingDoctor(String email)
         {
-            Doctor doctor = null;
-            Boolean emailCheck = false;
+            Doctor  doctor       = null;
+            Boolean emailCheck   = false;
             Boolean pendingCheck = false;
 
             query = "SELECT * FROM Doctors";
@@ -257,11 +258,59 @@ namespace HealthcareCompanion.DataAccessLayer
             query = "SELECT (Patients.FirstName + ' ' + Patients.LastName) AS FullName, " +
                     "(Patients.Address + ', ' + Patients.City + ', ' + UPPER(Patients.State) + ', ' + CAST(Patients.ZipCode AS NVARCHAR(50))) AS PatientAddress, Patients.PatientID, Patients.Email, Patients.CreatedAt " +
                     "FROM Doctors Inner Join PatientAssignment on Doctors.DoctorID = PatientAssignment.DoctorID " +
-                    "INNER JOIN Patients on PatientAssignment.PatientID = Patients.PatientID WHERE Doctors.DoctorID = " + id.ToString() + " AND Patients.Pending = 1; ";
+                    "INNER JOIN Patients on PatientAssignment.PatientID = Patients.PatientID WHERE Doctors.DoctorID = @PatientID AND Patients.Pending = 1; ";
 
             using (conn = new SqlConnection(connectionString))
             using (cmd  = new SqlCommand(query, conn))
             {
+                cmd.Parameters.Add("@PatientID", System.Data.SqlDbType.Int).Value = id;
+                try
+                {
+                    conn.Open();
+                    using (reader = cmd.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            patientList = new List<PatientFromDatabase>();
+                            while (reader.Read())
+                            {
+                                patient                = new PatientFromDatabase();
+                                patient.PatientID      = (int)reader["PatientID"];
+                                patient.FullName       = (string)reader["FullName"];
+                                patient.PatientAddress = (string)reader["PatientAddress"];
+                                patient.Email          = (string)reader["Email"];
+                                patient.CreatedAt      = (DateTime)reader["CreatedAt"];
+                                patientList.Add(patient);
+                            }
+                        }
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    throw new Exception(ex.Message);
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+
+            return patientList;
+        }
+        public List<PatientFromDatabase> listNotPendingPatients(int id)
+        {
+            List<PatientFromDatabase> patientList = null;
+            PatientFromDatabase       patient     = null;
+
+            query = "SELECT (Patients.FirstName + ' ' + Patients.LastName) AS FullName, " +
+                    "(Patients.Address + ', ' + Patients.City + ', ' + UPPER(Patients.State) + ', ' + CAST(Patients.ZipCode AS NVARCHAR(50))) AS PatientAddress, Patients.PatientID, Patients.Email, Patients.CreatedAt " +
+                    "FROM Doctors Inner Join PatientAssignment on Doctors.DoctorID = PatientAssignment.DoctorID " +
+                    "INNER JOIN Patients on PatientAssignment.PatientID = Patients.PatientID WHERE Doctors.DoctorID = @PatientID; ";
+
+            using (conn = new SqlConnection(connectionString))
+            using (cmd  = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.Add("@PatientID", System.Data.SqlDbType.Int).Value = id;
                 try
                 {
                     conn.Open();

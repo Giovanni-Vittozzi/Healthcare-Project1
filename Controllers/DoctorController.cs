@@ -45,6 +45,28 @@ namespace HealthcareCompanion.Controllers
         [HttpGet]
         public ActionResult ApprovePatients(Doctor doctor)
         {
+            DoctorTier tier    = new DoctorTier();
+            //need to get current signed in doctor
+            if (Request.IsAuthenticated)
+            {
+                var          userStore   = new UserStore<IdentityUser>();
+                var          userManager = new UserManager<IdentityUser>(userStore);
+                IdentityUser theUser     = userManager.FindById(User.Identity.GetUserId());
+                string       userEmail   = theUser.Email;
+                string       userID      = theUser.Id;
+                var          pendingDoc  = tier.isPendingDoctor(userEmail);
+                doctor.DoctorID          = tier.getDoctorByID(userID);
+                if (!pendingDoc.pendingCheck)
+                {
+                    List<PatientFromDatabase> patientList = tier.listPendingPatients(doctor.DoctorID);
+                    return View(patientList);
+                }
+            }
+            return RedirectToAction("Pending", "Doctor");
+        } 
+        [HttpGet]
+        public ActionResult ListPatients(Doctor doctor)
+        {
             DoctorTier tier = new DoctorTier();
             //need to get current signed in doctor
             if (Request.IsAuthenticated)
@@ -52,12 +74,18 @@ namespace HealthcareCompanion.Controllers
                 var          userStore   = new UserStore<IdentityUser>();
                 var          userManager = new UserManager<IdentityUser>(userStore);
                 IdentityUser theUser     = userManager.FindById(User.Identity.GetUserId());
+                string       userEmail   = theUser.Email;
                 string       userID      = theUser.Id;
+                var          pendingDoc  = tier.isPendingDoctor(userEmail);
                 doctor.DoctorID          = tier.getDoctorByID(userID);
+                if (!pendingDoc.pendingCheck)
+                {
+                    List<PatientFromDatabase> patientList = tier.listNotPendingPatients(doctor.DoctorID);
+                    return View(patientList);
+                }
             }
-            List<PatientFromDatabase> patientList = tier.listPendingPatients(doctor.DoctorID);
+            return RedirectToAction("Pending", "Doctor");
 
-            return View(patientList);
         }
     }
 }

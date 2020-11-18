@@ -41,24 +41,37 @@ namespace HealthcareCompanion.Controllers
         [HttpGet]
         public ActionResult MedicalDataSelection()
         {
-
-            return View();
+            PatientTier tier = new PatientTier();
+            //need to get current signed in doctor
+            if (Request.IsAuthenticated)
+            {
+                var          userStore   = new UserStore<IdentityUser>();
+                var          userManager = new UserManager<IdentityUser>(userStore);
+                IdentityUser theUser     = userManager.FindById(User.Identity.GetUserId());
+                string       userEmail   = theUser.Email;
+                var          pendPatient = tier.isPendingPatient(userEmail);
+                if (!pendPatient.pendingCheck)
+                {
+                    return View();
+                }
+            }
+            return RedirectToAction("Pending", "Patient");
         }
         [HttpPost]
         public ActionResult MedicalDataSelection(Patient medicalDataSelection)
         {
-            if (ModelState.IsValid)
-            {
-                return View();
-            }
+                if (ModelState.IsValid)
+                {
+                    return View();
+                }
             return View();
         }
         [HttpGet]
         public ActionResult BloodSugar()
         {
-            var TimeOfDayList = new List<string>() { "Morning", "Afternoon", "Evening", "Night" };
-            ViewBag.TimeOfDayList = TimeOfDayList;
-            return View();
+                    var TimeOfDayList     = new List<string>() { "Morning", "Afternoon", "Evening", "Night" };
+                    ViewBag.TimeOfDayList = TimeOfDayList;
+                    return View();
         }
         [HttpPost]
         public ActionResult BloodSugar(MedicalData medicalData)
@@ -168,7 +181,6 @@ namespace HealthcareCompanion.Controllers
                 return View();
             }
             return View();
-
         }
         [HttpPost]
         public ActionResult SignOut()

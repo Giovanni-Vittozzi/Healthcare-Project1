@@ -18,6 +18,7 @@ namespace HealthcareCompanion.Models
         [Required(ErrorMessage = "This field is required.")]//can modify it from inherited or just put it in the Registration Model
         [Display(Name = "Email")]
         public string Email { get; set; }
+        [Display(Name = "Created At")]
         public DateTime CreatedAt { get; set; }
     }
 }
