@@ -27,8 +27,22 @@ namespace HealthcareCompanion.Controllers
             return View();
         }
         [HttpGet]
-        public ActionResult EditDoctorInfo()
+        public ActionResult EditDoctorInfo(Doctor doctor)
         {
+            DoctorTier tier = new DoctorTier();
+            //need to get current signed in doctor
+            if (Request.IsAuthenticated)
+            {
+                var          userStore   = new UserStore<IdentityUser>();
+                var          userManager = new UserManager<IdentityUser>(userStore);
+                IdentityUser theUser     = userManager.FindById(User.Identity.GetUserId());
+                string       userEmail   = theUser.Email;
+                string       userID      = theUser.Id;
+                var          pendingDoc  = tier.isPendingDoctor(userEmail);
+                doctor.DoctorID          = tier.getDoctorByID(userID);
+                doctor                   = tier.retrieveDoctor(doctor.DoctorID);
+                ViewBag.doctor           = doctor;
+            }
 
             return View();
         }
@@ -80,12 +94,20 @@ namespace HealthcareCompanion.Controllers
                 doctor.DoctorID          = tier.getDoctorByID(userID);
                 if (!pendingDoc.pendingCheck)
                 {
-                    List<PatientFromDatabase> patientList = tier.listNotPendingPatients(doctor.DoctorID);
+                    List<PatientFromDatabase> patientList = tier.listAllPatients(doctor.DoctorID);
                     return View(patientList);
                 }
             }
             return RedirectToAction("Pending", "Doctor");
+        }
+        [HttpGet]
+        public ActionResult Approve(int id)
+        {
+            PatientTier tier = new PatientTier();
+            tier.approvePatient(id);
 
+
+            return RedirectToAction("ApprovePatients", "Doctor");
         }
     }
 }

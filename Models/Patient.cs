@@ -34,11 +34,14 @@ namespace HealthcareCompanion.Models
         public int ZipCode { get; set; }
         [Required(ErrorMessage = "This field is required.")]
         public string Email { get; set; }
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
         [Required(ErrorMessage = "This field is required.")]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string Password { get; set; }
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
         [Required(ErrorMessage = "This field is required.")]
+        [DataType(DataType.Password)]
         [Display(Name = "Confirm Password")]
         public string Confirm { get; set; }
         public DateTime CreatedAt { get; set; }

@@ -51,6 +51,15 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>packages\EntityFramework.6.1.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="Google.GData.Analytics, Version=2.2.0.0, Culture=neutral, PublicKeyToken=9e229226d7996434, processorArchitecture=MSIL">
+      <HintPath>packages\GoogleAnalytics.GoogleCharts.NET.1.0.1\lib\Google.GData.Analytics.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.GData.Client, Version=2.2.0.0, Culture=neutral, PublicKeyToken=04a59ca9b0273830, processorArchitecture=MSIL">
+      <HintPath>packages\GoogleAnalytics.GoogleCharts.NET.1.0.1\lib\Google.GData.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.GData.Extensions, Version=2.2.0.0, Culture=neutral, PublicKeyToken=0b4c5df2ebf20876, processorArchitecture=MSIL">
+      <HintPath>packages\GoogleAnalytics.GoogleCharts.NET.1.0.1\lib\Google.GData.Extensions.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.AspNet.Identity.Core.2.2.3\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
     </Reference>
@@ -343,8 +352,16 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Site.css" />
+    <Content Include="Controls\report.ascx" />
+    <Content Include="Examples\Ex01_Simple.aspx" />
+    <Content Include="Examples\Ex02_Advanced.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Images\Medical Banner2.png" />
+    <Content Include="js\chart-config.js" />
+    <Content Include="js\init-analytics.js" />
+    <Content Include="js\jquery-1.9.1.min.js" />
+    <Content Include="License.txt" />
+    <Content Include="READ_ME.txt" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -368,6 +385,7 @@
     <Content Include="Content\bootstrap-reboot.css.map" />
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
+    <Content Include="GoogleAnalytics.csproj" />
     <None Include="Scripts\jquery-3.0.0-vsdoc.js" />
     <Content Include="Scripts\jquery-3.0.0.js" />
     <Content Include="Scripts\jquery-3.0.0.min.js" />
@@ -473,19 +491,43 @@
     <Content Include="Views\Default\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnalyticsConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="ChartOptions.cs" />
+    <Compile Include="ChartType.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\DefaultController.cs" />
     <Compile Include="Controllers\DoctorController.cs" />
     <Compile Include="Controllers\PatientController.cs" />
     <Compile Include="Controllers\UserAdminController.cs" />
+    <Compile Include="Controls\report.ascx.cs">
+      <DependentUpon>report.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\report.ascx.designer.cs" />
     <Compile Include="DataAccessLayer\BaseTier.cs" />
     <Compile Include="DataAccessLayer\DoctorTier.cs" />
     <Compile Include="DataAccessLayer\PatientTier.cs" />
+    <Compile Include="Examples\Ex01_Simple.aspx.cs">
+      <DependentUpon>Ex01_Simple.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Examples\Ex01_Simple.aspx.designer.cs" />
+    <Compile Include="Examples\Ex02_Advanced.aspx.cs">
+      <DependentUpon>Ex02_Advanced.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Examples\Ex02_Advanced.aspx.designer.cs" />
+    <Compile Include="FeedGenerator.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Json\JsonCell.cs" />
+    <Compile Include="Json\JsonColumn.cs" />
+    <Compile Include="Json\JsonRow.cs" />
+    <Compile Include="Json\JsonTable.cs" />
+    <Compile Include="Json\JsonType.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
     <Compile Include="Identity\IdentityModels.cs" />
     <Compile Include="Models\ErrorModel.cs" />
@@ -513,7 +555,6 @@
     <Content Include="Views\Patient\EditPatientInfo.cshtml" />
     <Content Include="Views\Shared\_LayoutDoctor.cshtml" />
     <Content Include="Views\Doctor\Index.cshtml" />
-    <Content Include="Views\Doctor\EditDoctorInfo.cshtml" />
     <Content Include="Views\Shared\_LayoutAdmin.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Admin\AddUser.cshtml" />
@@ -535,6 +576,8 @@
     <Content Include="Views\Patient\SignOut.cshtml" />
     <Content Include="Views\Doctor\ApprovePatients.cshtml" />
     <Content Include="Views\Doctor\ListPatients.cshtml" />
+    <Content Include="Views\Doctor\EditDoctorInfo.cshtml" />
+    <Content Include="Views\Default\testchart.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

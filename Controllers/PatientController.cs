@@ -169,17 +169,24 @@ namespace HealthcareCompanion.Controllers
                 medicalData.Value2 = 0; //this value is only needed for blood pressure
                 if (Request.IsAuthenticated)
                 {
-                    var userStore         = new UserStore<IdentityUser>();
-                    var userManager       = new UserManager<IdentityUser>(userStore);
-                    IdentityUser theUser  = userManager.FindById(User.Identity.GetUserId());
-                    string userID         = theUser.Id;
-                    medicalData.PatientID = tier.getPatientByID(userID);
+                    var          userStore   = new UserStore<IdentityUser>();
+                    var          userManager = new UserManager<IdentityUser>(userStore);
+                    IdentityUser theUser     = userManager.FindById(User.Identity.GetUserId());
+                    string       userID      = theUser.Id;
+                    medicalData.PatientID    = tier.getPatientByID(userID);
                 }
                 medicalData.TypeID    = 4; //From the MedicalDataType Table, Weight is 4
                 medicalData.TimeOfDay = Request.Form["TimeOfDay"]; //Get selected time of day the reading was taken
                 tier.insertMedicalData(medicalData);
                 return View();
             }
+            return View();
+        }
+        [HttpGet]
+        public ActionResult ViewMedicalData()
+        {
+            var TimeOfDayList     = new List<string>() { "Morning", "Afternoon", "Evening", "Night" };
+            ViewBag.TimeOfDayList = TimeOfDayList;
             return View();
         }
         [HttpPost]

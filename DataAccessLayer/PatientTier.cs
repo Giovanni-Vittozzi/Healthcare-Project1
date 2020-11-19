@@ -309,6 +309,67 @@ namespace HealthcareCompanion.DataAccessLayer
             }
 
         }
+        public bool listMedicalData(MedicalData medicalData)
+        {
+            int rows = 0;
+
+            //patient_id is an auto number
+            query = "Select * FROM PatientMedicalData;";
+
+            using (conn = new SqlConnection(connectionString))
+            using (cmd  = new SqlCommand(query, conn))
+            {
+                try
+                {
+                    conn.Open();
+                    using (reader = cmd.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            rows = cmd.ExecuteNonQuery();
+                            medicalData = new MedicalData();
+                            medicalData.TypeID = (int)reader["PatientID"];
+                            medicalData.PatientID = (int)reader["PatientID"];
+                            medicalData.DateEntered = (DateTime)reader["PatientID"];
+                            medicalData.Value1 = (float)reader["PatientID"];
+                            medicalData.TimeOfDay = (string)reader["FirstName"];
+                            if (reader["Value2"] != DBNull.Value)
+                            {
+                                medicalData.Value2 = (float)reader["Value2"];
+                            }
+                            else
+                            {
+                                patient.MiddleName = "N\\A";
+                            }
+                            patient.LastName = (string)reader["LastName"];
+                            patient.Address = (string)reader["Address"];
+                            if (reader["Address2"] != DBNull.Value)
+                            {
+                                patient.Address2 = (string)reader["Address2"];
+                            }
+                        }
+
+                    if (rows > 0)
+                    {
+                        success = true;
+                    }
+                    else
+                    {
+                        success = false;
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    throw new Exception(ex.Message);
+                }
+                finally
+                {
+                    conn.Close();
+                }
+                return success;
+            }
+
+        }
         public bool pairDoctorPatient(int patientID, int DoctorID)
         {
             int rows = 0;

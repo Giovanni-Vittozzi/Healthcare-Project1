@@ -64,6 +64,51 @@ namespace HealthcareCompanion.DataAccessLayer
 
             return doctorList;
         }
+        public Doctor retrieveDoctor(int id)
+        {
+            Doctor doctor = null;
+
+            query = "SELECT * FROM Doctors WHERE DoctorID = @DoctorID;";
+
+            using (conn = new SqlConnection(connectionString))
+            using (cmd  = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.Add("@DoctorID", System.Data.SqlDbType.Int).Value = id;
+                try
+                {
+                    conn.Open();
+                    using (reader = cmd.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                doctor = new Doctor();
+                                doctor.DoctorID  = (int)reader["DoctorID"];
+                                doctor.FirstName = (string)reader["FirstName"];
+                                doctor.LastName  = (string)reader["LastName"];
+                                doctor.Address   = (string)reader["Address"];
+                                doctor.OfficeNum = (string)reader["OfficeNum"];
+                                doctor.City      = (string)reader["City"];
+                                doctor.State     = (string)reader["State"];
+                                doctor.ZipCode   = (int)reader["ZipCode"];
+                                doctor.Pending   = (Boolean)reader["Pending"];
+                            }
+                        }
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    throw new Exception(ex.Message);
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+
+            return doctor;
+        }
         public List<SelectListItem> listAllDoctors()
         {
             List<SelectListItem> doctorList = null;
@@ -297,7 +342,7 @@ namespace HealthcareCompanion.DataAccessLayer
 
             return patientList;
         }
-        public List<PatientFromDatabase> listNotPendingPatients(int id)
+        public List<PatientFromDatabase> listAllPatients(int id)
         {
             List<PatientFromDatabase> patientList = null;
             PatientFromDatabase       patient     = null;

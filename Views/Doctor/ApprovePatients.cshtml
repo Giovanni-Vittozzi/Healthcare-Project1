@@ -10,6 +10,8 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
+@if (Model != null)
+{
 <table class="table">
     <tr>
         <th>
@@ -30,7 +32,8 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
+@foreach (var item in Model)
+{
     <tr>
         <td>
             @Html.DisplayFor(modelItem => item.PatientID)
@@ -54,5 +57,10 @@
         </td>
     </tr>
 }
+    
 
 </table>
+} else
+{
+    <h2>No Pending Patients</h2>
+}
