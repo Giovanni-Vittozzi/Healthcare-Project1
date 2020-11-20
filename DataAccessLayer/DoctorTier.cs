@@ -20,12 +20,12 @@ namespace HealthcareCompanion.DataAccessLayer
         public List<Doctor> getAllDoctors()
         {
             List<Doctor> doctorList = null;
-            Doctor doctor = null;
+            Doctor       doctor     = null;
 
             query = "SELECT * FROM Doctors;";
 
             using (conn = new SqlConnection(connectionString))
-            using (cmd = new SqlCommand(query, conn))
+            using (cmd  = new SqlCommand(query, conn))
             {
                 try
                 {

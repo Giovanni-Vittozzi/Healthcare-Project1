@@ -309,16 +309,19 @@ namespace HealthcareCompanion.DataAccessLayer
             }
 
         }
-        public bool listMedicalData(MedicalData medicalData)
+        public List<MedicalData> listMedicalData(int PatientID)
         {
-            int rows = 0;
+            List<MedicalData> medicalDataList = null;
+            MedicalData       medicalData     = null;
+            int               rows            = 0;
 
             //patient_id is an auto number
-            query = "Select * FROM PatientMedicalData;";
+            query = "Select * FROM PatientMedicalData WHERE PatientID = @PatientID;";
 
             using (conn = new SqlConnection(connectionString))
             using (cmd  = new SqlCommand(query, conn))
             {
+                cmd.Parameters.Add("@PatientID", System.Data.SqlDbType.Int).Value = PatientID;
                 try
                 {
                     conn.Open();
@@ -326,28 +329,27 @@ namespace HealthcareCompanion.DataAccessLayer
                     {
                         if (reader.HasRows)
                         {
-                            rows = cmd.ExecuteNonQuery();
-                            medicalData = new MedicalData();
-                            medicalData.TypeID = (int)reader["PatientID"];
-                            medicalData.PatientID = (int)reader["PatientID"];
-                            medicalData.DateEntered = (DateTime)reader["PatientID"];
-                            medicalData.Value1 = (float)reader["PatientID"];
-                            medicalData.TimeOfDay = (string)reader["FirstName"];
+                            medicalDataList = new List<MedicalData>();
+                            while (reader.Read())
+                            {
+                                medicalData             = new MedicalData();
+                                medicalData.TypeID      = (int)reader["TypeID"];
+                                medicalData.PatientID   = (int)reader["PatientID"];
+                                medicalData.Now         = (DateTime)reader["DateEntered"];
+                                medicalData.Value1      = (int)reader["Value1"];
+                                medicalData.TimeOfDay   = (string)reader["TimeOfDay"];
                             if (reader["Value2"] != DBNull.Value)
                             {
-                                medicalData.Value2 = (float)reader["Value2"];
+                                medicalData.Value2 = (int)reader["Value2"];
                             }
                             else
                             {
-                                patient.MiddleName = "N\\A";
+                                medicalData.Value2 = null;
                             }
-                            patient.LastName = (string)reader["LastName"];
-                            patient.Address = (string)reader["Address"];
-                            if (reader["Address2"] != DBNull.Value)
-                            {
-                                patient.Address2 = (string)reader["Address2"];
+                            medicalDataList.Add(medicalData);
                             }
                         }
+                    }
 
                     if (rows > 0)
                     {
@@ -366,9 +368,8 @@ namespace HealthcareCompanion.DataAccessLayer
                 {
                     conn.Close();
                 }
-                return success;
+                return medicalDataList;
             }
-
         }
         public bool pairDoctorPatient(int patientID, int DoctorID)
         {

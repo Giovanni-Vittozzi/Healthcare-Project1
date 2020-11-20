@@ -1,0 +1,71 @@
+﻿@model IEnumerable<HealthcareCompanion.Models.MedicalData>
+
+@{
+    ViewBag.Title = "ViewMedicalData";
+    Layout = "~/Views/Shared/_LayoutPatient.cshtml";
+}
+
+<h2>ViewMedicalData</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+@if (Model != null)
+{
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.TypeID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PatientID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Value1)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Value2)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Now)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TimeOfDay)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TypeID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PatientID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Value1)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Value2)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Now)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TimeOfDay)
+                </td>
+                <td>
+                    @*@Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |*@
+                    @*@Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |*@
+                    @*@Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
+                </td>
+            </tr>
+        }
+
+    </table>
+} else
+{
+    <h2>No Medical Data To List</h2>
+}

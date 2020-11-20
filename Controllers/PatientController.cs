@@ -183,11 +183,21 @@ namespace HealthcareCompanion.Controllers
             return View();
         }
         [HttpGet]
-        public ActionResult ViewMedicalData()
+        public ActionResult ViewMedicalData(MedicalData medicalData)
         {
             var TimeOfDayList     = new List<string>() { "Morning", "Afternoon", "Evening", "Night" };
             ViewBag.TimeOfDayList = TimeOfDayList;
-            return View();
+            PatientTier tier = new PatientTier();
+            if (Request.IsAuthenticated)
+                {
+                    var          userStore   = new UserStore<IdentityUser>();
+                    var          userManager = new UserManager<IdentityUser>(userStore);
+                    IdentityUser theUser     = userManager.FindById(User.Identity.GetUserId());
+                    string       userID      = theUser.Id;
+                    medicalData.PatientID    = tier.getPatientByID(userID);
+                }
+            List<MedicalData> medicalDataList = tier.listMedicalData(medicalData.PatientID);
+            return View(medicalDataList);
         }
         [HttpPost]
         public ActionResult SignOut()

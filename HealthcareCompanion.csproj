@@ -578,6 +578,7 @@
     <Content Include="Views\Doctor\ListPatients.cshtml" />
     <Content Include="Views\Doctor\EditDoctorInfo.cshtml" />
     <Content Include="Views\Default\testchart.cshtml" />
+    <Content Include="Views\Patient\ViewMedicalData.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

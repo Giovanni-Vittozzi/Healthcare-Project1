@@ -105,8 +105,6 @@ namespace HealthcareCompanion.Controllers
         {
             PatientTier tier = new PatientTier();
             tier.approvePatient(id);
-
-
             return RedirectToAction("ApprovePatients", "Doctor");
         }
     }
