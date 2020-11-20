@@ -91,7 +91,7 @@ namespace HealthcareCompanion.Controllers
                 medicalData.TypeID    = 1; //From the MedicalDataType Table, Blood Sugar is 1
                 medicalData.TimeOfDay = Request.Form["TimeOfDay"]; //Get selected time of day the reading was taken
                 tier.insertMedicalData(medicalData);
-                return View();
+                return RedirectToAction("ViewMedicalData", "Patient");
             }
             return View();
         }
@@ -119,7 +119,7 @@ namespace HealthcareCompanion.Controllers
                 medicalData.TypeID    = 2; //From the MedicalDataType Table, Blood Pressure is 2
                 medicalData.TimeOfDay = Request.Form["TimeOfDay"]; //Get selected time of day the reading was taken
                 tier.insertMedicalData(medicalData);
-                return View();
+                return RedirectToAction("ViewMedicalData", "Patient");
             }
             return View();
         }
@@ -148,7 +148,7 @@ namespace HealthcareCompanion.Controllers
                 medicalData.TypeID    = 3; //From the MedicalDataType Table, Pulse is 3
                 medicalData.TimeOfDay = Request.Form["TimeOfDay"]; //Get selected time of day the reading was taken
                 tier.insertMedicalData(medicalData);
-                return View();
+                return RedirectToAction("ViewMedicalData", "Patient");
             }
             return View();
 
@@ -178,15 +178,28 @@ namespace HealthcareCompanion.Controllers
                 medicalData.TypeID    = 4; //From the MedicalDataType Table, Weight is 4
                 medicalData.TimeOfDay = Request.Form["TimeOfDay"]; //Get selected time of day the reading was taken
                 tier.insertMedicalData(medicalData);
-                return View();
+                return RedirectToAction("ViewMedicalData", "Patient");
             }
             return View();
         }
         [HttpGet]
         public ActionResult ViewMedicalData(MedicalData medicalData)
         {
-            var TimeOfDayList     = new List<string>() { "Morning", "Afternoon", "Evening", "Night" };
-            ViewBag.TimeOfDayList = TimeOfDayList;
+            PatientTier tier = new PatientTier();
+            if (Request.IsAuthenticated)
+                {
+                    var          userStore   = new UserStore<IdentityUser>();
+                    var          userManager = new UserManager<IdentityUser>(userStore);
+                    IdentityUser theUser     = userManager.FindById(User.Identity.GetUserId());
+                    string       userID      = theUser.Id;
+                    medicalData.PatientID    = tier.getPatientByID(userID);
+                }
+            List<MedicalData> medicalDataList = tier.listMedicalData(medicalData.PatientID);
+            return View(medicalDataList);
+        }
+        [HttpGet]
+        public ActionResult ChartMedicalData(MedicalData medicalData)
+        {
             PatientTier tier = new PatientTier();
             if (Request.IsAuthenticated)
                 {

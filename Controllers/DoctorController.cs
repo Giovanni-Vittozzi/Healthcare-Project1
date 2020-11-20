@@ -107,5 +107,18 @@ namespace HealthcareCompanion.Controllers
             tier.approvePatient(id);
             return RedirectToAction("ApprovePatients", "Doctor");
         }
+
+        [HttpPost]
+        public ActionResult SignOut()
+        {
+            if (HttpContext.User.Identity.IsAuthenticated)
+            {
+                HttpContext.GetOwinContext()
+                           .Authentication
+                           .SignOut(CookieAuthenticationDefaults.AuthenticationType);
+            }
+            return View();
+            //return RedirectToAction("SignOut", "Patient");
+        }
     }
 }
