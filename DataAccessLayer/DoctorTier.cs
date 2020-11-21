@@ -134,11 +134,11 @@ namespace HealthcareCompanion.DataAccessLayer
                             {
                                 if (reader["Pending"].ToString().Equals("False"))
                                 {
-                                    item = new SelectListItem();
-                                    var name = reader["FullName"].ToString();
+                                    item       = new SelectListItem();
+                                    var name   = reader["FullName"].ToString();
                                     var office = reader["DoctorOfficeAddress"].ToString();
                                     item.Value = reader["DoctorID"].ToString();
-                                    item.Text = name + " " + office;
+                                    item.Text  = name + " " + office;
                                     doctorList.Add(item);
                                 }
                             }

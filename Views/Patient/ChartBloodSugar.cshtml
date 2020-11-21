@@ -1,7 +1,7 @@
 ﻿@using HealthcareCompanion.DataAccessLayer;
 
 @{
-    ViewBag.Title = "ChartMedicalData";
+    ViewBag.Title = "ChartBloodSugar";
     Layout = "~/Views/Shared/_LayoutPatient.cshtml";
 }
 
@@ -12,22 +12,8 @@
 <button href="">Pulse </button>
 <button href="">Weight</button>
 
-@foreach (var item in ((IEnumerable<dynamic>)ViewBag.medicalDataList).Where(@item => @item.TypeID == 1))
-{
-    <text>['@item.Now', @item.Value1]</text>
-}
-
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
-    var selectedMedicalData = 1;
-
-    function BloodSugar() {
-        
-    }
-    function Pulse() {
-        selectedMedicalData = 3
-        LoadGoogle()
-    }
     function LoadGoogle() {
         google.charts.load('current', {
             callback: drawChart,
@@ -46,18 +32,19 @@
         //]);
 
         data.addRows([
-            @{ 
+            @{
                 int counter = 0;
-                foreach (var item in ((IEnumerable<dynamic>)ViewBag.medicalDataList).Where(@item => @item.TypeID == selectedMedicalData))
+                foreach (var item in ViewBag.medicalDataList)
                 {
-                    <text>[new Date('@item.Now'), @item.Value1],</text>
+                    int month = item.Now.Month - 1;
+                    <text>[new Date(@item.Now.Year, @month, @item.Now.Day, @item.Now.Hour, @item.Now.Minute, @item.Now.Second), @item.Value1],</text>
                     counter++;
                 }
             }
         ])
 
         var options = {
-            title: 'Rate the Day on a Scale of 1 to 10',
+            title: 'Graph of Blood Sugar Over Time',
             width: 900,
             height: 500,
             hAxis: {
@@ -74,19 +61,19 @@
 
                 chart.draw(data, options);
 
-        var button = document.getElementById('change');
+        //var button = document.getElementById('change');
 
-                button.onclick = function () {
+        //        button.onclick = function () {
 
-                    // If the format option matches, change it to the new option,
-                    // if not, reset it to the original format.
-                    options.hAxis.format === 'M/d/yy' ?
-                        options.hAxis.format = 'MMM dd, yyyy' :
-                        options.hAxis.format = 'M/d/yy';
+        //            // If the format option matches, change it to the new option,
+        //            // if not, reset it to the original format.
+        //            options.hAxis.format === 'M/d/yy' ?
+        //                options.hAxis.format = 'MMM dd, yyyy' :
+        //                options.hAxis.format = 'M/d/yy';
 
-                    chart.draw(data, options);
-                };
-            }
+        //            chart.draw(data, options);
+        //        };
+        }
     LoadGoogle();
 </script>
 @*<script src="https://www.gstatic.com/charts/loader.js"></script>*@

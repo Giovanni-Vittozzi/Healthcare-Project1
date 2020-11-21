@@ -1,7 +1,7 @@
 ﻿@using HealthcareCompanion.DataAccessLayer;
 
 @{
-    ViewBag.Title = "ChartMedicalData";
+    ViewBag.Title = "ChartBloodSugar";
     Layout = "~/Views/Shared/_LayoutPatient.cshtml";
 }
 
@@ -12,22 +12,8 @@
 <button href="">Pulse </button>
 <button href="">Weight</button>
 
-@foreach (var item in ((IEnumerable<dynamic>)ViewBag.medicalDataList).Where(@item => @item.TypeID == 1))
-{
-    <text>['@item.Now', @item.Value1]</text>
-}
-
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
-    var selectedMedicalData = 1;
-
-    function BloodSugar() {
-        
-    }
-    function Pulse() {
-        selectedMedicalData = 3
-        LoadGoogle()
-    }
     function LoadGoogle() {
         google.charts.load('current', {
             callback: drawChart,
@@ -39,28 +25,32 @@
 
         var data = new google.visualization.DataTable();
         data.addColumn('date', 'Time of Day');
-        data.addColumn('number', 'Blood Sugar');
+        data.addColumn('number', 'Blood Pressure');
 
         //data.addRows([
         //    [new Date("2020-11-15 16:03:45.970"), 107], [new Date("2020-11-14 16:03:45.970"), 108], [new Date("2020-11-13 16:03:45.970"), 120]
         //]);
 
         data.addRows([
-            @{ 
+            @{
                 int counter = 0;
-                foreach (var item in ((IEnumerable<dynamic>)ViewBag.medicalDataList).Where(@item => @item.TypeID == selectedMedicalData))
+                foreach (var item in ViewBag.medicalDataList)
                 {
-                    <text>[new Date('@item.Now'), @item.Value1],</text>
+                    <text>[new Date('@item.Now.Year'), @item.Value1],</text>
                     counter++;
                 }
             }
         ])
 
         var options = {
-            title: 'Rate the Day on a Scale of 1 to 10',
+            title: 'Graph of Blood Pressure Over Time',
             width: 900,
             height: 500,
             hAxis: {
+                viewWindow: {
+                    min: new Date(2020, 10, 21),
+                    max: new Date(2020, 10, 18)
+                },
                     format: 'M/d/yyyy',
                 gridlines: { count: @counter }
                     },

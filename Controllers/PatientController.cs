@@ -198,7 +198,7 @@ namespace HealthcareCompanion.Controllers
             return View(medicalDataList);
         }
         [HttpGet]
-        public ActionResult ChartMedicalData(MedicalData medicalData)
+        public ActionResult ChartBloodSugar(MedicalData medicalData)
         {
             PatientTier tier = new PatientTier();
             if (Request.IsAuthenticated)
@@ -208,9 +208,62 @@ namespace HealthcareCompanion.Controllers
                     IdentityUser theUser     = userManager.FindById(User.Identity.GetUserId());
                     string       userID      = theUser.Id;
                     medicalData.PatientID    = tier.getPatientByID(userID);
+                    medicalData.TypeID       = 1;
                 }
-            List<MedicalData> medicalDataList = tier.listMedicalData(medicalData.PatientID);
-            return View(medicalDataList);
+            List<MedicalData> medicalDataList = tier.listMedicalDataByTypeID(medicalData.PatientID, medicalData.TypeID);
+            ViewBag.medicalDataList           = medicalDataList;
+            return View();
+        }
+        [HttpGet]
+        public ActionResult ChartBloodPressure(MedicalData medicalData)
+        {
+            PatientTier tier = new PatientTier();
+            if (Request.IsAuthenticated)
+            {
+                var          userStore   = new UserStore<IdentityUser>();
+                var          userManager = new UserManager<IdentityUser>(userStore);
+                IdentityUser theUser     = userManager.FindById(User.Identity.GetUserId());
+                string       userID      = theUser.Id;
+                medicalData.PatientID    = tier.getPatientByID(userID);
+                medicalData.TypeID       = 2;
+            }
+            List<MedicalData> medicalDataList = tier.listMedicalDataByTypeID(medicalData.PatientID, medicalData.TypeID);
+            ViewBag.medicalDataList           = medicalDataList;
+            return View();
+        }
+        [HttpGet]
+        public ActionResult ChartPulse(MedicalData medicalData)
+        {
+            PatientTier tier = new PatientTier();
+            if (Request.IsAuthenticated)
+            {
+                var          userStore   = new UserStore<IdentityUser>();
+                var          userManager = new UserManager<IdentityUser>(userStore);
+                IdentityUser theUser     = userManager.FindById(User.Identity.GetUserId());
+                string       userID      = theUser.Id;
+                medicalData.PatientID    = tier.getPatientByID(userID);
+                medicalData.TypeID       = 3;
+            }
+            List<MedicalData> medicalDataList = tier.listMedicalDataByTypeID(medicalData.PatientID, medicalData.TypeID);
+            ViewBag.medicalDataList           = medicalDataList;
+            return View();
+        }
+        [HttpGet]
+        public ActionResult ChartWeight(MedicalData medicalData)
+        {
+            PatientTier tier = new PatientTier();
+            if (Request.IsAuthenticated)
+            {
+                var          userStore   = new UserStore<IdentityUser>();
+                var          userManager = new UserManager<IdentityUser>(userStore);
+                IdentityUser theUser     = userManager.FindById(User.Identity.GetUserId());
+                string       userID      = theUser.Id;
+                medicalData.PatientID    = tier.getPatientByID(userID);
+                medicalData.TypeID       = 4;
+            }
+            List<MedicalData> medicalDataList = tier.listMedicalDataByTypeID(medicalData.PatientID, medicalData.TypeID);
+            ViewBag.medicalDataList           = medicalDataList;
+            return View();
         }
         [HttpPost]
         public ActionResult SignOut()

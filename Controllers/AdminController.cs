@@ -25,12 +25,11 @@ namespace HealthcareCompanion.Controllers
         [HttpGet]
         public ActionResult ApprovePatients()
         {
-            PatientTier tier = new PatientTier();
+            PatientTier   tier        = new PatientTier();
             List<Patient> patientList = tier.getAllPatients();
 
             return View(patientList);
         }
-
         [AllowAnonymous]
         [HttpGet]
         public ActionResult PatientRegistration()
@@ -38,7 +37,6 @@ namespace HealthcareCompanion.Controllers
 
             return View();
         }
-
         [AllowAnonymous]//so this makes it ok 
         [HttpPost]
         public async Task<ActionResult> PatientRegistration(Patient patient)
@@ -47,11 +45,11 @@ namespace HealthcareCompanion.Controllers
             {
                 bool processError = false;
                 //First Create the user using Identity Objects
-                var userStore        = new UserStore<IdentityUser>();
-                var userManager      = new UserManager<IdentityUser>(userStore);
+                var    userStore     = new UserStore<IdentityUser>();
+                var    userManager   = new UserManager<IdentityUser>(userStore);
                 string statusMessage = "";
 
-                IdentityUser theUser     = new IdentityUser() { UserName = patient.Email, Email = patient.Email };
+                IdentityUser   theUser   = new IdentityUser() { UserName = patient.Email, Email = patient.Email };
                 IdentityResult theResult = await userManager.CreateAsync(theUser, patient.Password);
 
                 if (theResult == IdentityResult.Success)
@@ -71,9 +69,8 @@ namespace HealthcareCompanion.Controllers
                         {
                             statusMessage = string.Format("User Group Creation failed because : {0}", theResult.Errors.FirstOrDefault());
                             //Need to exit nicely here for some reason, we could not create the role with the DB
-                            processError = true;
+                            processError  = true;
                         }
-
                     }
                     if (!processError)
                     {
@@ -88,12 +85,11 @@ namespace HealthcareCompanion.Controllers
                     statusMessage = string.Format("User Creation failed because : {0}", theResult.Errors.FirstOrDefault());
                     processError  = true;
                 }
-
                 //If an occurred with user creation, post the error to the end user.
                 if (processError)
                 {
-                    ErrorModel error = new ErrorModel();
-                    error.Location = "Creating a new user in Identity";
+                    ErrorModel error   = new ErrorModel();
+                    error.Location     = "Creating a new user in Identity";
                     error.ErrorMessage = statusMessage;
                     //Error Page for creating a user
                     //return View("Error", "Employee", error); //need a proper view for this
@@ -121,7 +117,6 @@ namespace HealthcareCompanion.Controllers
         {
             return View();
         }
-
         [AllowAnonymous]//so this makes it ok 
         [HttpPost]
         public async Task<ActionResult> DoctorRegistration(Doctor doctor)
@@ -144,7 +139,6 @@ namespace HealthcareCompanion.Controllers
                     var          roleStore   = new RoleStore<IdentityRole>();
                     var          roleManager = new RoleManager<IdentityRole>(roleStore);
                     IdentityRole theRole     = await roleManager.FindByNameAsync("User");
-
                     if (theRole == null)
                     {
                         //The user role does not exist, create it.
@@ -171,19 +165,17 @@ namespace HealthcareCompanion.Controllers
                     statusMessage = string.Format("User Creation failed because : {0}", theResult.Errors.FirstOrDefault());
                     processError  = true;
                 }
-
                 //If an occurred with user creation, post the error to the end user.
                 if (processError)
                 {
-                    ErrorModel error = new ErrorModel();
-                    error.Location = "Creating a new user in Identity";
+                    ErrorModel error   = new ErrorModel();
+                    error.Location     = "Creating a new user in Identity";
                     error.ErrorMessage = statusMessage;
                     //Error Page for creating a user
                     //return View("Error", "Employee", error);//need a correct redirect here
                     //create a view to refer for errors
                     //in employee controller (second attribute here is the controller
                 }
-
                 //Add code to add the rest of the information for the user in the doctor table
                 DoctorTier tier = new DoctorTier();
                 doctor.userID   = theUser.Id;
@@ -198,6 +190,5 @@ namespace HealthcareCompanion.Controllers
             }
             return View();
         }
-
     }
 }

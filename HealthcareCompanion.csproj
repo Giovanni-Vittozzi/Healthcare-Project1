@@ -581,6 +581,8 @@
     <Content Include="Views\Patient\ViewMedicalData.cshtml" />
     <Content Include="Views\Doctor\SignOut.cshtml" />
     <Content Include="Views\Patient\ChartMedicalData.cshtml" />
+    <Content Include="Views\Patient\ChartBloodSugar.cshtml" />
+    <Content Include="Views\Patient\ChartBloodPressure.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
