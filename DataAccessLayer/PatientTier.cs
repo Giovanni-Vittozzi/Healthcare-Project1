@@ -350,7 +350,6 @@ namespace HealthcareCompanion.DataAccessLayer
                             }
                         }
                     }
-
                     if (rows > 0)
                     {
                         success = true;
@@ -385,6 +384,71 @@ namespace HealthcareCompanion.DataAccessLayer
             {
                 cmd.Parameters.Add("@PatientID", System.Data.SqlDbType.Int).Value = PatientID;
                 cmd.Parameters.Add("@TypeID", System.Data.SqlDbType.Int).Value    = TypeID;
+                try
+                {
+                    conn.Open();
+                    using (reader = cmd.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            medicalDataList = new List<MedicalData>();
+                            while (reader.Read())
+                            {
+                                medicalData             = new MedicalData();
+                                medicalData.TypeID      = (int)reader["TypeID"];
+                                medicalData.PatientID   = (int)reader["PatientID"];
+                                medicalData.Now         = (DateTime)reader["DateEntered"];
+                                medicalData.Value1      = (int)reader["Value1"];
+                                medicalData.TimeOfDay   = (string)reader["TimeOfDay"];
+                            if (reader["Value2"] != DBNull.Value)
+                            {
+                                medicalData.Value2 = (int)reader["Value2"];
+                            }
+                            else
+                            {
+                                medicalData.Value2 = null;
+                            }
+                            medicalDataList.Add(medicalData);
+                            }
+                        }
+                    }
+
+                    if (rows > 0)
+                    {
+                        success = true;
+                    }
+                    else
+                    {
+                        success = false;
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    throw new Exception(ex.Message);
+                }
+                finally
+                {
+                    conn.Close();
+                }
+                return medicalDataList;
+            }
+        }
+        public List<MedicalData> listMedicalDataByTypeIDByDate(int PatientID, int TypeID, int? Month, int Year)
+        {
+            List<MedicalData> medicalDataList = null;
+            MedicalData       medicalData     = null;
+            int               rows            = 0;
+
+            //patient_id is an auto number
+            query = "Select * FROM PatientMedicalData WHERE PatientID = @PatientID AND TypeID = @TypeID AND MONTH(DateEntered)=@Month AND YEAR(DateEntered)=@Year;";
+
+            using (conn = new SqlConnection(connectionString))
+            using (cmd  = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.Add("@PatientID", System.Data.SqlDbType.Int).Value = PatientID;
+                cmd.Parameters.Add("@TypeID",    System.Data.SqlDbType.Int).Value = TypeID;
+                cmd.Parameters.Add("@Month",     System.Data.SqlDbType.Int).Value = Month;
+                cmd.Parameters.Add("@Year",      System.Data.SqlDbType.Int).Value = Year;
                 try
                 {
                     conn.Open();

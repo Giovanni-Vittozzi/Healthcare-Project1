@@ -48,13 +48,6 @@
             </nav>
         </div>
 
-        <div class="container-fluid">
-            @if (Context.User.Identity.IsAuthenticated)
-            {
-                <h4>Hello, <b>@Context.User.Identity.Name</b></h4>
-            }
-        </div>
-
         <div class="container body-content">
             @RenderBody()
             <hr />

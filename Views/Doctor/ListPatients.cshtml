@@ -42,7 +42,7 @@
             @Html.DisplayFor(modelItem => item.PatientAddress)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Email)
+            <a href="mailto:@item.Email">@Html.DisplayFor(modelItem => item.Email)</a>
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.CreatedAt)
