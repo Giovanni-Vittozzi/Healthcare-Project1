@@ -27,9 +27,10 @@ namespace HealthcareCompanion.Controllers
             return View();
         }
         [HttpGet]
-        public ActionResult EditDoctorInfo(Doctor doctor)
+        public ActionResult EditDoctorInfo()
         {
-            DoctorTier tier = new DoctorTier();
+            DoctorTier tier   = new DoctorTier();
+            Doctor     doctor = new Doctor();
             //need to get current signed in doctor
             if (Request.IsAuthenticated)
             {
@@ -43,7 +44,25 @@ namespace HealthcareCompanion.Controllers
                 doctor                   = tier.retrieveDoctor(doctor.DoctorID);
                 ViewBag.doctor           = doctor;
             }
-
+            return View();
+        }
+        [HttpPost]
+        public ActionResult EditDoctorInfo(Doctor doctor)
+        {
+            if (ModelState.IsValid)
+            {
+                DoctorTier tier   = new DoctorTier();
+                if (Request.IsAuthenticated)
+                {
+                    var userStore         = new UserStore<IdentityUser>();
+                    var userManager       = new UserManager<IdentityUser>(userStore);
+                    IdentityUser theUser  = userManager.FindById(User.Identity.GetUserId());
+                    string userID         = theUser.Id;
+                    doctor.DoctorID       = tier.getDoctorByID(userID);
+                    tier.updateDoctorInfo(doctor);
+                }
+                return RedirectToAction("Index", "Doctor");
+            }
             return View();
         }
         [HttpGet]
@@ -107,7 +126,6 @@ namespace HealthcareCompanion.Controllers
             tier.approvePatient(id);
             return RedirectToAction("ApprovePatients", "Doctor");
         }
-
         [HttpPost]
         public ActionResult SignOut()
         {

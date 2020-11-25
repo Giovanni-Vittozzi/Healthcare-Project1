@@ -584,6 +584,11 @@
     <Content Include="Views\Patient\ChartBloodSugar.cshtml" />
     <Content Include="Views\Patient\ChartBloodPressure.cshtml" />
     <Content Include="Views\Patient\ChartBloodSugarByMonth.cshtml" />
+    <Content Include="Views\Patient\ChartPulse.cshtml" />
+    <Content Include="Views\Patient\ChartPulseByMonth.cshtml" />
+    <Content Include="Views\Patient\ChartWeight.cshtml" />
+    <Content Include="Views\Patient\ChartWeightByMonth.cshtml" />
+    <Content Include="Views\Patient\ChartBloodPressureByMonth.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

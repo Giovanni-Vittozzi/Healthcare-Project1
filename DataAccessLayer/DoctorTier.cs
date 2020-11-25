@@ -389,9 +389,49 @@ namespace HealthcareCompanion.DataAccessLayer
 
             return patientList;
         }
-        public bool updateDoctor(Doctor doctor)
+        public bool updateDoctorInfo(Doctor doctor)
         {
-            return success;
+            int rows = 0;
+
+            //DoctorID is an auto number
+            query = "UPDATE Doctors SET " +
+                "FirstName = @FirstName, LastName = @LastName, Address = @Address, OfficeNum = @OfficeNum, City = @City, State = @State, ZipCode = @ZipCode " +
+                "WHERE DoctorID = @DoctorID";
+
+            using (conn = new SqlConnection(connectionString))
+            using (cmd  = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.Add("@DoctorID",   System.Data.SqlDbType.Int         ).Value  = doctor.DoctorID;
+                cmd.Parameters.Add("@FirstName",  System.Data.SqlDbType.NVarChar, 50).Value  = doctor.FirstName;
+                cmd.Parameters.Add("@LastName",   System.Data.SqlDbType.NVarChar, 50).Value  = doctor.LastName;
+                cmd.Parameters.Add("@Address",    System.Data.SqlDbType.NVarChar, 50).Value  = doctor.Address;
+                cmd.Parameters.Add("@OfficeNum",  System.Data.SqlDbType.NVarChar, 50).Value  = doctor.OfficeNum;
+                cmd.Parameters.Add("@City",       System.Data.SqlDbType.NVarChar, 50).Value  = doctor.City;
+                cmd.Parameters.Add("@State",      System.Data.SqlDbType.NVarChar, 50).Value  = doctor.State;
+                cmd.Parameters.Add("@ZipCode",    System.Data.SqlDbType.Int,      50).Value  = doctor.ZipCode;
+                try
+                {
+                    conn.Open();
+                    rows = cmd.ExecuteNonQuery();
+
+                    if(rows > 0)
+                    {
+                        success = true;
+                    }
+                    else
+                    {
+                        success = false;
+                    }
+                }catch(SqlException ex)
+                {
+                    throw new Exception(ex.Message);
+                }
+                finally
+                {
+                    conn.Close();
+                }
+                return success;
+            }
         }
         public bool deleteDoctor(int id)
         {

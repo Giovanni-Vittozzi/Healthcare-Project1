@@ -8,14 +8,16 @@
 <h2>Blood Sugar Graph</h2>
 
 <div class="form-group">
-    <button type="button" class="btn btn-primary" onclick="BloodSugar()">Blood Sugar</button>
-    <button type="button" class="btn btn-primary" href="">Blood Pressure</button>
-    <button type="button" class="btn btn-primary" href="">Pulse </button>
-    <button type="button" class="btn btn-primary" href="">Weight</button>
+    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("ChartBloodSugar", "Patient")'">Blood Sugar</button>
+    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("ChartBloodPressure", "Patient")'">Blood Pressure</button>
+    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("ChartPulse", "Patient")'">Pulse</button>
+    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("ChartWeight", "Patient")'">Weight</button>
 </div>
 
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<script type="text/javascript">
+@if (ViewBag.medicalDataList != null)
+{
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
     function LoadGoogle() {
         google.charts.load('current', {
             callback: drawChart,
@@ -54,7 +56,7 @@
                     gridlines: { color: 'grey', count: @counter }
             },
             vAxis: {
-                    gridlines: { color: 'none' },
+                    gridlines: { color: 'grey', count: @counter },
                 minValue: 80  //can i change to viewbag min value
             },
             pointSize: 7
@@ -78,45 +80,50 @@
         //        };
         }
     LoadGoogle();
-</script>
-@*<script src="https://www.gstatic.com/charts/loader.js"></script>*@
-<div id="chart_div"></div>
+    </script>
+    @*<script src="https://www.gstatic.com/charts/loader.js"></script>*@
+    <div id="chart_div"></div>
 
-<div class="form-group">
-    <div class="col-md-10">
-        @using (Html.BeginForm("ChartBloodSugar", "Patient", FormMethod.Post))
-        {
-            if (ViewBag.MonthList != null)
+    <div class="form-group">
+        <div class="col-md-10">
+            @using (Html.BeginForm("ChartBloodSugar", "Patient", FormMethod.Post))
             {
-                <select id="MonthSelect" name="MonthSelect">
-                    <option selected>--Change the graph month range here--</option>
-                    @foreach (var item in ViewBag.MonthList)
-                    {
-                        <option value=@item>@item</option>
-                    }
-                </select>
-            }
-            else
-            {
-                <p>There is no medical information entered to change the timeline.</p>
-            }
+                if (ViewBag.MonthList != null)
+                {
+                    <select id="MonthSelect" name="MonthSelect">
+                        <option selected>--Change the graph month range here--</option>
+                        @foreach (var item in ViewBag.MonthList)
+                        {
+                            <option value=@item>@item</option>
+                        }
+                    </select>
+                }
+                else
+                {
+                    <p>There is no medical information entered to change the timeline.</p>
+                }
 
-            if (ViewBag.YearList != null)
-            {
-                <select id="YearSelect" name="YearSelect">
-                    <option selected>--Change the graph year range here--</option>
-                    @foreach (var item in ViewBag.YearList)
-                    {
-                        <option value=@item>@item</option>
-                    }
-                </select>
+                if (ViewBag.YearList != null)
+                {
+                    <select id="YearSelect" name="YearSelect">
+                        <option selected>--Change the graph year range here--</option>
+                        @foreach (var item in ViewBag.YearList)
+                        {
+                            <option value=@item>@item</option>
+                        }
+                    </select>
+                }
+                else
+                {
+                    <p>There is no medical information entered to change the timeline.</p>
+                }
+                @*<button type="button" class="btn btn-info" onclick="location.href='@Url.Action("ChartBloodSugar", "Patient", FormMethod.Post)'">Change Timeline</button>*@
+                <input type="submit" value="Change Timeline" class="btn btn-info" />
             }
-            else
-            {
-                <p>There is no medical information entered to change the timeline.</p>
-            }
-            @*<button type="button" class="btn btn-info" onclick="location.href='@Url.Action("ChartBloodSugar", "Patient", FormMethod.Post)'">Change Timeline</button>*@
-            <input type="submit" value="Change Timeline" class="btn btn-info" />
-        }
+        </div>
     </div>
-</div>
+}
+else
+{
+    <h2>No Medical Data To List</h2>
+}
