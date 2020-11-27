@@ -356,6 +356,7 @@
     <Content Include="Examples\Ex01_Simple.aspx" />
     <Content Include="Examples\Ex02_Advanced.aspx" />
     <Content Include="Global.asax" />
+    <Content Include="Images\doctorimage.jpg" />
     <Content Include="Images\Medical Banner2.png" />
     <Content Include="js\chart-config.js" />
     <Content Include="js\init-analytics.js" />
