@@ -1,18 +1,18 @@
 ﻿@using HealthcareCompanion.DataAccessLayer;
 
 @{
-    ViewBag.Title = "ChartBloodPressureByMonth";
-    Layout = "~/Views/Shared/_LayoutPatient.cshtml";
+    ViewBag.Title = "ChartBloodSugar";
+    Layout = "~/Views/Shared/_LayoutDoctor.cshtml";
 }
 
 <div class="form-group">
-    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("ChartBloodSugar", "Patient")'">Blood Sugar</button>
-    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("ChartBloodPressure", "Patient")'">Blood Pressure</button>
-    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("ChartPulse", "Patient")'">Pulse</button>
-    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("ChartWeight", "Patient")'">Weight</button>
+    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("ChartBloodSugar",    "Doctor")'">Blood Sugar</button>
+    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("ChartBloodPressure", "Doctor")'">Blood Pressure</button>
+    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("ChartPulse",         "Doctor")'">Pulse</button>
+    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("ChartWeight",        "Doctor")'">Weight</button>
 </div>
 
-<h2>Blood Pressure Graph</h2>
+<h2>Blood Sugar Graph</h2>
 
 @if (ViewBag.medicalDataList != null)
 {
@@ -29,12 +29,7 @@
 
         var data = new google.visualization.DataTable();
         data.addColumn('string', 'Time of Day');
-        data.addColumn('number', 'Systolic Blood Pressure');
-        data.addColumn('number', 'Diastolic Blood Pressure');
-
-        //data.addRows([
-        //    [new Date("2020-11-15 16:03:45.970"), 107], [new Date("2020-11-14 16:03:45.970"), 108], [new Date("2020-11-13 16:03:45.970"), 120]
-        //]);
+        data.addColumn('number', 'Blood Sugar');
 
         data.addRows([
             @{
@@ -42,7 +37,7 @@
                 foreach (var item in ViewBag.medicalDataList)
                 {
                     int month = item.Now.Month - 1;
-                    <text>["@item.Now.Month/@item.Now.Day/@item.Now.Year - @item.TimeOfDay", @item.Value1, @item.Value2],</text>
+                    <text>["@item.Now.Month/@item.Now.Day/@item.Now.Year - @item.TimeOfDay", @item.Value1],</text>
                     counter++;
                 }
             }
@@ -58,36 +53,22 @@
             },
             vAxis: {
                     gridlines: { color: 'grey', count: @counter },
-                minValue: 70  
+                minValue: 80  //can i change to viewbag min value
             },
             pointSize: 7
         };
 
-                var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
-
-                chart.draw(data, options);
-
-        //var button = document.getElementById('change');
-
-        //        button.onclick = function () {
-
-        //            // If the format option matches, change it to the new option,
-        //            // if not, reset it to the original format.
-        //            options.hAxis.format === 'M/d/yy' ?
-        //                options.hAxis.format = 'MMM dd, yyyy' :
-        //                options.hAxis.format = 'M/d/yy';
-
-        //            chart.draw(data, options);
-        //        };
-        }
+        var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+    }
     LoadGoogle();
     </script>
     @*<script src="https://www.gstatic.com/charts/loader.js"></script>*@
     <div id="chart_div"></div>
 
     <div class="form-group">
-        <div class="col-md-12">
-            @using (Html.BeginForm("ChartBloodPressureByMonth", "Patient", FormMethod.Post))
+        <div class="col-md-10">
+            @using (Html.BeginForm("ChartBloodSugar", "Doctor", FormMethod.Post))
             {
                 if (ViewBag.MonthList != null)
                 {
@@ -118,9 +99,7 @@
                 {
                     <p>There is no medical information entered to change the timeline.</p>
                 }
-                @*<button type="button" class="btn btn-info" onclick="location.href='@Url.Action("ChartBloodSugar", "Patient", FormMethod.Post)'">Change Timeline</button>*@
                 <input type="submit" value="Change Timeline" class="btn btn-info" />
-                <button type="button" class="btn btn-info" onclick="location.href='@Url.Action("ChartBloodPressure", "Patient")'">Reset To Full Timeline</button>
             }
         </div>
     </div>

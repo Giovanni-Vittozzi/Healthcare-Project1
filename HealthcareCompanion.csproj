@@ -590,6 +590,7 @@
     <Content Include="Views\Patient\ChartWeight.cshtml" />
     <Content Include="Views\Patient\ChartWeightByMonth.cshtml" />
     <Content Include="Views\Patient\ChartBloodPressureByMonth.cshtml" />
+    <Content Include="Views\Doctor\ChartBloodSugar.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

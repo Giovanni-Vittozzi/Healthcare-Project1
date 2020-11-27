@@ -48,9 +48,9 @@
             @Html.DisplayFor(modelItem => item.CreatedAt)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("View Medical Data", "View Medical Data", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            @Html.ActionLink("Edit",               "Edit",               new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Chart Medical Data", "ChartBloodSugar",    new { id = item.PatientID      }) |
+            @Html.ActionLink("Delete",             "Delete",             new { /* id=item.PrimaryKey */ })
         </td>
     </tr>
 }

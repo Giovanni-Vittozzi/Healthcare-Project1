@@ -5,14 +5,14 @@
     Layout = "~/Views/Shared/_LayoutPatient.cshtml";
 }
 
-<h2>Weight Graph By Month</h2>
-
 <div class="form-group">
     <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("ChartBloodSugar", "Patient")'">Blood Sugar</button>
     <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("ChartBloodPressure", "Patient")'">Blood Pressure</button>
     <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("ChartPulse", "Patient")'">Pulse</button>
     <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("ChartWeight", "Patient")'">Weight</button>
 </div>
+
+<h2>Weight Graph By Month</h2>
 
 
 @if (ViewBag.medicalDataList != null)
