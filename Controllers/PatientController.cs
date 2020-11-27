@@ -288,9 +288,10 @@ namespace HealthcareCompanion.Controllers
             return RedirectToAction("ChartBloodSugarByMonth", new { yearInt = yearInt, monthInt= monthInt});
         }
         [HttpGet]
-        public ActionResult ChartBloodPressure(MedicalData medicalData)
+        public ActionResult ChartBloodPressure()
         {
-            PatientTier tier = new PatientTier();
+            MedicalData medicalData = new MedicalData();
+            PatientTier tier        = new PatientTier();
             if (Request.IsAuthenticated)
             {
                 var          userStore   = new UserStore<IdentityUser>();
@@ -319,8 +320,8 @@ namespace HealthcareCompanion.Controllers
             }   
             return View();
         }
-        [HttpPost]
-        public ActionResult ChartBloodPressure()
+        [HttpPost, ActionName("ChartBloodPressure")]
+        public ActionResult ChartBloodPressureNew()
         {
             PatientTier tier     = new PatientTier();
             string      month    = Request.Form["MonthSelect"].ToString(); //Get selected month to change data to

@@ -127,7 +127,7 @@ namespace HealthcareCompanion.Controllers
             return RedirectToAction("ApprovePatients", "Doctor");
         }
         [HttpGet]
-        public ActionResult ChartBloodSugar(int id)
+        public ActionResult ChartBloodSugar(int patientID)
         {
             PatientTier tier        = new PatientTier();
             MedicalData medicalData = new MedicalData();
@@ -137,7 +137,7 @@ namespace HealthcareCompanion.Controllers
                 var          userManager = new UserManager<IdentityUser>(userStore);
                 IdentityUser theUser     = userManager.FindById(User.Identity.GetUserId());
                 string       userID      = theUser.Id;
-                medicalData.PatientID    = id;
+                medicalData.PatientID    = patientID;
                 medicalData.TypeID       = 1;
             }
             List<MedicalData> medicalDataList = tier.listMedicalDataByTypeID(medicalData.PatientID, medicalData.TypeID);
@@ -156,21 +156,110 @@ namespace HealthcareCompanion.Controllers
                 YearList  = YearList.Distinct().ToList();
                 ViewBag.MonthList = MonthList;
                 ViewBag.YearList  = YearList;
+                ViewBag.Patient   = patientID;
             }
             return View();
         }
-        [HttpPost]
-        public ActionResult ChartBloodSugar()
+        [HttpPost, ActionName("ChartBloodSugar")]
+        public ActionResult ChartBloodSugarNew(int patientID)
         {
             PatientTier tier     = new PatientTier();
             string      month    = Request.Form["MonthSelect"].ToString(); //Get selected month to change data to
             int?        monthInt = Convert.ToDateTime(month + " 01, 1900").Month;
             string      year     = Request.Form["YearSelect"].ToString(); //Get selected month to change data to
             int         yearInt  = Int32.Parse(year);
-            return RedirectToAction("ChartBloodSugarByMonth", new { yearInt = yearInt, monthInt= monthInt});
+            return RedirectToAction("ChartBloodSugarByMonth", "Doctor", new { yearInt = yearInt, monthInt = monthInt, patientID = patientID});
         }
         [HttpGet]
-        public ActionResult ChartBloodSugarByMonth(MedicalData medicalData, int? monthInt, int yearInt)
+        public ActionResult ChartBloodSugarByMonth(MedicalData medicalData, int? monthInt, int yearInt, int patientID)
+        {
+            PatientTier tier     = new PatientTier();
+            if (Request.IsAuthenticated)
+                {
+                    var          userStore   = new UserStore<IdentityUser>();
+                    var          userManager = new UserManager<IdentityUser>(userStore);
+                    IdentityUser theUser     = userManager.FindById(User.Identity.GetUserId());
+                    string       userID      = theUser.Id;
+                    medicalData.PatientID    = patientID;
+                    medicalData.TypeID       = 1;
+            }
+            List<MedicalData> medicalDataList = tier.listMedicalDataByTypeIDByDate(medicalData.PatientID, medicalData.TypeID, monthInt, yearInt);
+            ViewBag.medicalDataList           = medicalDataList;
+            List<MedicalData> monthDataList   = tier.listMedicalDataByTypeID(medicalData.PatientID, medicalData.TypeID);
+            List<string>      MonthList       = new List<string>();
+            List<int>         YearList        = new List<int>();
+            if (medicalDataList != null)
+            {
+                foreach (var item in monthDataList)
+                {
+                    DateTime date = new DateTime(2020, item.Now.Month, 1);
+                    MonthList.Add(date.ToString("MMMM"));
+                    YearList.Add(item.Now.Year);
+                }
+                MonthList = MonthList.Distinct().ToList();
+                YearList  = YearList.Distinct().ToList();
+                ViewBag.MonthList = MonthList;
+                ViewBag.YearList  = YearList;
+                ViewBag.Patient   = patientID;
+            }
+            return View();
+        }
+        [HttpPost]
+        public ActionResult ChartBloodSugarByMonth(int patientID)
+        {
+            PatientTier tier     = new PatientTier();
+            string      month    = Request.Form["MonthSelect"].ToString(); //Get selected month to change data to
+            int?        monthInt = Convert.ToDateTime(month + " 01, 1900").Month;
+            string      year     = Request.Form["YearSelect"].ToString(); //Get selected month to change data to
+            int         yearInt  = Int32.Parse(year);
+            return RedirectToAction("ChartBloodSugarByMonth", "Doctor", new { yearInt = yearInt, monthInt= monthInt, patientID = patientID});
+        }
+        [HttpGet]
+        public ActionResult ChartBloodPressure(int patientID)
+        {
+            MedicalData medicalData = new MedicalData();
+            PatientTier tier        = new PatientTier();
+            if (Request.IsAuthenticated)
+            {
+                var          userStore   = new UserStore<IdentityUser>();
+                var          userManager = new UserManager<IdentityUser>(userStore);
+                IdentityUser theUser     = userManager.FindById(User.Identity.GetUserId());
+                string       userID      = theUser.Id;
+                medicalData.PatientID    = patientID;
+                medicalData.TypeID       = 2;
+            }
+            List<MedicalData> medicalDataList = tier.listMedicalDataByTypeID(medicalData.PatientID, medicalData.TypeID);
+            List<string>      MonthList       = new List<string>();
+            List<int>         YearList        = new List<int>();
+            ViewBag.medicalDataList           = medicalDataList;
+            if (medicalDataList != null)
+            {
+                foreach (var item in medicalDataList)
+                {
+                    DateTime date = new DateTime(2020, item.Now.Month, 1);
+                    MonthList.Add(date.ToString("MMMM"));
+                    YearList.Add(item.Now.Year);
+                }
+                MonthList = MonthList.Distinct().ToList();
+                YearList  = YearList.Distinct().ToList();
+                ViewBag.MonthList = MonthList;
+                ViewBag.YearList  = YearList;
+                ViewBag.Patient   = patientID;
+            }   
+            return View();
+        }
+        [HttpPost, ActionName("ChartBloodPressure")]
+        public ActionResult ChartBloodPressureNew(int patientID)
+        {
+            PatientTier tier     = new PatientTier();
+            string      month    = Request.Form["MonthSelect"].ToString(); //Get selected month to change data to
+            int?        monthInt = Convert.ToDateTime(month + " 01, 1900").Month;
+            string      year     = Request.Form["YearSelect"].ToString(); //Get selected month to change data to
+            int         yearInt  = Int32.Parse(year);
+            return RedirectToAction("ChartBloodPressureByMonth", new { yearInt = yearInt, monthInt= monthInt, patientID = patientID});
+        }
+        [HttpGet]
+        public ActionResult ChartBloodPressureByMonth(MedicalData medicalData, int? monthInt, int yearInt, int patientID)
         {
             PatientTier tier     = new PatientTier();
             if (Request.IsAuthenticated)
@@ -180,7 +269,7 @@ namespace HealthcareCompanion.Controllers
                     IdentityUser theUser     = userManager.FindById(User.Identity.GetUserId());
                     string       userID      = theUser.Id;
                     medicalData.PatientID    = tier.getPatientByID(userID);
-                    medicalData.TypeID       = 1;
+                    medicalData.TypeID       = 2;
             }
             List<MedicalData> medicalDataList = tier.listMedicalDataByTypeIDByDate(medicalData.PatientID, medicalData.TypeID, monthInt, yearInt);
             ViewBag.medicalDataList           = medicalDataList;
@@ -198,9 +287,20 @@ namespace HealthcareCompanion.Controllers
                 MonthList = MonthList.Distinct().ToList();
                 YearList = YearList.Distinct().ToList();
                 ViewBag.MonthList = MonthList;
-                ViewBag.YearList = YearList;
+                ViewBag.YearList  = YearList;
+                ViewBag.Patient   = patientID;
             }
             return View();
+        }
+        [HttpPost]
+        public ActionResult ChartBloodPressureByMonth(int patientID)
+        {
+            PatientTier tier     = new PatientTier();
+            string      month    = Request.Form["MonthSelect"].ToString(); //Get selected month to change data to
+            int?        monthInt = Convert.ToDateTime(month + " 01, 1900").Month;
+            string      year     = Request.Form["YearSelect"].ToString(); //Get selected month to change data to
+            int         yearInt  = Int32.Parse(year);
+            return RedirectToAction("ChartBloodPressureByMonth", "Doctor", new { yearInt = yearInt, monthInt= monthInt, patientID = patientID});
         }
         [HttpPost]
         public ActionResult SignOut()

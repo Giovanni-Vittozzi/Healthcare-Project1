@@ -1,7 +1,7 @@
 ﻿@using HealthcareCompanion.DataAccessLayer;
 
 @{
-    ViewBag.Title = "ChartBloodSugar";
+    ViewBag.Title = "ChartBloodPressureByMonth";
     Layout = "~/Views/Shared/_LayoutDoctor.cshtml";
 }
 
@@ -12,7 +12,7 @@
     <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("ChartWeight",        "Doctor", new { patientID = @ViewBag.Patient })'">Weight</button>
 </div>
 
-<h2>Blood Sugar Graph</h2>
+<h2>Blood Pressure Graph</h2>
 
 @if (ViewBag.medicalDataList != null)
 {
@@ -29,7 +29,8 @@
 
         var data = new google.visualization.DataTable();
         data.addColumn('string', 'Time of Day');
-        data.addColumn('number', 'Blood Sugar');
+        data.addColumn('number', 'Systolic Blood Pressure');
+        data.addColumn('number', 'Diastolic Blood Pressure');
 
         data.addRows([
             @{
@@ -37,7 +38,7 @@
                 foreach (var item in ViewBag.medicalDataList)
                 {
                     int month = item.Now.Month - 1;
-                    <text>["@item.Now.Month/@item.Now.Day/@item.Now.Year - @item.TimeOfDay", @item.Value1],</text>
+                    <text>["@item.Now.Month/@item.Now.Day/@item.Now.Year - @item.TimeOfDay", @item.Value1, @item.Value2],</text>
                     counter++;
                 }
             }
@@ -53,13 +54,13 @@
             },
             vAxis: {
                     gridlines: { color: 'grey', count: @counter },
-                minValue: 80  //can i change to viewbag min value
+                minValue: 70
             },
             pointSize: 7
         };
 
-        var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
-        chart.draw(data, options);
+         var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+         chart.draw(data, options);
     }
     LoadGoogle();
     </script>
@@ -67,8 +68,8 @@
     <div id="chart_div"></div>
 
     <div class="form-group">
-        <div class="col-md-10">
-            @using (Html.BeginForm("ChartBloodSugar", "Doctor", new { patientID = @ViewBag.Patient }, FormMethod.Post))
+        <div class="col-md-12">
+            @using (Html.BeginForm("ChartBloodPressureByMonth", "Doctor", new { patientID = @ViewBag.Patient }, FormMethod.Post))
             {
                 if (ViewBag.MonthList != null)
                 {
@@ -100,6 +101,7 @@
                     <p>There is no medical information entered to change the timeline.</p>
                 }
                 <input type="submit" value="Change Timeline" class="btn btn-info" />
+                <button type="button" class="btn btn-info" onclick="location.href='@Url.Action("ChartBloodPressure", "Doctor", new { patientID = ViewBag.Patient })'">Reset To Full Timeline</button>
             }
         </div>
     </div>
