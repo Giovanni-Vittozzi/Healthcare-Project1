@@ -5,8 +5,15 @@
     Layout = "~/Views/Shared/_LayoutPatient.cshtml";
 }
 
-<h2>Pulse</h2>
+<h2>Click a button to enter a different kind of medical data.</h2>
+<button type="button" class="btn btn-success" onclick="location.href='@Url.Action("BloodSugar", "Patient")'">Blood Sugar</button>
+<button type="button" class="btn btn-success" onclick="location.href='@Url.Action("BloodPressure", "Patient")'">Blood Pressure</button>
+<button type="button" class="btn btn-success" onclick="location.href='@Url.Action("Pulse", "Patient")'">Pulse</button>
+<button type="button" class="btn btn-success" onclick="location.href='@Url.Action("Weight", "Patient")'">Weight</button>
 <br />
+<br />
+<h2>Pulse</h2>
+<hr/>
 
 @using (Html.BeginForm())
 {
@@ -52,7 +59,3 @@
         </div>
     </div>
 }
-
-<div>
-    @Html.ActionLink("Back to Medical Selection", "MedicalDataSelection")
-</div>

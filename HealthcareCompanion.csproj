@@ -356,9 +356,11 @@
     <Content Include="Examples\Ex01_Simple.aspx" />
     <Content Include="Examples\Ex02_Advanced.aspx" />
     <Content Include="Global.asax" />
+    <Content Include="Images\covid19.jpg" />
     <Content Include="Images\doctorimage.jpg" />
     <Content Include="Images\Medical Banner2.png" />
     <Content Include="Images\medical-data-management.jpg" />
+    <Content Include="Images\medicaldata2.jpg" />
     <Content Include="Images\patientdoctor.jpg" />
     <Content Include="js\chart-config.js" />
     <Content Include="js\init-analytics.js" />
