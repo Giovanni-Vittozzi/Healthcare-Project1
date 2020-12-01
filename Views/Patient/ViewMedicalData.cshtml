@@ -12,7 +12,7 @@
     <table class="table">
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.TypeID)
+                Type of Data
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Value1)
@@ -21,7 +21,7 @@
                 @Html.DisplayNameFor(model => model.Value2)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Now)
+                Time Data Was Entered
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.TimeOfDay)
@@ -32,9 +32,18 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.TypeID)
-                </td>
+                @{
+                    if (item.TypeID == 1)
+                    {
+                        <td>Blood Sugar</td>
+                    }else if(item.TypeID == 2) {
+                        <td>Blood Pressure</td>
+                    }else if(item.TypeID == 3) {
+                        <td>Pulse</td>
+                    }else if(item.TypeID == 4) {
+                        <td>Weight</td>
+                    }
+                }
                 <td>
                     @Html.DisplayFor(modelItem => item.Value1)
                 </td>
@@ -62,5 +71,5 @@ else
     <h2>No Medical Data To List</h2>
 }
 <div>
-    @Html.ActionLink("Add New Medical Data", "MedicalDataSelection")
+    @Html.ActionLink("Add New Medical Data", "BloodSugar")
 </div>

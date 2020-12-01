@@ -101,8 +101,8 @@ namespace HealthcareCompanion.DataAccessLayer
 
             //patient_id is an auto number
             query = "INSERT INTO Patients" +
-                "(IdentityID, FirstName, MiddleName, LastName, Address, Address2, City, State, ZipCode, Pending, Email)" +
-                "VALUES(@IdentityID, @FName, @MName, @LName, @Address, @Address2, @City, @State, @ZipCode, @Pending, @Email)";
+                "(IdentityID, FirstName, MiddleName, LastName, Address, Address2, AptNum, City, State, ZipCode, Pending, Email)" +
+                "VALUES(@IdentityID, @FName, @MName, @LName, @Address, @Address2, @AptNum, @City, @State, @ZipCode, @Pending, @Email)";
 
             using (conn = new SqlConnection(connectionString))
             using (cmd  = new SqlCommand(query, conn))
@@ -126,6 +126,14 @@ namespace HealthcareCompanion.DataAccessLayer
                 else
                 {
                     cmd.Parameters.Add("@Address2", System.Data.SqlDbType.NVarChar, 50).Value  = DBNull.Value;
+                }
+                if (patient.AptNum != null)
+                {
+                    cmd.Parameters.Add("@AptNum", System.Data.SqlDbType.NVarChar, 50).Value = patient.AptNum;
+                }
+                else
+                {
+                    cmd.Parameters.Add("@AptNum", System.Data.SqlDbType.NVarChar, 50).Value  = DBNull.Value;
                 }
                 cmd.Parameters.Add("@City", System.Data.SqlDbType.NVarChar, 50).Value  = patient.City;
                 cmd.Parameters.Add("@State", System.Data.SqlDbType.NVarChar, 50).Value = patient.State;
@@ -157,6 +165,66 @@ namespace HealthcareCompanion.DataAccessLayer
             }
 
         }
+        public Patient retrievePatient(int id)
+        {
+            Patient patient = null;
+
+            query = "SELECT * FROM Patients WHERE PatientID = @PatientID;";
+
+            using (conn = new SqlConnection(connectionString))
+            using (cmd  = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.Add("@PatientID", System.Data.SqlDbType.Int).Value = id;
+                try
+                {
+                    conn.Open();
+                    using (reader = cmd.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                patient = new Patient();
+                                patient.PatientID = (int)reader["PatientID"];
+                                patient.FirstName = (string)reader["FirstName"];
+                                patient.LastName  = (string)reader["LastName"];
+                                patient.Address   = (string)reader["Address"];
+                                if (reader["Address2"] != DBNull.Value)
+                                {
+                                    patient.Address2 = (string)reader["Address2"];
+                                }
+                                else
+                                {
+                                    patient.Address2 = null;
+                                }
+                                if (reader["AptNum"] != DBNull.Value)
+                                {
+                                    patient.AptNum = (string)reader["AptNum"];
+                                }
+                                else
+                                {
+                                    patient.AptNum = null;
+                                }
+                                patient.City      = (string)reader["City"];
+                                patient.State     = (string)reader["State"];
+                                patient.ZipCode   = (int)reader["ZipCode"];
+                                patient.Pending   = (Boolean)reader["Pending"];
+                            }
+                        }
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    throw new Exception(ex.Message);
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+            return patient;
+        }
+
         //get pending Patients and returns list [where pending = true or 1]
         public int getPatientByID(String id)
         {
@@ -257,6 +325,66 @@ namespace HealthcareCompanion.DataAccessLayer
                 }
             }
             return (pendingCheck, emailCheck);
+        }
+        public bool updatePatientInfo(Patient patient)
+        {
+            int rows = 0;
+
+            //DoctorID is an auto number
+            query = "UPDATE Patients SET " +
+                "FirstName = @FirstName, LastName = @LastName, Address = @Address, Address2 = @Address2, AptNum = @AptNum, City = @City, State = @State, ZipCode = @ZipCode " +
+                "WHERE PatientID = @PatientID";
+
+            using (conn = new SqlConnection(connectionString))
+            using (cmd  = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.Add("@PatientID",  System.Data.SqlDbType.Int         ).Value = patient.PatientID;
+                cmd.Parameters.Add("@FirstName", System.Data.SqlDbType.NVarChar, 50).Value = patient.FirstName;
+                cmd.Parameters.Add("@LastName",  System.Data.SqlDbType.NVarChar, 50).Value = patient.LastName;
+                cmd.Parameters.Add("@Address",   System.Data.SqlDbType.NVarChar, 50).Value = patient.Address;
+                if (patient.Address2 != null)
+                {
+                    cmd.Parameters.Add("@Address2", System.Data.SqlDbType.NVarChar, 50).Value = patient.Address2;
+                }
+                else
+                {
+                    cmd.Parameters.Add("@Address2", System.Data.SqlDbType.NVarChar, 50).Value = DBNull.Value;
+                }
+                if (patient.AptNum != null)
+                {
+                    cmd.Parameters.Add("@AptNum", System.Data.SqlDbType.NVarChar, 50).Value = patient.AptNum;
+                }
+                else
+                {
+                    cmd.Parameters.Add("@AptNum", System.Data.SqlDbType.NVarChar, 50).Value = DBNull.Value;
+                }
+                cmd.Parameters.Add("@City",      System.Data.SqlDbType.NVarChar, 50).Value = patient.City;
+                cmd.Parameters.Add("@State",     System.Data.SqlDbType.NVarChar, 50).Value = patient.State;
+                cmd.Parameters.Add("@ZipCode",   System.Data.SqlDbType.Int,      50).Value = patient.ZipCode;
+                try
+                {
+                    conn.Open();
+                    rows = cmd.ExecuteNonQuery();
+
+                    if (rows > 0)
+                    {
+                        success = true;
+                    }
+                    else
+                    {
+                        success = false;
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    throw new Exception(ex.Message);
+                }
+                finally
+                {
+                    conn.Close();
+                }
+                return success;
+            }
         }
         public bool insertMedicalData(MedicalData medicalData)
         {

@@ -31,7 +31,40 @@ namespace HealthcareCompanion.Controllers
         [HttpGet]
         public ActionResult EditPatientInfo()
         {
-
+            PatientTier tier    = new PatientTier();
+            Patient     patient = new Patient();
+            //need to get current signed in doctor
+            if (Request.IsAuthenticated)
+            {
+                var          userStore   = new UserStore<IdentityUser>();
+                var          userManager = new UserManager<IdentityUser>(userStore);
+                IdentityUser theUser     = userManager.FindById(User.Identity.GetUserId());
+                string       userEmail   = theUser.Email;
+                string       userID      = theUser.Id;
+                var          pendPatient = tier.isPendingPatient(userEmail);
+                patient.PatientID        = tier.getPatientByID(userID);
+                patient                  = tier.retrievePatient(patient.PatientID);
+                ViewBag.patient = patient;
+            }
+            return View();
+        }
+        [HttpPost]
+        public ActionResult EditPatientInfo(Patient patient)
+        {
+            if (ModelState.IsValid)
+            {
+                PatientTier tier   = new PatientTier();
+                if (Request.IsAuthenticated)
+                {
+                    var userStore         = new UserStore<IdentityUser>();
+                    var userManager       = new UserManager<IdentityUser>(userStore);
+                    IdentityUser theUser  = userManager.FindById(User.Identity.GetUserId());
+                    string userID         = theUser.Id;
+                    patient.PatientID     = tier.getPatientByID(userID);
+                    tier.updatePatientInfo(patient);
+                }
+                return RedirectToAction("Index", "Patient");
+            }
             return View();
         }
         [HttpGet]

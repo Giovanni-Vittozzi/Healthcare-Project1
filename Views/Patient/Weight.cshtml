@@ -11,6 +11,8 @@
 <button type="button" class="btn btn-success" onclick="location.href='@Url.Action("BloodPressure", "Patient")'">Blood Pressure</button>
 <button type="button" class="btn btn-success" onclick="location.href='@Url.Action("Pulse", "Patient")'">Pulse</button>
 <button type="button" class="btn btn-success" onclick="location.href='@Url.Action("Weight", "Patient")'">Weight</button>
+<button type="button" class="btn btn-info" onclick="location.href='@Url.Action("ViewMedicalData", "Patient")'">View Entered Data</button>
+
 <br />
 <br />
 <h2>Weight</h2>
@@ -21,7 +23,6 @@
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
             @Html.LabelFor(model => model.Value1, "Enter Weight", htmlAttributes: new { @class = "control-label col-md-12" })
