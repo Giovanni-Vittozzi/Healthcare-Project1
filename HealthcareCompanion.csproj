@@ -598,6 +598,11 @@
     <Content Include="Views\Doctor\ChartBloodSugarByMonth.cshtml" />
     <Content Include="Views\Doctor\ChartBloodPressure.cshtml" />
     <Content Include="Views\Doctor\ChartBloodPressureByMonth.cshtml" />
+    <Content Include="Views\Doctor\ShowProfile.cshtml" />
+    <Content Include="Views\Doctor\ChartPulse.cshtml" />
+    <Content Include="Views\Doctor\ChartPulseByMonth.cshtml" />
+    <Content Include="Views\Doctor\ChartWeight.cshtml" />
+    <Content Include="Views\Doctor\ChartWeightByMonth.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

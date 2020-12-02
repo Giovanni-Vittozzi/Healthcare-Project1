@@ -2,14 +2,14 @@
 
 @{
     ViewBag.Title = "ChartPulse";
-    Layout = "~/Views/Shared/_LayoutPatient.cshtml";
+    Layout = "~/Views/Shared/_LayoutDoctor.cshtml";
 }
 
 <div class="form-group">
-    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("ChartBloodSugar",    "Patient")'">Blood Sugar</button>
-    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("ChartBloodPressure", "Patient")'">Blood Pressure</button>
-    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("ChartPulse",         "Patient")'">Pulse</button>
-    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("ChartWeight",        "Patient")'">Weight</button>
+    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("ChartBloodSugar",    "Doctor", new { patientID = @ViewBag.Patient })'">Blood Sugar</button>
+    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("ChartBloodPressure", "Doctor", new { patientID = @ViewBag.Patient })'">Blood Pressure</button>
+    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("ChartPulse",         "Doctor", new { patientID = @ViewBag.Patient })'">Pulse</button>
+    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("ChartWeight",        "Doctor", new { patientID = @ViewBag.Patient })'">Weight</button>
 </div>
 
 <h2>Pulse Graph</h2>
@@ -57,7 +57,6 @@
             colors: ['#00FF06'],
             pointSize: 7
         };
-
         var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
         chart.draw(data, options);
     }
@@ -68,7 +67,7 @@
 
     <div class="form-group">
         <div class="col-md-10">
-            @using (Html.BeginForm("ChartPulse", "Patient", FormMethod.Post))
+            @using (Html.BeginForm("ChartPulse", "Doctor", new { patientID = @ViewBag.Patient }, FormMethod.Post))
             {
                 if (ViewBag.MonthList != null)
                 {
@@ -109,3 +108,7 @@ else
 {
     <h2>No Medical Data To List</h2>
 }
+
+<div>
+    <button type="button" class="btn btn-success" onclick="location.href='@Url.Action("ListPatients", "Doctor")'">Select Another Patient</button>
+</div>
