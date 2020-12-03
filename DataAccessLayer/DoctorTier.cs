@@ -252,11 +252,12 @@ namespace HealthcareCompanion.DataAccessLayer
             Boolean emailCheck   = false;
             Boolean pendingCheck = false;
 
-            query = "SELECT * FROM Doctors";
+            query = "SELECT * FROM Doctors WHERE Email = @Email;";
 
             using (conn = new SqlConnection(connectionString))
             using (cmd  = new SqlCommand(query, conn))
             {
+                cmd.Parameters.Add("@Email", System.Data.SqlDbType.NVarChar, 50).Value = email;
                 try
                 {
                     conn.Open();

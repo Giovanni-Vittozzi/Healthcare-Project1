@@ -321,11 +321,12 @@ namespace HealthcareCompanion.DataAccessLayer
             Boolean emailCheck   = false;
             Boolean pendingCheck = false;
             //where patientid is equal to this and pending is true
-            query = "SELECT * FROM Patients;";
+            query = "SELECT * FROM Patients WHERE Email = @Email;";
 
             using (conn = new SqlConnection(connectionString))
             using (cmd  = new SqlCommand(query, conn))
             {
+                cmd.Parameters.Add("@Email", System.Data.SqlDbType.NVarChar, 50).Value = email;
                 try
                 {
                     conn.Open();

@@ -25,7 +25,21 @@ namespace HealthcareCompanion.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-
+            PatientTier tier    = new PatientTier();
+            Patient     patient = new Patient();
+            //need to get current signed in doctor
+            if (Request.IsAuthenticated)
+            {
+                var          userStore   = new UserStore<IdentityUser>();
+                var          userManager = new UserManager<IdentityUser>(userStore);
+                IdentityUser theUser     = userManager.FindById(User.Identity.GetUserId());
+                string       userEmail   = theUser.Email;
+                string       userID      = theUser.Id;
+                var          pendPatient = tier.isPendingPatient(userEmail);
+                patient.PatientID        = tier.getPatientByID(userID);
+                patient                  = tier.retrievePatient(patient.PatientID);
+                ViewBag.pending = pendPatient.pendingCheck;
+            }
             return View();
         }
         [HttpGet]
@@ -108,9 +122,22 @@ namespace HealthcareCompanion.Controllers
         [HttpGet]
         public ActionResult BloodSugar()
         {
-                    var TimeOfDayList     = new List<string>() { "Morning", "Afternoon", "Evening", "Night" };
-                    ViewBag.TimeOfDayList = TimeOfDayList;
+            PatientTier tier = new PatientTier();
+            if (Request.IsAuthenticated)
+            {
+                var          userStore     = new UserStore<IdentityUser>();
+                var          userManager   = new UserManager<IdentityUser>(userStore);
+                IdentityUser theUser       = userManager.FindById(User.Identity.GetUserId());
+                string       userEmail     = theUser.Email;
+                var          pendPatient   = tier.isPendingPatient(userEmail);
+                var          TimeOfDayList = new List<string>() { "Morning", "Afternoon", "Evening", "Night" };
+                ViewBag.TimeOfDayList      = TimeOfDayList;
+                if (!pendPatient.pendingCheck)
+                {
                     return View();
+                }
+            }
+            return RedirectToAction("Pending", "Patient");
         }
         [HttpPost]
         public ActionResult BloodSugar(MedicalData medicalData)
@@ -245,27 +272,33 @@ namespace HealthcareCompanion.Controllers
                 var          userManager = new UserManager<IdentityUser>(userStore);
                 IdentityUser theUser     = userManager.FindById(User.Identity.GetUserId());
                 string       userID      = theUser.Id;
+                string       userEmail   = theUser.Email;
                 medicalData.PatientID    = tier.getPatientByID(userID);
                 medicalData.TypeID       = 1;
-            }
-            List<MedicalData> medicalDataList = tier.listMedicalDataByTypeID(medicalData.PatientID, medicalData.TypeID);
-            List<string>      MonthList       = new List<string>();
-            List<int>         YearList        = new List<int>();
-            ViewBag.medicalDataList           = medicalDataList;
-            if (medicalDataList != null)
-            {
-                foreach (var item in medicalDataList)
+                var pendPatient = tier.isPendingPatient(userEmail);
+                if (!pendPatient.pendingCheck)
                 {
-                    DateTime date = new DateTime(2020, item.Now.Month, 1);
-                    MonthList.Add(date.ToString("MMMM"));
-                    YearList.Add(item.Now.Year);
+                    List<MedicalData> medicalDataList = tier.listMedicalDataByTypeID(medicalData.PatientID, medicalData.TypeID);
+                    List<string>      MonthList       = new List<string>();
+                    List<int>         YearList        = new List<int>();
+                    ViewBag.medicalDataList           = medicalDataList;
+                    if (medicalDataList != null)
+                    {
+                        foreach (var item in medicalDataList)
+                        {
+                            DateTime date = new DateTime(2020, item.Now.Month, 1);
+                            MonthList.Add(date.ToString("MMMM"));
+                            YearList.Add(item.Now.Year);
+                        }
+                        MonthList = MonthList.Distinct().ToList();
+                        YearList  = YearList.Distinct().ToList();
+                        ViewBag.MonthList = MonthList;
+                        ViewBag.YearList  = YearList;
+                    }
+                    return View();
                 }
-                MonthList = MonthList.Distinct().ToList();
-                YearList = YearList.Distinct().ToList();
-                ViewBag.MonthList = MonthList;
-                ViewBag.YearList = YearList;
             }
-            return View();
+            return RedirectToAction("Pending", "Patient");
         }
         [HttpPost]
         public ActionResult ChartBloodSugar()

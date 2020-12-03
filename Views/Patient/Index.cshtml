@@ -4,11 +4,57 @@
     Layout = "~/Views/Shared/_LayoutPatient.cshtml";
 }
 
-@if (Context.User.Identity.IsAuthenticated)
-{
-    <h4>Hello, <b>@Context.User.Identity.Name</b></h4>
-}
-<br />
-<h2>You are logged in as a patient.</h2>
-<h2>You can edit your info in the tab above.</h2>
 
+<div class="card">
+    <div class="card-header text-center">
+        <h2>The Healthcare Companion</h2>
+    </div>
+    </br>
+    <div class="row">
+        <div class="col-md-8 order-md-2">
+            <br />
+            <br />
+            @if (Context.User.Identity.IsAuthenticated)
+            {
+                <h4>Hello, <b>@Context.User.Identity.Name</b></h4>
+            }
+            @{
+                if (ViewBag.pending)
+                {
+                    <h3>Your status is currently pending, your doctor needs to approve you before you can start entering medical data.</h3>
+                }
+                else
+                {
+                    <h3>Your status is no longer pending, you can start <br />entering your medical information using the <br /><a href="~/Patient/BloodSugar" class="font-weight-bold text-primary">Enter Data</a> tab above.</h3>
+                }
+            }
+        </div>
+        <div class="col-md-4 order-md-1">
+            <img class="rounded img-fluid mx-auto" src="~/Images/medical-data-management.jpg">
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-md-8 order-md-1">
+            </br>
+            </br>
+            <ul>
+                <h3>If you need to make changes to you profile information, click on the <a href="~/Patient/Profile" class="font-weight-bold text-primary">Profile</a> tab above.</h3>
+            </ul>
+        </div>
+        <div class="col-md-4 order-md-2">
+            <img class="rounded img-fluid mx-auto" src="~/Images/patientdoctor.jpg">
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-md-8 order-md-2">
+            </br>
+            <h3><span class="font-weight-bold font-italic"> The Healthcare Companion</span> provides comprehensive charting of your data powered by Google Charts. Click on the <a href="~/Patient/ChartBloodSugar" class="font-weight-bold text-primary">Chart Data</a> tab above to use.</h3>
+        </div>
+        <div class="col-md-4 order-md-1">
+            <img class="rounded img-fluid mx-auto" src="~/Images/linegraph.jpg">
+        </div>
+    </div>
+</div>
+<hr />
