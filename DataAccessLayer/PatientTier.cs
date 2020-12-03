@@ -232,11 +232,12 @@ namespace HealthcareCompanion.DataAccessLayer
             Boolean identityIDCheck = false;
             int     myid            = 0;
 
-            query = "SELECT * FROM Patients WHERE IdentityID = '" + id + "';";
+            query = "SELECT * FROM Patients WHERE IdentityID = @IdentityID;";
 
             using (conn = new SqlConnection(connectionString))
             using (cmd  = new SqlCommand(query, conn))
             {
+                cmd.Parameters.Add("@IdentityID", System.Data.SqlDbType.NVarChar, 128).Value = id;
                 try
                 {
                     conn.Open();
@@ -267,6 +268,43 @@ namespace HealthcareCompanion.DataAccessLayer
                 }
             }
             return myid;
+        }
+
+        //get pending Patients and returns list [where pending = true or 1]
+        public String getPatientEmail(int id)
+        {
+            String  email           = null;
+
+            query = "SELECT * FROM Patients WHERE PatientID = @PatientID;";
+
+            using (conn = new SqlConnection(connectionString))
+            using (cmd  = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.Add("@PatientID", System.Data.SqlDbType.Int).Value = id;
+                try
+                {
+                    conn.Open();
+                    using (reader = cmd.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                email = (String)reader["Email"];
+                            }
+                        }
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    throw new Exception(ex.Message);
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+            return email;
         }
 
         public bool updatePatient(Patient patient)

@@ -14,10 +14,13 @@
 
 <h2>Blood Sugar Graph</h2>
 
-@if (ViewBag.medicalDataList != null)
-{
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
+<div class="d-flex justify-content-end">See a problem? Email the patient with the link below:</div>
+<div class="d-flex justify-content-end"> <a href="mailto:@ViewBag.Email">@ViewBag.Email</a></div>
+
+    @if (ViewBag.medicalDataList != null)
+    {
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript">
     function LoadGoogle() {
         google.charts.load('current', {
             callback: drawChart,
@@ -62,53 +65,53 @@
         chart.draw(data, options);
     }
     LoadGoogle();
-    </script>
-    @*<script src="https://www.gstatic.com/charts/loader.js"></script>*@
-    <div id="chart_div"></div>
+        </script>
+        @*<script src="https://www.gstatic.com/charts/loader.js"></script>*@
+        <div id="chart_div"></div>
 
-    <div class="form-group">
-        <div class="col-md-10">
-            @using (Html.BeginForm("ChartBloodSugar", "Doctor", new { patientID = @ViewBag.Patient }, FormMethod.Post))
-            {
-                if (ViewBag.MonthList != null)
+        <div class="form-group">
+            <div class="col-md-10">
+                @using (Html.BeginForm("ChartBloodSugar", "Doctor", new { patientID = @ViewBag.Patient }, FormMethod.Post))
                 {
-                    <select id="MonthSelect" name="MonthSelect">
-                        <option selected>--Change the graph month range here--</option>
-                        @foreach (var item in ViewBag.MonthList)
-                        {
-                            <option value=@item>@item</option>
-                        }
-                    </select>
-                }
-                else
-                {
-                    <p>There is no medical information entered to change the timeline.</p>
-                }
+                    if (ViewBag.MonthList != null)
+                    {
+                        <select id="MonthSelect" name="MonthSelect">
+                            <option selected>--Change the graph month range here--</option>
+                            @foreach (var item in ViewBag.MonthList)
+                            {
+                                <option value=@item>@item</option>
+                            }
+                        </select>
+                    }
+                    else
+                    {
+                        <p>There is no medical information entered to change the timeline.</p>
+                    }
 
-                if (ViewBag.YearList != null)
-                {
-                    <select id="YearSelect" name="YearSelect">
-                        <option selected>--Change the graph year range here--</option>
-                        @foreach (var item in ViewBag.YearList)
-                        {
-                            <option value=@item>@item</option>
-                        }
-                    </select>
+                    if (ViewBag.YearList != null)
+                    {
+                        <select id="YearSelect" name="YearSelect">
+                            <option selected>--Change the graph year range here--</option>
+                            @foreach (var item in ViewBag.YearList)
+                            {
+                                <option value=@item>@item</option>
+                            }
+                        </select>
+                    }
+                    else
+                    {
+                        <p>There is no medical information entered to change the timeline.</p>
+                    }
+                    <input type="submit" value="Change Timeline" class="btn btn-info" />
                 }
-                else
-                {
-                    <p>There is no medical information entered to change the timeline.</p>
-                }
-                <input type="submit" value="Change Timeline" class="btn btn-info" />
-            }
+            </div>
         </div>
-    </div>
-}
-else
-{
-    <h2>No Medical Data To List</h2>
-}
+    }
+    else
+    {
+        <h2>No Medical Data To List</h2>
+    }
 
-<div>
-    <button type="button" class="btn btn-success" onclick="location.href='@Url.Action("ListPatients", "Doctor")'">Select Another Patient</button>
-</div>
+    <div>
+        <button type="button" class="btn btn-success" onclick="location.href='@Url.Action("ListPatients", "Doctor")'">Select Another Patient</button>
+    </div>

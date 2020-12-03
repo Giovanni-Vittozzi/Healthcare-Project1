@@ -158,8 +158,10 @@ namespace HealthcareCompanion.Controllers
                 var          userManager = new UserManager<IdentityUser>(userStore);
                 IdentityUser theUser     = userManager.FindById(User.Identity.GetUserId());
                 string       userID      = theUser.Id;
+                string       email       = theUser.Email;
                 medicalData.PatientID    = patientID;
                 medicalData.TypeID       = 1;
+                ViewBag.Email            = tier.getPatientEmail(patientID);
             }
             List<MedicalData> medicalDataList = tier.listMedicalDataByTypeID(medicalData.PatientID, medicalData.TypeID);
             List<string>      MonthList       = new List<string>();
@@ -203,6 +205,7 @@ namespace HealthcareCompanion.Controllers
                     string       userID      = theUser.Id;
                     medicalData.PatientID    = patientID;
                     medicalData.TypeID       = 1;
+                    ViewBag.Email = tier.getPatientEmail(patientID);
             }
             List<MedicalData> medicalDataList = tier.listMedicalDataByTypeIDByDate(medicalData.PatientID, medicalData.TypeID, monthInt, yearInt);
             ViewBag.medicalDataList           = medicalDataList;
@@ -248,6 +251,7 @@ namespace HealthcareCompanion.Controllers
                 string       userID      = theUser.Id;
                 medicalData.PatientID    = patientID;
                 medicalData.TypeID       = 2;
+                ViewBag.Email            = tier.getPatientEmail(patientID);
             }
             List<MedicalData> medicalDataList = tier.listMedicalDataByTypeID(medicalData.PatientID, medicalData.TypeID);
             List<string>      MonthList       = new List<string>();
@@ -291,6 +295,7 @@ namespace HealthcareCompanion.Controllers
                     string       userID      = theUser.Id;
                     medicalData.PatientID    = patientID;
                     medicalData.TypeID       = 2;
+                    ViewBag.Email            = tier.getPatientEmail(patientID);
             }
             List<MedicalData> medicalDataList = tier.listMedicalDataByTypeIDByDate(medicalData.PatientID, medicalData.TypeID, monthInt, yearInt);
             ViewBag.medicalDataList           = medicalDataList;
@@ -335,6 +340,7 @@ namespace HealthcareCompanion.Controllers
                 string       userID      = theUser.Id;
                 medicalData.PatientID    = patientID;
                 medicalData.TypeID       = 3;
+                ViewBag.Email            = tier.getPatientEmail(patientID);
             }
             List<MedicalData> medicalDataList = tier.listMedicalDataByTypeID(medicalData.PatientID, medicalData.TypeID);
             List<string>      MonthList       = new List<string>();
@@ -378,6 +384,7 @@ namespace HealthcareCompanion.Controllers
                     string       userID      = theUser.Id;
                     medicalData.PatientID    = patientID;
                     medicalData.TypeID       = 3;
+                    ViewBag.Email            = tier.getPatientEmail(patientID);
             }
             List<MedicalData> medicalDataList = tier.listMedicalDataByTypeIDByDate(medicalData.PatientID, medicalData.TypeID, monthInt, yearInt);
             ViewBag.medicalDataList           = medicalDataList;
@@ -422,6 +429,7 @@ namespace HealthcareCompanion.Controllers
                 string       userID      = theUser.Id;
                 medicalData.PatientID    = patientID;
                 medicalData.TypeID       = 4;
+                ViewBag.Email            = tier.getPatientEmail(patientID);
             }
             List<MedicalData> medicalDataList = tier.listMedicalDataByTypeID(medicalData.PatientID, medicalData.TypeID);
             List<string>      MonthList       = new List<string>();
@@ -465,6 +473,7 @@ namespace HealthcareCompanion.Controllers
                     string       userID      = theUser.Id;
                     medicalData.PatientID    = patientID;
                     medicalData.TypeID       = 4;
+                    ViewBag.Email            = tier.getPatientEmail(patientID);
             }
             List<MedicalData> medicalDataList = tier.listMedicalDataByTypeIDByDate(medicalData.PatientID, medicalData.TypeID, monthInt, yearInt);
             ViewBag.medicalDataList           = medicalDataList;
