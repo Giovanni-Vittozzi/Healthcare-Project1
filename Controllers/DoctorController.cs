@@ -75,11 +75,11 @@ namespace HealthcareCompanion.Controllers
                 DoctorTier tier   = new DoctorTier();
                 if (Request.IsAuthenticated)
                 {
-                    var userStore         = new UserStore<IdentityUser>();
-                    var userManager       = new UserManager<IdentityUser>(userStore);
-                    IdentityUser theUser  = userManager.FindById(User.Identity.GetUserId());
-                    string userID         = theUser.Id;
-                    doctor.DoctorID       = tier.getDoctorByID(userID);
+                    var          userStore   = new UserStore<IdentityUser>();
+                    var          userManager = new UserManager<IdentityUser>(userStore);
+                    IdentityUser theUser     = userManager.FindById(User.Identity.GetUserId());
+                    string       userID      = theUser.Id;
+                    doctor.DoctorID          = tier.getDoctorByID(userID);
                     tier.updateDoctorInfo(doctor);
                 }
                 return RedirectToAction("ShowProfile", "Doctor");

@@ -514,6 +514,7 @@
     </Compile>
     <Compile Include="Controls\report.ascx.designer.cs" />
     <Compile Include="DataAccessLayer\BaseTier.cs" />
+    <Compile Include="DataAccessLayer\AdminTier.cs" />
     <Compile Include="DataAccessLayer\DoctorTier.cs" />
     <Compile Include="DataAccessLayer\PatientTier.cs" />
     <Compile Include="Examples\Ex01_Simple.aspx.cs">
@@ -541,6 +542,7 @@
     <Compile Include="Models\Doctor.cs" />
     <Compile Include="Models\NewUser.cs" />
     <Compile Include="Models\MedicalData.cs" />
+    <Compile Include="Models\RegisterPatient.cs" />
     <Compile Include="Models\PatientFromDatabase.cs" />
     <Compile Include="Models\Patient.cs" />
     <Compile Include="Models\Role.cs" />
@@ -605,6 +607,7 @@
     <Content Include="Views\Doctor\ChartPulseByMonth.cshtml" />
     <Content Include="Views\Doctor\ChartWeight.cshtml" />
     <Content Include="Views\Doctor\ChartWeightByMonth.cshtml" />
+    <Content Include="Views\Patient\ShowProfile.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

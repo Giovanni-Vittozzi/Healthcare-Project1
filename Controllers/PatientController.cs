@@ -42,6 +42,27 @@ namespace HealthcareCompanion.Controllers
             }
             return View();
         }
+         [HttpGet]
+        public ActionResult ShowProfile()
+        {
+            PatientTier tier    = new PatientTier();
+            Patient     patient = new Patient();
+            //need to get current signed in doctor
+            if (Request.IsAuthenticated)
+            {
+                var          userStore   = new UserStore<IdentityUser>();
+                var          userManager = new UserManager<IdentityUser>(userStore);
+                IdentityUser theUser     = userManager.FindById(User.Identity.GetUserId());
+                string       userEmail   = theUser.Email;
+                string       userID      = theUser.Id;
+                var          pendingDoc  = tier.isPendingPatient(userEmail);
+                patient.PatientID        = tier.getPatientByID(userID);
+                patient                  = tier.retrievePatient(patient.PatientID);
+                ViewBag.patient          = patient;
+                return View(patient);
+            }
+            return RedirectToAction("Index", "Patient");
+        }
         [HttpGet]
         public ActionResult EditPatientInfo()
         {
@@ -70,14 +91,14 @@ namespace HealthcareCompanion.Controllers
                 PatientTier tier   = new PatientTier();
                 if (Request.IsAuthenticated)
                 {
-                    var userStore         = new UserStore<IdentityUser>();
-                    var userManager       = new UserManager<IdentityUser>(userStore);
-                    IdentityUser theUser  = userManager.FindById(User.Identity.GetUserId());
-                    string userID         = theUser.Id;
-                    patient.PatientID     = tier.getPatientByID(userID);
+                    var          userStore   = new UserStore<IdentityUser>();
+                    var          userManager = new UserManager<IdentityUser>(userStore);
+                    IdentityUser theUser     = userManager.FindById(User.Identity.GetUserId());
+                    string       userID      = theUser.Id;
+                    patient.PatientID        = tier.getPatientByID(userID);
                     tier.updatePatientInfo(patient);
                 }
-                return RedirectToAction("Index", "Patient");
+                return RedirectToAction("ShowProfile", "Patient");
             }
             return View();
         }

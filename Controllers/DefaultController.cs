@@ -207,6 +207,8 @@ namespace HealthcareCompanion.Controllers
                 IdentityUser user        = userManager.Find(login.UserName, login.Password);
                 PatientTier  patientTier = new PatientTier();
                 DoctorTier   doctorTier  = new DoctorTier();
+                AdminTier    adminTier   = new AdminTier();
+                var          adminCheck  = adminTier.isAdmin(login.UserName);
                 var          patientUser = patientTier.isPendingPatient(login.UserName);
                 var          doctorUser  = doctorTier.isPendingDoctor(login.UserName);
                 //isPending
@@ -217,7 +219,8 @@ namespace HealthcareCompanion.Controllers
                     authManager.SignIn(
                         new AuthenticationProperties { IsPersistent = false }, ident);
                     //this code right here officer  && !pendingDoctor
-                    if (      patientUser.pendingCheck && patientUser.emailCheck && !doctorUser.emailCheck)  { return Redirect(login.ReturnUrl ?? Url.Action("Pending",    "Patient"));}
+                    if (adminCheck) { return Redirect(login.ReturnUrl ?? Url.Action("Index", "Admin")); }
+                    else if ( patientUser.pendingCheck && patientUser.emailCheck && !doctorUser.emailCheck)  { return Redirect(login.ReturnUrl ?? Url.Action("Pending",    "Patient"));}
                     else if (!patientUser.pendingCheck && patientUser.emailCheck && !doctorUser.emailCheck)  { return Redirect(login.ReturnUrl ?? Url.Action("NotPending", "Patient"));}
                     else if ( doctorUser.pendingCheck  && doctorUser.emailCheck  && !patientUser.emailCheck) { return Redirect(login.ReturnUrl ?? Url.Action("Pending",    "Doctor")); }
                     else if (!doctorUser.pendingCheck  && doctorUser.emailCheck  && !patientUser.emailCheck) { return Redirect(login.ReturnUrl ?? Url.Action("NotPending", "Doctor")); }
