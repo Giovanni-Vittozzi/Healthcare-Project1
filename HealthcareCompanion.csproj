@@ -542,6 +542,7 @@
     <Compile Include="Models\Doctor.cs" />
     <Compile Include="Models\NewUser.cs" />
     <Compile Include="Models\MedicalData.cs" />
+    <Compile Include="Models\DoctorFromDatabase.cs" />
     <Compile Include="Models\RegisterPatient.cs" />
     <Compile Include="Models\PatientFromDatabase.cs" />
     <Compile Include="Models\Patient.cs" />
@@ -608,6 +609,8 @@
     <Content Include="Views\Doctor\ChartWeight.cshtml" />
     <Content Include="Views\Doctor\ChartWeightByMonth.cshtml" />
     <Content Include="Views\Patient\ShowProfile.cshtml" />
+    <Content Include="Views\Admin\ApproveDoctors.cshtml" />
+    <Content Include="Views\Admin\SignOut.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

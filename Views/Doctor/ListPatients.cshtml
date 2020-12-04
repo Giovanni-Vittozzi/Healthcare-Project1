@@ -48,8 +48,16 @@
             @Html.DisplayFor(modelItem => item.CreatedAt)
         </td>
         <td>
-            @Html.ActionLink("Edit",               "Edit",               new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Chart Medical Data", "ChartBloodSugar",    new { patientID = item.PatientID      }) |
+            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+            @{           
+                if (item.Pending) {
+                    @Html.ActionLink("Chart Medical Data", "ListPatients", new { patientID = item.PatientID }, new { onclick = "return confirm('You need to approve this patient before viewing their information.');" })
+                }
+                else
+                {
+                    @Html.ActionLink("Chart Medical Data", "ChartBloodSugar", new { patientID = item.PatientID })
+                }
+            } |
             @Html.ActionLink("Delete",             "Delete",             new { /* id=item.PrimaryKey */ })
         </td>
     </tr>

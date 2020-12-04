@@ -129,7 +129,7 @@ namespace HealthcareCompanion.Controllers
                     return View();
                 }
             }
-            return RedirectToAction("Pending", "Patient");
+            return RedirectToAction("Index", "Patient");
         }
         [HttpPost]
         public ActionResult MedicalDataSelection(Patient medicalDataSelection)
@@ -158,7 +158,7 @@ namespace HealthcareCompanion.Controllers
                     return View();
                 }
             }
-            return RedirectToAction("Pending", "Patient");
+            return RedirectToAction("Index", "Patient");
         }
         [HttpPost]
         public ActionResult BloodSugar(MedicalData medicalData)
@@ -319,7 +319,7 @@ namespace HealthcareCompanion.Controllers
                     return View();
                 }
             }
-            return RedirectToAction("Pending", "Patient");
+            return RedirectToAction("Index", "Patient");
         }
         [HttpPost]
         public ActionResult ChartBloodSugar()

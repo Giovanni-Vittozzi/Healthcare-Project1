@@ -1,27 +1,24 @@
-﻿@model IEnumerable<HealthcareCompanion.Models.PatientFromDatabase>
+﻿@model IEnumerable<HealthcareCompanion.Models.DoctorFromDatabase>
 
 @{
-    ViewBag.Title = "ApprovePatients";
+    ViewBag.Title = "ApproveDoctors";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h2>Approve Patients</h2>
+<h2>ApproveDoctors</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
 @if (Model != null)
 {
     <table class="table">
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.PatientID)
+                @Html.DisplayNameFor(model => model.DoctorID)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.FullName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PatientAddress)
+                @Html.DisplayNameFor(model => model.DoctorAddress)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Email)
@@ -36,13 +33,13 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.PatientID)
+                    @Html.DisplayFor(modelItem => item.DoctorID)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.FullName)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.PatientAddress)
+                    @Html.DisplayFor(modelItem => item.DoctorAddress)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Email)
@@ -51,17 +48,16 @@
                     @Html.DisplayFor(modelItem => item.CreatedAt)
                 </td>
                 <td>
-                    @Html.ActionLink("Approve", "Approve", new { id = item.PatientID }) |
+                    @Html.ActionLink("Approve", "Approve", new { id = item.DoctorID }) |
                     @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
                     @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
                 </td>
             </tr>
         }
 
-
     </table>
 }
 else
 {
-    <h2>No Pending Patients</h2>
+    <h2>No Pending Doctors</h2>
 }

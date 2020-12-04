@@ -116,7 +116,7 @@ namespace HealthcareCompanion.Controllers
                     return View(patientList);
                 }
             }
-            return RedirectToAction("Pending", "Doctor");
+            return RedirectToAction("Index", "Doctor");
         } 
         [HttpGet]
         public ActionResult ListPatients(Doctor doctor)
@@ -138,7 +138,7 @@ namespace HealthcareCompanion.Controllers
                     return View(patientList);
                 }
             }
-            return RedirectToAction("Pending", "Doctor");
+            return RedirectToAction("Index", "Doctor");
         }
         [HttpGet]
         public ActionResult Approve(int id)
@@ -162,6 +162,7 @@ namespace HealthcareCompanion.Controllers
                 medicalData.PatientID    = patientID;
                 medicalData.TypeID       = 1;
                 ViewBag.Email            = tier.getPatientEmail(patientID);
+                ViewBag.Patient          = patientID;
             }
             List<MedicalData> medicalDataList = tier.listMedicalDataByTypeID(medicalData.PatientID, medicalData.TypeID);
             List<string>      MonthList       = new List<string>();
@@ -179,7 +180,6 @@ namespace HealthcareCompanion.Controllers
                 YearList  = YearList.Distinct().ToList();
                 ViewBag.MonthList = MonthList;
                 ViewBag.YearList  = YearList;
-                ViewBag.Patient   = patientID;
             }
             return View();
         }
@@ -205,7 +205,8 @@ namespace HealthcareCompanion.Controllers
                     string       userID      = theUser.Id;
                     medicalData.PatientID    = patientID;
                     medicalData.TypeID       = 1;
-                    ViewBag.Email = tier.getPatientEmail(patientID);
+                    ViewBag.Email            = tier.getPatientEmail(patientID);
+                    ViewBag.Patient          = patientID;
             }
             List<MedicalData> medicalDataList = tier.listMedicalDataByTypeIDByDate(medicalData.PatientID, medicalData.TypeID, monthInt, yearInt);
             ViewBag.medicalDataList           = medicalDataList;
@@ -224,7 +225,6 @@ namespace HealthcareCompanion.Controllers
                 YearList  = YearList.Distinct().ToList();
                 ViewBag.MonthList = MonthList;
                 ViewBag.YearList  = YearList;
-                ViewBag.Patient   = patientID;
             }
             return View();
         }
@@ -252,6 +252,7 @@ namespace HealthcareCompanion.Controllers
                 medicalData.PatientID    = patientID;
                 medicalData.TypeID       = 2;
                 ViewBag.Email            = tier.getPatientEmail(patientID);
+                ViewBag.Patient          = patientID;
             }
             List<MedicalData> medicalDataList = tier.listMedicalDataByTypeID(medicalData.PatientID, medicalData.TypeID);
             List<string>      MonthList       = new List<string>();
@@ -269,7 +270,6 @@ namespace HealthcareCompanion.Controllers
                 YearList  = YearList.Distinct().ToList();
                 ViewBag.MonthList = MonthList;
                 ViewBag.YearList  = YearList;
-                ViewBag.Patient   = patientID;
             }   
             return View();
         }
@@ -296,6 +296,7 @@ namespace HealthcareCompanion.Controllers
                     medicalData.PatientID    = patientID;
                     medicalData.TypeID       = 2;
                     ViewBag.Email            = tier.getPatientEmail(patientID);
+                    ViewBag.Patient          = patientID;
             }
             List<MedicalData> medicalDataList = tier.listMedicalDataByTypeIDByDate(medicalData.PatientID, medicalData.TypeID, monthInt, yearInt);
             ViewBag.medicalDataList           = medicalDataList;
@@ -314,7 +315,6 @@ namespace HealthcareCompanion.Controllers
                 YearList = YearList.Distinct().ToList();
                 ViewBag.MonthList = MonthList;
                 ViewBag.YearList  = YearList;
-                ViewBag.Patient   = patientID;
             }
             return View();
         }
@@ -341,6 +341,7 @@ namespace HealthcareCompanion.Controllers
                 medicalData.PatientID    = patientID;
                 medicalData.TypeID       = 3;
                 ViewBag.Email            = tier.getPatientEmail(patientID);
+                ViewBag.Patient          = patientID;
             }
             List<MedicalData> medicalDataList = tier.listMedicalDataByTypeID(medicalData.PatientID, medicalData.TypeID);
             List<string>      MonthList       = new List<string>();
@@ -358,7 +359,6 @@ namespace HealthcareCompanion.Controllers
                 YearList  = YearList.Distinct().ToList();
                 ViewBag.MonthList = MonthList;
                 ViewBag.YearList  = YearList;
-                ViewBag.Patient   = patientID;
             }
             return View();
         }
@@ -385,6 +385,7 @@ namespace HealthcareCompanion.Controllers
                     medicalData.PatientID    = patientID;
                     medicalData.TypeID       = 3;
                     ViewBag.Email            = tier.getPatientEmail(patientID);
+                    ViewBag.Patient          = patientID;
             }
             List<MedicalData> medicalDataList = tier.listMedicalDataByTypeIDByDate(medicalData.PatientID, medicalData.TypeID, monthInt, yearInt);
             ViewBag.medicalDataList           = medicalDataList;
@@ -403,7 +404,6 @@ namespace HealthcareCompanion.Controllers
                 YearList  = YearList.Distinct().ToList();
                 ViewBag.MonthList = MonthList;
                 ViewBag.YearList  = YearList;
-                ViewBag.Patient   = patientID;
             }
             return View();
         }
@@ -430,6 +430,7 @@ namespace HealthcareCompanion.Controllers
                 medicalData.PatientID    = patientID;
                 medicalData.TypeID       = 4;
                 ViewBag.Email            = tier.getPatientEmail(patientID);
+                ViewBag.Patient          = patientID;
             }
             List<MedicalData> medicalDataList = tier.listMedicalDataByTypeID(medicalData.PatientID, medicalData.TypeID);
             List<string>      MonthList       = new List<string>();
@@ -447,7 +448,6 @@ namespace HealthcareCompanion.Controllers
                 YearList = YearList.Distinct().ToList();
                 ViewBag.MonthList = MonthList;
                 ViewBag.YearList  = YearList;
-                ViewBag.Patient   = patientID;
             }
             return View();
         }
@@ -474,6 +474,7 @@ namespace HealthcareCompanion.Controllers
                     medicalData.PatientID    = patientID;
                     medicalData.TypeID       = 4;
                     ViewBag.Email            = tier.getPatientEmail(patientID);
+                    ViewBag.Patient          = patientID;
             }
             List<MedicalData> medicalDataList = tier.listMedicalDataByTypeIDByDate(medicalData.PatientID, medicalData.TypeID, monthInt, yearInt);
             ViewBag.medicalDataList           = medicalDataList;
@@ -492,7 +493,6 @@ namespace HealthcareCompanion.Controllers
                 YearList  = YearList.Distinct().ToList();
                 ViewBag.MonthList = MonthList;
                 ViewBag.YearList  = YearList;
-                ViewBag.Patient   = patientID;
             }
             return View();
         }

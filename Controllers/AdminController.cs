@@ -1,16 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using HealthcareCompanion.DataAccessLayer;
 using HealthcareCompanion.Models;
 using System.Threading.Tasks;
 using Owin;
 using Microsoft.Owin;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin.Security;
-using HealthcareCompanion.DataAccessLayer;
+using Microsoft.Owin.Security.Cookies;
+using System.Web.UI.WebControls;
 
 namespace HealthcareCompanion.Controllers
 {
@@ -23,12 +27,48 @@ namespace HealthcareCompanion.Controllers
             return View();
         }
         [HttpGet]
-        public ActionResult ApprovePatients()
+        public ActionResult ApprovePatients(Doctor doctor)
         {
-            PatientTier   tier        = new PatientTier();
-            List<Patient> patientList = tier.getAllPatients();
+            PatientTier tier    = new PatientTier();
+            //need to get current signed in doctor
+            if (Request.IsAuthenticated)
+            {
+                var          userStore   = new UserStore<IdentityUser>();
+                var          userManager = new UserManager<IdentityUser>(userStore);
+                IdentityUser theUser     = userManager.FindById(User.Identity.GetUserId());
+                string       userEmail   = theUser.Email;
+                string       userID      = theUser.Id;
+                var          pendingDoc  = tier.isPendingPatient(userEmail);
 
-            return View(patientList);
+                //List<PatientFromDatabase> patientList = tier.listPendingPatients(doctor.DoctorID);
+                //return View(patientList);
+                return RedirectToAction("Pending", "Doctor");
+            }
+            return RedirectToAction("Pending", "Doctor");
+        } 
+        [HttpGet]//////////////////////COME BACK
+        public ActionResult ApproveDoctors(Doctor doctor)
+        {
+            AdminTier tier    = new AdminTier();
+            //need to get current signed in doctor
+            if (Request.IsAuthenticated)
+            {
+                var          userStore   = new UserStore<IdentityUser>();
+                var          userManager = new UserManager<IdentityUser>(userStore);
+                IdentityUser theUser     = userManager.FindById(User.Identity.GetUserId());
+                string       userEmail   = theUser.Email;
+                string       userID      = theUser.Id;
+                List<DoctorFromDatabase> doctorList = tier.listPendingDoctors();
+                return View(doctorList);
+            }
+            return RedirectToAction("Index", "Admin");
+        }
+        [HttpGet]
+        public ActionResult Approve(int id)
+        {
+            DoctorTier tier = new DoctorTier();
+            tier.approveDoctor(id);
+            return RedirectToAction("ApproveDoctors", "Admin");
         }
         [AllowAnonymous]
         [HttpGet]
@@ -189,6 +229,18 @@ namespace HealthcareCompanion.Controllers
                 return RedirectToAction("Index");
             }
             return View();
+        }
+        [HttpPost]
+        public ActionResult SignOut()
+        {
+            if (HttpContext.User.Identity.IsAuthenticated)
+            {
+                HttpContext.GetOwinContext()
+                           .Authentication
+                           .SignOut(CookieAuthenticationDefaults.AuthenticationType);
+            }
+            return View();
+            //return RedirectToAction("SignOut", "Patient");
         }
     }
 }

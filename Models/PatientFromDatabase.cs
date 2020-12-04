@@ -8,6 +8,7 @@ namespace HealthcareCompanion.Models
 {
     public class PatientFromDatabase
     {
+        public Boolean Pending { get; set; } //Pending approval by admin
         public int PatientID { get; set; }
         [Required(ErrorMessage = "This field is required.")]//can modify it from inherited or just put it in the Registration Model
         [Display(Name = "Full Name")]

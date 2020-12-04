@@ -349,7 +349,7 @@ namespace HealthcareCompanion.DataAccessLayer
             PatientFromDatabase       patient     = null;
 
             query = "SELECT (Patients.FirstName + ' ' + Patients.LastName) AS FullName, " +
-                    "(Patients.Address + ', ' + Patients.City + ', ' + UPPER(Patients.State) + ', ' + CAST(Patients.ZipCode AS NVARCHAR(50))) AS PatientAddress, Patients.PatientID, Patients.Email, Patients.CreatedAt " +
+                    "(Patients.Address + ', ' + Patients.City + ', ' + UPPER(Patients.State) + ', ' + CAST(Patients.ZipCode AS NVARCHAR(50))) AS PatientAddress, Patients.PatientID, Patients.Email, Patients.CreatedAt, Patients.Pending " +
                     "FROM Doctors Inner Join PatientAssignment on Doctors.DoctorID = PatientAssignment.DoctorID " +
                     "INNER JOIN Patients on PatientAssignment.PatientID = Patients.PatientID WHERE Doctors.DoctorID = @PatientID; ";
 
@@ -369,9 +369,10 @@ namespace HealthcareCompanion.DataAccessLayer
                             {
                                 patient                = new PatientFromDatabase();
                                 patient.PatientID      = (int)reader["PatientID"];
+                                patient.Pending        = (Boolean)reader["Pending"];
                                 patient.FullName       = (string)reader["FullName"];
                                 patient.PatientAddress = (string)reader["PatientAddress"];
-                                patient.Email = (string)reader["Email"];
+                                patient.Email          = (string)reader["Email"];
                                 patient.CreatedAt      = (DateTime)reader["CreatedAt"];
                                 patientList.Add(patient);
                             }
@@ -437,6 +438,43 @@ namespace HealthcareCompanion.DataAccessLayer
         public bool deleteDoctor(int id)
         {
             return success;
+        }
+        public bool approveDoctor(int doctorID)
+        {
+            int rows = 0;
+
+            //patient_id is an auto number
+            query = "UPDATE Doctors SET Pending = 0 WHERE DoctorID = @DoctorID;";
+
+            using (conn = new SqlConnection(connectionString))
+            using (cmd  = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.Add("@DoctorID", System.Data.SqlDbType.Int).Value = doctorID;
+                try
+                {
+                    conn.Open();
+                    rows = cmd.ExecuteNonQuery();
+
+                    if (rows > 0)
+                    {
+                        success = true;
+                    }
+                    else
+                    {
+                        success = false;
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    throw new Exception(ex.Message);
+                }
+                finally
+                {
+                    conn.Close();
+                }
+                return success;
+            }
+
         }
     }
 }

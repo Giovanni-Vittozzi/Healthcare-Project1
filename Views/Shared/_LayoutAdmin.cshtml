@@ -26,14 +26,23 @@
                         <a class="nav-link" href="~/Admin/Index/">Admin Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="~/Admin/Index/">Patients (Not Created Yet)</a>
+                        <a class="nav-link" href="~/Admin/Index/">Patients</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="~/Admin/Index/">Doctors (Not Created Yet)</a>
+                        <a class="nav-link" href="~/Admin/Index/">Doctors</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="~/Default/About">About</a>
+                        <a class="nav-link" href="~/Admin/ApproveDoctors">Approve Pending Doctors</a>
                     </li>
+                    @if (Context.User.Identity.IsAuthenticated)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" onclick="document.getElementById('logout_form').submit();" style="cursor: pointer;">
+                                Sign out
+                            </a>
+                            <form action="/Admin/SignOut" method="post" id="logout_form"></form>
+                        </li>
+                    }
                 </ul>
 
             </nav>

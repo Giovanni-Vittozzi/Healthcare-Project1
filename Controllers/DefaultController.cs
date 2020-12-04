@@ -220,10 +220,10 @@ namespace HealthcareCompanion.Controllers
                         new AuthenticationProperties { IsPersistent = false }, ident);
                     //this code right here officer  && !pendingDoctor
                     if (adminCheck) { return Redirect(login.ReturnUrl ?? Url.Action("Index", "Admin")); }
-                    else if ( patientUser.pendingCheck && patientUser.emailCheck && !doctorUser.emailCheck)  { return Redirect(login.ReturnUrl ?? Url.Action("Pending",    "Patient"));}
-                    else if (!patientUser.pendingCheck && patientUser.emailCheck && !doctorUser.emailCheck)  { return Redirect(login.ReturnUrl ?? Url.Action("NotPending", "Patient"));}
-                    else if ( doctorUser.pendingCheck  && doctorUser.emailCheck  && !patientUser.emailCheck) { return Redirect(login.ReturnUrl ?? Url.Action("Pending",    "Doctor")); }
-                    else if (!doctorUser.pendingCheck  && doctorUser.emailCheck  && !patientUser.emailCheck) { return Redirect(login.ReturnUrl ?? Url.Action("NotPending", "Doctor")); }
+                    else if ( patientUser.pendingCheck && patientUser.emailCheck && !doctorUser.emailCheck)  { return Redirect(login.ReturnUrl ?? Url.Action("Index",    "Patient"));}
+                    else if (!patientUser.pendingCheck && patientUser.emailCheck && !doctorUser.emailCheck)  { return Redirect(login.ReturnUrl ?? Url.Action("Index", "Patient"));}
+                    else if ( doctorUser.pendingCheck  && doctorUser.emailCheck  && !patientUser.emailCheck) { return Redirect(login.ReturnUrl ?? Url.Action("Index",    "Doctor")); }
+                    else if (!doctorUser.pendingCheck  && doctorUser.emailCheck  && !patientUser.emailCheck) { return Redirect(login.ReturnUrl ?? Url.Action("Index", "Doctor")); }
                 }
             }
             ModelState.AddModelError("", "Invalid username or password");
