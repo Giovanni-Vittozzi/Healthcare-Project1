@@ -7,66 +7,76 @@
 
 <h2>Your Patients</h2>
 
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.PatientID)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.FullName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.PatientAddress)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Email)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CreatedAt)
-        </th>
-        <th></th>
-    </tr>
+@if (Model != null)
+{
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.PatientID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FullName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PatientAddress)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedAt)
+            </th>
+            <th></th>
+        </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.PatientID)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.FullName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.PatientAddress)
-        </td>
-        <td>
-            <a href="mailto:@item.Email">@Html.DisplayFor(modelItem => item.Email)</a>
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CreatedAt)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-            @{           
-                if (item.Pending) {
-                    @Html.ActionLink("Chart Data", "ListPatients", new { patientID = item.PatientID }, new { onclick = "return confirm('You need to approve this patient before viewing their information.');" })
-                }
-                else
-                {
-                    @Html.ActionLink("Chart Data", "ChartBloodSugar", new { patientID = item.PatientID })
-                }
-            } |
-            @{           
-                if (item.Pending) {
-                    @Html.ActionLink("View Data", "ListPatients", new { patientID = item.PatientID }, new { onclick = "return confirm('You need to approve this patient before viewing their information.');" })
-                }
-                else
-                {
-                    @Html.ActionLink("View Data", "ViewMedicalData", new { patientID = item.PatientID })
-                }
-            } |
-            @Html.ActionLink("Delete",             "Delete",             new { /* id=item.PrimaryKey */ })
-        </td>
-    </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PatientID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PatientAddress)
+                </td>
+                <td>
+                    <a href="mailto:@item.Email">@Html.DisplayFor(modelItem => item.Email)</a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreatedAt)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                    @{
+                        if (item.Pending)
+                        {
+                            @Html.ActionLink("Chart Data", "ListPatients", new { patientID = item.PatientID }, new { onclick = "return confirm('You need to approve this patient before viewing their information.');" })
+                        }
+                        else
+                        {
+                            @Html.ActionLink("Chart Data", "ChartBloodSugar", new { patientID = item.PatientID })
+                        }
+                    } |
+                    @{
+                        if (item.Pending)
+                        {
+                            @Html.ActionLink("View Data", "ListPatients", new { patientID = item.PatientID }, new { onclick = "return confirm('You need to approve this patient before viewing their information.');" })
+                        }
+                        else
+                        {
+                            @Html.ActionLink("View Data", "ViewMedicalData", new { patientID = item.PatientID })
+                        }
+                    } |
+                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                </td>
+            </tr>
+        }
+
+    </table>
 }
-
-</table>
+else
+{
+    <h2>No Patients Assigned To You</h2>
+}
