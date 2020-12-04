@@ -23,7 +23,21 @@ namespace HealthcareCompanion.Controllers
         // GET: Doctor
         public ActionResult Index()
         {
-
+            DoctorTier tier   = new DoctorTier();
+            Doctor     doctor = new Doctor();
+            //need to get current signed in doctor
+            if (Request.IsAuthenticated)
+            {
+                var          userStore   = new UserStore<IdentityUser>();
+                var          userManager = new UserManager<IdentityUser>(userStore);
+                IdentityUser theUser     = userManager.FindById(User.Identity.GetUserId());
+                string       userEmail   = theUser.Email;
+                string       userID      = theUser.Id;
+                var          pendDoctor  = tier.isPendingDoctor(userEmail);
+                doctor.DoctorID          = tier.getDoctorByID(userID);
+                doctor                   = tier.retrieveDoctor(doctor.DoctorID);
+                ViewBag.pending          = pendDoctor.pendingCheck;
+            }
             return View();
         }
         [HttpGet]
@@ -506,7 +520,21 @@ namespace HealthcareCompanion.Controllers
             int         yearInt  = Int32.Parse(year);
             return RedirectToAction("ChartWeightByMonth", new { yearInt = yearInt, monthInt= monthInt, patientID = patientID});
         }
-
+        [HttpGet]
+        public ActionResult ViewMedicalData(MedicalData medicalData, int patientID)
+        {
+            PatientTier tier = new PatientTier();
+            if (Request.IsAuthenticated)
+                {
+                    var          userStore   = new UserStore<IdentityUser>();
+                    var          userManager = new UserManager<IdentityUser>(userStore);
+                    IdentityUser theUser     = userManager.FindById(User.Identity.GetUserId());
+                    string       userID      = theUser.Id;
+                    medicalData.PatientID    = patientID;
+                }
+            List<MedicalData> medicalDataList = tier.listMedicalData(medicalData.PatientID);
+            return View(medicalDataList);
+        }
         [HttpPost]
         public ActionResult SignOut()
         {

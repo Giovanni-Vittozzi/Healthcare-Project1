@@ -611,6 +611,7 @@
     <Content Include="Views\Patient\ShowProfile.cshtml" />
     <Content Include="Views\Admin\ApproveDoctors.cshtml" />
     <Content Include="Views\Admin\SignOut.cshtml" />
+    <Content Include="Views\Doctor\ViewMedicalData.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

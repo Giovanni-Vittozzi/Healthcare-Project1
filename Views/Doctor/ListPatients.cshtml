@@ -5,11 +5,8 @@
     Layout = "~/Views/Shared/_LayoutDoctor.cshtml";
 }
 
-<h2>ListPatients</h2>
+<h2>Your Patients</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
 <table class="table">
     <tr>
         <th>
@@ -51,11 +48,20 @@
             @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
             @{           
                 if (item.Pending) {
-                    @Html.ActionLink("Chart Medical Data", "ListPatients", new { patientID = item.PatientID }, new { onclick = "return confirm('You need to approve this patient before viewing their information.');" })
+                    @Html.ActionLink("Chart Data", "ListPatients", new { patientID = item.PatientID }, new { onclick = "return confirm('You need to approve this patient before viewing their information.');" })
                 }
                 else
                 {
-                    @Html.ActionLink("Chart Medical Data", "ChartBloodSugar", new { patientID = item.PatientID })
+                    @Html.ActionLink("Chart Data", "ChartBloodSugar", new { patientID = item.PatientID })
+                }
+            } |
+            @{           
+                if (item.Pending) {
+                    @Html.ActionLink("View Data", "ListPatients", new { patientID = item.PatientID }, new { onclick = "return confirm('You need to approve this patient before viewing their information.');" })
+                }
+                else
+                {
+                    @Html.ActionLink("View Data", "ViewMedicalData", new { patientID = item.PatientID })
                 }
             } |
             @Html.ActionLink("Delete",             "Delete",             new { /* id=item.PrimaryKey */ })

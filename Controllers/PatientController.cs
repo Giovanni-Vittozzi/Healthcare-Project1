@@ -38,7 +38,7 @@ namespace HealthcareCompanion.Controllers
                 var          pendPatient = tier.isPendingPatient(userEmail);
                 patient.PatientID        = tier.getPatientByID(userID);
                 patient                  = tier.retrievePatient(patient.PatientID);
-                ViewBag.pending = pendPatient.pendingCheck;
+                ViewBag.pending          = pendPatient.pendingCheck;
             }
             return View();
         }

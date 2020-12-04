@@ -4,11 +4,10 @@
     ViewBag.Title = "ShowProfile";
     Layout = "~/Views/Shared/_LayoutDoctor.cshtml";
 }
-
-<h2>ShowProfile</h2>
+<br />
+<h2>Dr. @Model.FirstName @Model.LastName's Profile</h2>
 
 <div>
-    <h4>Doctor</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -20,7 +19,8 @@
                 if (Model.Pending == true)
                 {
                     <td>Your status is currently pending, site administrator will approve you soon.</td>
-                }else
+                }
+                else
                 {
                     <td>Your status is no longer pending, you can now view your patients.</td>
                 }

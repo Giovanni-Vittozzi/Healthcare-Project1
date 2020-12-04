@@ -10,6 +10,7 @@
     <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("ChartBloodPressure", "Doctor", new { patientID = @ViewBag.Patient })'">Blood Pressure</button>
     <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("ChartPulse",         "Doctor", new { patientID = @ViewBag.Patient })'">Pulse</button>
     <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("ChartWeight",        "Doctor", new { patientID = @ViewBag.Patient })'">Weight</button>
+    <button type="button" class="btn btn-info"    onclick="location.href='@Url.Action("ViewMedicalData",    "Doctor", new { patientID = @ViewBag.Patient })'">View Entered Data</button>
 </div>
 
 <h2>Blood Pressure Graph</h2>

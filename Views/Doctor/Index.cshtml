@@ -4,6 +4,56 @@
     Layout = "~/Views/Shared/_LayoutDoctor.cshtml";
 }
 
-<h2>You are logged in as a doctor.</h2>
-<h2>You can edit your info in the tab above.</h2>
-
+<div class="card">
+    <div class="card-header text-center">
+        <h2>The Healthcare Companion</h2>
+    </div>
+    </br>
+    <div class="row">
+        <div class="col-md-8 order-md-2">
+            <br />
+            <br />
+            @if (Context.User.Identity.IsAuthenticated)
+            {
+                <h4>Hello, <b>@Context.User.Identity.Name</b></h4>
+            }
+            @{
+                if (ViewBag.pending)
+                {
+                    <h3>Your status is currently pending, your administrator needs to approve you before you can start viewing patient data.</h3>
+                }
+                else
+                {
+                    <h3>Your status is no longer pending, you can begin <br />viewing patient data via the<br /><a href="~/Doctor/ListPatients" class="font-weight-bold text-primary">Patients</a> tab above.</h3>
+                }
+            }
+        </div>
+        <div class="col-md-4 order-md-1">
+            <img class="rounded img-fluid mx-auto" src="~/Images/medical-data-management.jpg">
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-md-8 order-md-1">
+            </br>
+            </br>
+            <ul>
+                <h3>If you need to make changes to you profile information, click on the <a href="~/Doctor/ShowProfile" class="font-weight-bold text-primary">Profile</a> tab above.</h3>
+            </ul>
+        </div>
+        <div class="col-md-4 order-md-2">
+            <img class="rounded img-fluid mx-auto" src="~/Images/patientdoctor.jpg">
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-md-8 order-md-2">
+            </br>
+            <h3><span class="font-weight-bold font-italic"> The Healthcare Companion</span> provides comprehensive charting of patient data powered by Google Charts. Select a patient in the <a href="~/Doctor/ListPatients" class="font-weight-bold text-primary">Patients</a> tab above to begin.</h3>
+        </div>
+        <div class="col-md-4 order-md-1">
+            <img class="rounded img-fluid mx-auto" src="~/Images/linegraph.jpg">
+        </div>
+    </div>
+</div>
+<hr />
